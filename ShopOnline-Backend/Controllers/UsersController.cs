@@ -32,7 +32,7 @@ namespace ShopOnline_Backend.Controllers
 			{
 				return BadRequest("Username or Password is incorrect");
 			}
-			return Ok(new { token = rsToken });
+			return Ok(rsToken);
 		}
 
 		[HttpPost("register")]
