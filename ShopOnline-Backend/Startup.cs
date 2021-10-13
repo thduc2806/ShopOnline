@@ -46,7 +46,6 @@ namespace ShopOnline_Backend
 
 			services.AddControllers()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
-			services.AddTransient<IPublicProductService, PublicProductServie>();
 			services.AddTransient<IManageProductService, ManageProductServie>();
 			services.AddTransient<IStorageService, FileStorageService>();
 			services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();

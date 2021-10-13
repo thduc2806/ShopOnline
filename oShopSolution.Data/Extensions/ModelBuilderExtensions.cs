@@ -41,6 +41,7 @@ namespace oShopSolution.Data.Extensions
                Price = 100000,
                Description = "This is Iphone 11 Promax",
                Rating = 5,
+               Featured = true
            },
             new Product()
             {
@@ -50,6 +51,7 @@ namespace oShopSolution.Data.Extensions
                 Price = 20000,
                 Description = "This is Iphone 12 Promax",
                 Rating = 10,
+                Featured = true,
             });
             modelBuilder.Entity<ProductInCategory>().HasData(
                 new ProductInCategory() { ProductId = 1, CategoryId = 1 }
