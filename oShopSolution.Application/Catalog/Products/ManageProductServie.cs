@@ -71,8 +71,10 @@ namespace oShopSolution.Application.Catalog.Products
 		public async Task<PageResult<ProductView>> GetAllPaging(GetManageProductPageRequest request)
 		{
 			var query = from p in _context.Products
-						join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-						join c in _context.Categories on pic.CategoryId equals c.Id
+						join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
+						from pic in ppic.DefaultIfEmpty()
+						join c in _context.Categories on pic.CategoryId equals c.Id into picc
+						from c in picc.DefaultIfEmpty()
 						select new { p, pic };
 			if (!string.IsNullOrEmpty(request.Keyword))
 				query = query.Where(x => x.p.Name.Contains(request.Keyword));
@@ -103,13 +105,18 @@ namespace oShopSolution.Application.Catalog.Products
 		public async Task<ProductView> GetById(int productId)
 		{
 			var product = await _context.Products.FindAsync(productId);
+			var category = await (from c in _context.Categories
+							join pic in _context.ProductInCategories on c.Id equals pic.CategoryId
+							where pic.ProductId == productId
+							select c.Name).ToListAsync();
 			var productView = new ProductView()
 			{
 				Id = product.Id,
 				Name = product.Name,
 				Price = product.Price,
 				Description = product.Description,
-				CreateDate = product.CreateDate
+				CreateDate = product.CreateDate,
+				Category = category
 			};
 			return productView;
 		}
@@ -158,8 +165,10 @@ namespace oShopSolution.Application.Catalog.Products
 		public async Task<PageResult<ProductView>> GetAllByCategoryId(GetPublicProductPageRequest request)
 		{
 			var query = from p in _context.Products
-						join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-						join c in _context.Categories on pic.CategoryId equals c.Id
+						join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
+						from pic in ppic.DefaultIfEmpty()
+						join c in _context.Categories on pic.CategoryId equals c.Id into picc
+						from c in picc.DefaultIfEmpty()
 						select new { p, pic };
 			if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
 			{
@@ -189,6 +198,7 @@ namespace oShopSolution.Application.Catalog.Products
 		{
 			var p = _context;
 			var product = await p.Products.Select(s => new ProductView()
+
 			{
 				Id = s.Id,
 				Name = s.Name,

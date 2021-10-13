@@ -11,24 +11,22 @@ namespace ShopOnline_Backend.Controllers
 	[Authorize]
 	public class ProductController : ControllerBase
 	{
-		private readonly IPublicProductService _publicProductServie;
 		private readonly IManageProductService _manageProductService;
-		public ProductController(IPublicProductService publicProductServie, IManageProductService manageProductService)
+		public ProductController(IManageProductService manageProductService)
 		{
-			_publicProductServie = publicProductServie;
 			_manageProductService = manageProductService;
 		}
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			var product = await _publicProductServie.GetAll();
+			var product = await _manageProductService.GetAll();
 			return Ok(product);
 		}
 
 		[HttpGet("Page")]
 		public async Task<IActionResult> Get([FromQuery] GetPublicProductPageRequest request)
 		{
-			var product = await _publicProductServie.GetAllByCategoryId(request);
+			var product = await _manageProductService.GetAllByCategoryId(request);
 			return Ok(product);
 		}
 
