@@ -18,11 +18,13 @@ namespace oShopSolution.Application.Catalog.Category
 		}
 		public async Task<List<CategoryView>> GetAll()
 		{
-			var c = _context;
-			var category = await c.Categories.Select(c => new CategoryView()
+			var query = from c in _context.Categories
+						select new { c };
+			var category = await query.Select(x => new CategoryView()
 			{
-				Id = c.Id,
-				Name = c.Name,
+				Id = x.c.Id,
+				Name = x.c.Name,
+				Description = x.c.Description
 			}).ToListAsync();
 			return category;
 		}

@@ -114,9 +114,11 @@ namespace oShopSolution.Application.Catalog.Products
 				Id = product.Id,
 				Name = product.Name,
 				Price = product.Price,
+				Rating = product.Rating,
 				Description = product.Description,
 				CreateDate = product.CreateDate,
 				Category = category
+				
 			};
 			return productView;
 		}
@@ -196,18 +198,22 @@ namespace oShopSolution.Application.Catalog.Products
 
 		public async Task<List<ProductView>> GetAll()
 		{
-			var p = _context;
-			var product = await p.Products.Select(s => new ProductView()
+			var query = (from p in _context.Products
+						 join i in _context.ProductImgs on p.Id equals i.ProductId into pi
+						 from i in pi.DefaultIfEmpty()
+						 select new { p, i.ImgPath, i.Id }).OrderBy(x => x.Id);
 
+			var product = await query.Select(z => new ProductView()
 			{
-				Id = s.Id,
-				Name = s.Name,
-				Price = s.Price,
-				Description = s.Description,
-				Rating = s.Rating,
-				CreateDate = s.CreateDate,
+				Id = z.p.Id,
+				Name = z.p.Name,
+				Description = z.p.Description,
+				Price = z.p.Price,
+				CreateDate = z.p.CreateDate,
+				ThumbImg = z.ImgPath
 			}).ToListAsync();
 			return product;
 		}
+		
 	}
 }

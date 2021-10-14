@@ -17,6 +17,7 @@ namespace ShopOnline_Backend.Controllers
 			_manageProductService = manageProductService;
 		}
 		[HttpGet]
+		[AllowAnonymous]
 		public async Task<IActionResult> Get()
 		{
 			var product = await _manageProductService.GetAll();
@@ -66,6 +67,7 @@ namespace ShopOnline_Backend.Controllers
 				return BadRequest();
 			return Ok();
 		}
+		
 
 		[HttpPut("price/{id}/{newPrice}")]
 		public async Task<IActionResult> UpdatePrice(int id, decimal newPrice)

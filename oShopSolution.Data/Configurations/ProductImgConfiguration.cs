@@ -18,7 +18,6 @@ namespace oShopSolution.Data.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.ImgPath).HasMaxLength(200).IsRequired(true);
-
             builder.HasOne(x => x.Product).WithMany(x => x.ProductImgs).HasForeignKey(x => x.ProductId);
 
         }

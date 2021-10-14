@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using oShopSolution.Application.Catalog.Category;
 using oShopSolution.Application.Catalog.Products;
 using oShopSolution.Application.Common;
 using oShopSolution.Application.System.Users;
@@ -47,6 +48,7 @@ namespace ShopOnline_Backend
 			services.AddControllers()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 			services.AddTransient<IManageProductService, ManageProductServie>();
+			services.AddTransient<ICategoryService, CategoryService>();
 			services.AddTransient<IStorageService, FileStorageService>();
 			services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 			services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
@@ -54,6 +56,7 @@ namespace ShopOnline_Backend
 			services.AddTransient<IUserService, UserService>();
 			services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
 			services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
+
 
 
 

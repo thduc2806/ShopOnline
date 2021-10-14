@@ -15,6 +15,7 @@ namespace oShopSolution.ViewModels.Catalog.Products
 		public int Rating { get; set; }
 		public bool? Featured { get; set; }
 		public DateTime CreateDate { get; set; }
+		public string ThumbImg { get; set; }
 		public List<string> Category { get; set; } = new List<string>();
 	}
 }
