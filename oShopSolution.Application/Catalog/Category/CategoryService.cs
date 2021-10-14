@@ -28,5 +28,10 @@ namespace oShopSolution.Application.Catalog.Category
 			}).ToListAsync();
 			return category;
 		}
+
+		public Task<List<CategoryView>> GetById()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

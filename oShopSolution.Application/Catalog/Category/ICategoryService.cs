@@ -10,5 +10,7 @@ namespace oShopSolution.Application.Catalog.Category
 	public interface ICategoryService
 	{
 		Task<List<CategoryView>> GetAll();
+		Task<List<CategoryView>> GetById();
+
 	}
 }

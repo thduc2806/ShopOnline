@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\oShopSolution.Utilities\oShopSolution.Utilities.csproj" />
     <ProjectReference Include="..\oShopSolutionViewModels\oShopSolution.ViewModels.csproj" />
+    <ProjectReference Include="..\ShopOnline-Backend\ShopOnline-Backend.csproj" />
   </ItemGroup>
 
 </Project>

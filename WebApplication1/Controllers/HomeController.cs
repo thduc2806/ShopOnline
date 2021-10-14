@@ -18,7 +18,6 @@ namespace WebApplication1.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
-		//private readonly ISharedCultureLocalizer _loc;
 		private readonly IProductAPI _productApi;
 
 		public HomeController(ILogger<HomeController> logger , IProductAPI productApiClient)

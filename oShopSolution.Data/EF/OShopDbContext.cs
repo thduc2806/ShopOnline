@@ -23,7 +23,6 @@ namespace oShopSolution.Data.EF
 			modelBuilder.ApplyConfiguration(new AppConfigConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductConfiguration());
 			modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-			modelBuilder.ApplyConfiguration(new ProductInCategoryConfiguration());
 			modelBuilder.ApplyConfiguration(new OrderConfiguration());
 			modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
 			modelBuilder.ApplyConfiguration(new CartConfiguration());
@@ -48,7 +47,6 @@ namespace oShopSolution.Data.EF
 		public DbSet<Product> Products { get; set; }
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<AppConfig> AppConfigs { get; set; }
-		public DbSet<ProductInCategory> ProductInCategories { get; set; }
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<OrderDetail> OrderDetails { get; set; }
 		public DbSet<Cart> Carts { get; set; }

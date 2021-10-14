@@ -21,7 +21,7 @@ namespace oShopSolution.Application.Catalog.Products
 
 		Task<List<ProductView>> GetAll();
 		//Task<List<ProductView>> GetAll();
-		Task<PageResult<ProductView>> GetAllPaging(GetManageProductPageRequest request);
+		//Task<PageResult<ProductView>> GetAllPaging(GetManageProductPageRequest request);
 		//Task<int> AddImg(int productId, List<IFormFile> files);
 		//Task<int> RemoveImg(int imageId);
 

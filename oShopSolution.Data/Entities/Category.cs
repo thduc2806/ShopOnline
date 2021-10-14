@@ -12,7 +12,9 @@ namespace oShopSolution.Data.Entities
 		public string Name { get; set; }
 		public string Description { get; set; }
 
-		public List<ProductInCategory> ProductInCategories { get; set; }
+		public ICollection<Product> Products { get; set; }
+
+
 
 
 	}
