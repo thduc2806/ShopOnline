@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
 		{
 			var viewModel = new HomeViewModels 
 			{
-				Product =  await _productApi.GetAll()
+				Product =  await _productApi.GetAll(),
 			};
 			return View(viewModel);
 		}

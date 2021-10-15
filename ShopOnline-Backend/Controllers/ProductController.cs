@@ -32,6 +32,7 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[AllowAnonymous]
 		public async Task<IActionResult> GetById(int id)
 		{
 			var product = await _manageProductService.GetById(id);

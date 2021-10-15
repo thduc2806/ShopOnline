@@ -1,4 +1,5 @@
-﻿using oShopSolution.ViewModels.Catalog.Products;
+﻿using oShopSolution.ViewModels.Catalog.Categories;
+using oShopSolution.ViewModels.Catalog.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;

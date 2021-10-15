@@ -1,0 +1,35 @@
+﻿@model ProductDetailViewModel
+@{
+	ViewData["Title"] = "Detail";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="product-details">
+	<!--product-details-->
+	<div class="col-sm-5">
+		<div class="view-product">
+			<img src="@Model.Product.ThumbPath" alt="@Model.Product.Name" />
+		</div>
+	</div>
+	<div class="col-sm-7">
+		<div class="product-information">
+			<!--/product-information-->
+			<img src="images/product-details/new.jpg" class="newarrival" alt="" />
+			<h2>@Model.Product.Name</h2>
+			<p>Category @Model.Product.CategoryId</p>
+			<span>
+				<span>@Model.Product.Price USD</span>
+				<button type="button" class="btn btn-fefault cart">
+					<i class="fa fa-shopping-cart"></i>
+					Add to cart
+				</button>
+			</span>
+			<p>@Model.Product.Description</p>
+			<p>Rating: @Model.Product.Rating</p>
+			<p>Create Date: @Model.Product.CreateDate</p>
+			<a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
+		</div><!--/product-information-->
+	</div>
+</div>
+
+

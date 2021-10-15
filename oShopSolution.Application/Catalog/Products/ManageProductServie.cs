@@ -104,6 +104,7 @@ namespace oShopSolution.Application.Catalog.Products
 				Description = product.Description,
 				CreateDate = product.CreateDate,
 				ThumbPath = product.ThumbPath,
+				CategoryId = product.CategoryId,
 				Category = category,
 
 			};
