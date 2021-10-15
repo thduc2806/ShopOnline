@@ -2,15 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace oShopSolution.Application.Catalog.Category
+namespace WebApplication1.Helper
 {
-	public interface ICategoryService
+	public interface ICategoryAPI
 	{
 		Task<List<CategoryView>> GetAll();
-		Task<List<CategoryView>> GetById(int id);
 
+		Task<CategoryView> GetById(int id);
 	}
 }

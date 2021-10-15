@@ -29,9 +29,18 @@ namespace oShopSolution.Application.Catalog.Category
 			return category;
 		}
 
-		public Task<List<CategoryView>> GetById()
+		public async Task<List<CategoryView>> GetById(int id)
 		{
-			throw new NotImplementedException();
+			var query = from c in _context.Categories
+						where c.Id == id
+						select new { c };
+			var category = await query.Select(x => new CategoryView()
+			{
+				Id = x.c.Id,
+				Name = x.c.Name,
+				Description = x.c.Description
+			}).ToListAsync();
+			return category;
 		}
 	}
 }

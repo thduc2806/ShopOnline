@@ -19,9 +19,11 @@ namespace oShopSolution.Application.Catalog.Products
 	public class ManageProductServie : IManageProductService
 	{
 		private readonly OShopDbContext _context;
-		public ManageProductServie(OShopDbContext context)
+		private readonly IStorageService _storageService;
+		public ManageProductServie(OShopDbContext context, IStorageService storageService)
 		{
 			_context = context;
+			_storageService = storageService;
 		}
 		public async Task<int> Create(ProductCreateRequest request)
 		{
@@ -50,37 +52,41 @@ namespace oShopSolution.Application.Catalog.Products
 		}
 
 
-		//public async Task<PageResult<ProductView>> GetAllPaging(GetManageProductPageRequest request)
-		//{
-		//	var query = from p in _context.Products
-		//				join c in _context.Categories on p.CategoryId equals c.Id into pc
-		//				from c in pc.DefaultIfEmpty()
-		//				select new { p, pc };
-		//	if (!string.IsNullOrEmpty(request.Keyword))
-		//		query = query.Where(x => x.p.Name.Contains(request.Keyword));
-		//	if (request.CategoryIds.Count > 0)
-		//	{
-		//		query = query.Where(p => request.CategoryIds.Contains(p.CategoryId));
-		//	}
-		//	int totalRow = await query.CountAsync();
-		//	var data =  await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
-		//		.Take(request.PageSize)
-		//		.Select(x => new ProductView()
-		//		{
-		//			Id = x.p.Id,
-		//			Name = x.p.Name,
-		//			Description = x.p.Description,
-		//			Price = x.p.Price,
-		//			Rating = x.p.Rating,
-		//			CreateDate = x.p.CreateDate,
-		//		}).ToListAsync();
-		//	var pageResult = new PageResult<ProductView>()
-		//	{
-		//		TotalRecord = totalRow,
-		//		Items = data,
-		//	};
-		//	return pageResult;
-		//}
+		public async Task<PageResult<ProductView>> GetAllPaging(GetManageProductPageRequest request)
+		{
+			var query = from p in _context.Products
+						join c in _context.Categories on p.CategoryId equals c.Id into pc
+						from c in pc.DefaultIfEmpty()
+						select new { p, pc };
+			if (!string.IsNullOrEmpty(request.Keyword))
+				query = query.Where(x => x.p.Name.Contains(request.Keyword));
+			if (request.CategoryId != null && request.CategoryId != 0)
+			{
+				query = query.Where(p => p.p.CategoryId == request.CategoryId);
+			}
+			int totalRow = await query.CountAsync();
+			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+				.Take(request.PageSize)
+				.Select(x => new ProductView()
+				{
+					Id = x.p.Id,
+					Name = x.p.Name,
+					Description = x.p.Description,
+					Price = x.p.Price,
+					Rating = x.p.Rating,
+					CategoryId = x.p.CategoryId,
+					CreateDate = x.p.CreateDate,
+					ThumbPath = x.p.ThumbPath,
+				}).ToListAsync();
+			var pageResult = new PageResult<ProductView>()
+			{
+				TotalRecord = totalRow,
+				PageSize = request.PageSize,
+				PageIndex = request.PageIndex,
+				Items = data
+			};
+			return pageResult;
+		}
 
 		public async Task<ProductView> GetById(int productId)
 		{
@@ -125,28 +131,39 @@ namespace oShopSolution.Application.Catalog.Products
 			return await _context.SaveChangesAsync() > 0;
 		}
 
-		//public async Task<ProductView> GetAllByCategoryId(int categoryId)
-		//{
-		//	var category = await _context.Categories.FindAsync(categoryId);
-		//	var query = from c in _context.Categories
-		//				join p in _context.Products on c.Id equals p.CategoryId into pc
-		//				from p in pc.DefaultIfEmpty()
-		//				where p.Id == categoryId
-		//				select new { p, c };
-
-		//		var product = await query.Select(z => new ProductView()
-		//		{
-		//			Id = z.p.Id,
-		//			Name = z.p.Name,
-		//			Description = z.p.Description,
-		//			Price = z.p.Price,
-		//			CreateDate = z.p.CreateDate,
-		//			CategoryId = z.p.CategoryId,
-		//			Rating = z.p.Rating,
-		//			ThumbPath = z.p.ThumbPath,
-		//		}).ToListAsync();
-		//	return product;
-		//}
+		public async Task<PageResult<ProductView>> GetAllByCategoryId(GetPublicProductPageRequest request)
+		{
+			var query = from p in _context.Products
+						join c in _context.Categories on p.CategoryId equals c.Id into pc
+						from c in pc.DefaultIfEmpty()
+						select new { p, c };
+			if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
+			{
+				query = query.Where(p => p.c.Id== request.CategoryId);
+			}
+			int totalRow = await query.CountAsync();
+			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+				.Take(request.PageSize)
+				.Select(x => new ProductView()
+				{
+					Id = x.p.Id,
+					Name = x.p.Name,
+					Description = x.p.Description,
+					Price = x.p.Price,
+					Rating = x.p.Rating,
+					CategoryId = x.p.CategoryId,
+					CreateDate = x.p.CreateDate,
+					ThumbPath = x.p.ThumbPath
+				}).ToListAsync();
+			var pageResult = new PageResult<ProductView>()
+			{
+				TotalRecord = totalRow,
+				PageSize = request.PageSize,
+				PageIndex = request.PageIndex,
+				Items = data,
+			};
+			return pageResult;
+		}
 
 		public async Task<List<ProductView>> GetAll()
 		{

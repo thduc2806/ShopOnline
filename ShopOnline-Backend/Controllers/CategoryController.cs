@@ -24,5 +24,12 @@ namespace ShopOnline_Backend.Controllers
 			var category = await _categoryService.GetAll();
 			return Ok(category);
 		}
+
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetById(int id)
+		{
+			var category = await _categoryService.GetById(id);
+			return Ok(category);
+		}
 	}
 }

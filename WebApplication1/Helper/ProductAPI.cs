@@ -38,8 +38,18 @@ namespace WebApplication1.Helper
 
         public async Task<List<ProductView>> GetAll()
         {
-            var data = await GetListAsync<ProductView>($"/api/product");
+            var data = await GetListAsync<ProductView>("/api/product");
             return data;
         }
-    }
+
+		public async Task<PageResult<ProductView>> GetPagings(GetManageProductPageRequest request)
+		{
+            var data = await GetAsync<PageResult<ProductView>>(
+                $"/api/products/paging?pageIndex={request.PageIndex}" +
+                $"&pageSize={request.PageSize}" +
+                $"&keyword={request.Keyword}categoryId={request.CategoryId}");
+
+            return data;
+        }
+	}
 }
