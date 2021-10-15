@@ -3,15 +3,14 @@ using oShopSolution.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace oShopSolution.Application.System.Users
+namespace WebApplication1.Helper
 {
-	public interface IUserService
+	public interface IUserAPI
 	{
-		Task<ApiResult<string>> Authencate(LoginRequest request);
-		Task<bool> Register(RegisterRequest request);
+		Task<ApiResult<string>> Authenticate(LoginRequest request);
+		Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest);
 		Task<ApiResult<bool>> RoleAssign(Guid id, RoleRequest request);
 	}
 }

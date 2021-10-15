@@ -21,22 +21,20 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpPost("authenticate")]
-		[AllowAnonymous]
 
-		public async Task<IActionResult> Authenticate([FromForm]LoginRequest request )
+		public async Task<IActionResult> Authenticate([FromBody]LoginRequest request )
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 			var rsToken = await _userService.Authencate(request);
-			if (string.IsNullOrEmpty(rsToken))
+			if (string.IsNullOrEmpty(rsToken.ResultObj))
 			{
-				return BadRequest("Username or Password is incorrect");
+				return BadRequest(rsToken);
 			}
 			return Ok(rsToken);
 		}
 
 		[HttpPost("register")]
-		[AllowAnonymous]
 
 		public async Task<IActionResult> Authenticate([FromForm] RegisterRequest request)
 		{

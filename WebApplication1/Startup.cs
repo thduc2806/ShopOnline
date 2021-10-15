@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.Helper;
 using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebApplication1
 {
@@ -28,10 +29,21 @@ namespace WebApplication1
 		{
 			services.AddControllersWithViews();
 			services.AddHttpClient();
-			services.AddSession();
+			
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(options =>
+				{
+					options.LoginPath = "/CustomerAccount/Login";
+					options.AccessDeniedPath = "/User/Forbidden/";
+				});
+			services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromMinutes(30);
+			});
 
 
 			services.AddTransient<IProductAPI, ProductAPI>();
+			services.AddTransient<IUserAPI, UserAPI>();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}
@@ -52,6 +64,7 @@ namespace WebApplication1
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
+			app.UseAuthentication();
 			app.UseRouting();
 
 			app.UseAuthorization();

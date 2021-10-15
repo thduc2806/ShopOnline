@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using oShopSolution.Data.Entities;
+using oShopSolution.ViewModels.Common;
 using oShopSolution.ViewModels.System.Users;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,14 +26,15 @@ namespace oShopSolution.Application.System.Users
 			_roleManager = roleManager;
 			_config = condfig;
 		}
-		public async Task<string> Authencate(LoginRequest request)
+		public async Task<ApiResult<string>> Authencate(LoginRequest request)
 		{
 			var user = await _userManager.FindByNameAsync(request.Username);
-			if (user == null) return null;
-			var rs = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
-			if (!rs.Succeeded)
+			if (user == null) return new ApiErrorResult<string>("Account does not exist");
+
+			var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+			if (!result.Succeeded)
 			{
-				return null;
+				return new ApiErrorResult<string>("Login fail");
 			}
 			var role = _userManager.GetRolesAsync(user);
 			var claims = new[]
@@ -48,7 +51,7 @@ namespace oShopSolution.Application.System.Users
 				claims,
 				expires: DateTime.Now.AddHours(3),
 				signingCredentials: creds);
-			return new JwtSecurityTokenHandler().WriteToken(token);
+			return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
 		}
 
 		public async Task<bool> Register(RegisterRequest request)
@@ -67,6 +70,35 @@ namespace oShopSolution.Application.System.Users
 				return true;
 			}
 			else return false;
+		}
+
+		public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleRequest request)
+		{
+			var user = await _userManager.FindByIdAsync(id.ToString());
+			if (user == null)
+			{
+				return new ApiErrorResult<bool>("Account does not exist");
+			}
+			var removedRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+			foreach (var roleName in removedRoles)
+			{
+				if (await _userManager.IsInRoleAsync(user, roleName) == true)
+				{
+					await _userManager.RemoveFromRoleAsync(user, roleName);
+				}
+			}
+			await _userManager.RemoveFromRolesAsync(user, removedRoles);
+
+			var addedRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
+			foreach (var roleName in addedRoles)
+			{
+				if (await _userManager.IsInRoleAsync(user, roleName) == false)
+				{
+					await _userManager.AddToRoleAsync(user, roleName);
+				}
+			}
+
+			return new ApiSuccessResult<bool>();
 		}
 	}
 }
