@@ -14,6 +14,7 @@ namespace oShopSolution.Data.Entities
 		public string Description { get; set; }
 		public int Rating { get; set; }
 		public DateTime CreateDate { get; set; }
+		public string ThumbPath { get; set; }
 		public int CategoryId { get; set; }
 		public Category Category { get; set; }
 		public List<Cart> Carts { get; set; }

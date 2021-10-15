@@ -17,7 +17,7 @@ namespace oShopSolution.Application.Catalog.Products
 		Task<int> Update(ProductUpdateRequest request);
 		Task<int> Delete(int producId);
 		Task<bool> UpdatePrice(int producId, decimal newPrice);
-		Task<PageResult<ProductView>> GetAllByCategoryId(GetPublicProductPageRequest request);
+		//Task<ProductView> GetAllByCategoryId(int categoryId);
 
 		Task<List<ProductView>> GetAll();
 		//Task<List<ProductView>> GetAll();

@@ -13,6 +13,7 @@ namespace oShopSolution.ViewModels.Catalog.Products
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public int Rating { get; set; }
+		public string ThumbPath { get; set; }
 		public IFormFile ThumbImg { get; set; }
 
 	}

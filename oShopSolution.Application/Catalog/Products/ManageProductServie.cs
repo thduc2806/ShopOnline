@@ -19,11 +19,9 @@ namespace oShopSolution.Application.Catalog.Products
 	public class ManageProductServie : IManageProductService
 	{
 		private readonly OShopDbContext _context;
-		private readonly IStorageService _storageService;
-		public ManageProductServie(OShopDbContext context, IStorageService storageService)
+		public ManageProductServie(OShopDbContext context)
 		{
 			_context = context;
-			_storageService = storageService;
 		}
 		public async Task<int> Create(ProductCreateRequest request)
 		{
@@ -34,21 +32,10 @@ namespace oShopSolution.Application.Catalog.Products
 				Rating = request.Rating,
 				Price = request.Price,
 				CreateDate = DateTime.Now,
+				CategoryId = request.CategoryId,
+				ThumbPath = request.ThumbPath,
 				
 			};
-			//IMG
-			if(request.ThumbImg != null)
-			{
-				product.ProductImgs = new List<ProductImg>()
-				{
-					new ProductImg()
-					{
-						FileSize = request.ThumbImg.Length,
-						ImgPath = await this.SaveFile(request.ThumbImg),
-						
-					}
-				};
-			}
 			_context.Products.Add(product);
 			await _context.SaveChangesAsync();
 			return product.Id; 
@@ -58,11 +45,6 @@ namespace oShopSolution.Application.Catalog.Products
 		{
 			var product = await _context.Products.FindAsync(productId);
 			if (product == null) throw new OShopException($"Cannot find product: {productId}");
-			var imges = _context.ProductImgs.Where(i => i.ProductId == productId);
-			foreach(var imge in imges)
-			{
-				await _storageService.DeleteFileAsync(imge.ImgPath);
-			}
 			_context.Products.Remove(product);
 			return await _context.SaveChangesAsync();
 		}
@@ -115,8 +97,9 @@ namespace oShopSolution.Application.Catalog.Products
 				Rating = product.Rating,
 				Description = product.Description,
 				CreateDate = product.CreateDate,
-				Category = category
-				
+				ThumbPath = product.ThumbPath,
+				Category = category,
+
 			};
 			return productView;
 		}
@@ -129,19 +112,7 @@ namespace oShopSolution.Application.Catalog.Products
 			product.Name = request.Name;
 			product.Description = request.Description;
 			product.Rating = request.Rating;
-
-			if (request.ThumbImg != null)
-			{
-				var thumbImg = await _context.ProductImgs.FirstOrDefaultAsync(i => i.ProductId == request.Id);
-				if (thumbImg != null)
-				{
-					thumbImg.FileSize = request.ThumbImg.Length;
-					thumbImg.ImgPath = await this.SaveFile(request.ThumbImg);
-
-					_context.ProductImgs.Update(thumbImg);
-
-				}
-			}
+			product.ThumbPath = request.ThumbPath;
 
 			return await _context.SaveChangesAsync();
 		}
@@ -153,51 +124,34 @@ namespace oShopSolution.Application.Catalog.Products
 			product.Price = newPrice;
 			return await _context.SaveChangesAsync() > 0;
 		}
-		private async Task<string> SaveFile(IFormFile file)
-		{
-			var orFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-			var fileName = $"{Guid.NewGuid()}{Path.GetExtension(orFileName)}";
-			await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-			return fileName;
-		}
 
+		//public async Task<ProductView> GetAllByCategoryId(int categoryId)
+		//{
+		//	var category = await _context.Categories.FindAsync(categoryId);
+		//	var query = from c in _context.Categories
+		//				join p in _context.Products on c.Id equals p.CategoryId into pc
+		//				from p in pc.DefaultIfEmpty()
+		//				where p.Id == categoryId
+		//				select new { p, c };
 
-		public async Task<PageResult<ProductView>> GetAllByCategoryId(GetPublicProductPageRequest request)
-		{
-			var query = from p in _context.Products
-						join c in _context.Categories on p.CategoryId equals c.Id into picc
-						from c in picc.DefaultIfEmpty()
-						select new { p, c };
-			if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
-			{
-				query = query.Where(p => p.c.Id== request.CategoryId);
-			}
-			int totalRow = await query.CountAsync();
-			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
-				.Take(request.PageSize)
-				.Select(x => new ProductView()
-				{
-					Id = x.p.Id,
-					Name = x.p.Name,
-					Description = x.p.Description,
-					Price = x.p.Price,
-					Rating = x.p.Rating,
-					CreateDate = x.p.CreateDate,
-				}).ToListAsync();
-			var pageResult = new PageResult<ProductView>()
-			{
-				TotalRecord = totalRow,
-				Items = data,
-			};
-			return pageResult;
-		}
+		//		var product = await query.Select(z => new ProductView()
+		//		{
+		//			Id = z.p.Id,
+		//			Name = z.p.Name,
+		//			Description = z.p.Description,
+		//			Price = z.p.Price,
+		//			CreateDate = z.p.CreateDate,
+		//			CategoryId = z.p.CategoryId,
+		//			Rating = z.p.Rating,
+		//			ThumbPath = z.p.ThumbPath,
+		//		}).ToListAsync();
+		//	return product;
+		//}
 
 		public async Task<List<ProductView>> GetAll()
 		{
-			var query = (from p in _context.Products
-						 join i in _context.ProductImgs on p.Id equals i.ProductId into pi
-						 from i in pi.DefaultIfEmpty()
-						 select new { p, i.ImgPath, i.Id }).OrderBy(x => x.Id);
+			var query = from p in _context.Products
+						 select new { p };
 
 			var product = await query.Select(z => new ProductView()
 			{
@@ -206,7 +160,9 @@ namespace oShopSolution.Application.Catalog.Products
 				Description = z.p.Description,
 				Price = z.p.Price,
 				CreateDate = z.p.CreateDate,
-				ThumbImg = z.ImgPath
+				CategoryId = z.p.CategoryId,
+				Rating = z.p.Rating,
+				ThumbPath = z.p.ThumbPath,
 			}).ToListAsync();
 			return product;
 		}

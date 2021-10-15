@@ -41,7 +41,8 @@ namespace oShopSolution.Data.Extensions
                Price = 100000,
                Description = "This is Iphone 11 Promax",
                Rating = 5,
-               CategoryId = 1
+               CategoryId = 1,
+               ThumbPath = "https://www.imagevenue.com/ME13YCXU][IMG]https://cdn-thumbs.imagevenue.com/b5/a4/b5/ME13YCXU_t.png"
            },
             new Product()
             {
