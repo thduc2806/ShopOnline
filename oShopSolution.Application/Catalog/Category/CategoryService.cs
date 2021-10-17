@@ -24,7 +24,7 @@ namespace oShopSolution.Application.Catalog.Category
 			{
 				Id = x.c.Id,
 				Name = x.c.Name,
-				Description = x.c.Description
+				Description = x.c.Description,
 			}).ToListAsync();
 			return category;
 		}

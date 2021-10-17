@@ -1,0 +1,18 @@
+﻿@model List<oShopSolution.ViewModels.Catalog.Categories.CategoryView>
+
+
+<div class="panel-group category-products" id="accordian">
+	<!--category-productsr-->
+		@{ 
+			var category = Model.Where(x => x.Id != null);
+		}
+		@foreach (var categories in category)
+		{
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title"><a href="/product/category/@categories.Id">@categories.Name</a></h4>
+					</div>
+				</div>
+			}
+		
+</div>

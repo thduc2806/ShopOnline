@@ -24,7 +24,7 @@ namespace WebApplication1.Helper
 
 		public async Task<CategoryView> GetById(int id)
 		{
-			return await GetAsync<CategoryView>($"/api/category/{id}");
+			return await GetAsync<CategoryView>($"/api/Category/{id}");
 		}
 
 	}

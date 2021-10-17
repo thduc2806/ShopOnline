@@ -69,7 +69,7 @@ namespace oShopSolution.Application.Catalog.Products
 		}
 
 
-		public async Task<PageResult<ProductView>> GetAllPaging(GetManageProductPageRequest request)
+		public async Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request)
 		{
 			var query = from p in _context.Products
 						join c in _context.Categories on p.CategoryId equals c.Id into pc
@@ -84,9 +84,7 @@ namespace oShopSolution.Application.Catalog.Products
 			{
 				query = query.Where(p => p.p.CategoryId == request.CategoryId);
 			}
-			int totalRow = await query.CountAsync();
-			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
-				.Select(x => new ProductView()
+			var data = await query.Select(x => new ProductView()
 				{
 					Id = x.p.Id,
 					Name = x.p.Name,
@@ -98,14 +96,7 @@ namespace oShopSolution.Application.Catalog.Products
 					ThumbImg = x.pi.ImgPath
 					
 				}).ToListAsync();
-			var pageResult = new PageResult<ProductView>()
-			{
-				TotalRecord = totalRow,
-				PageSize = request.PageSize,
-				PageIndex = request.PageIndex,
-				Items = data
-			};
-			return pageResult;
+			return data;
 		}
 
 		public async Task<ProductView> GetById(int productId)
@@ -149,7 +140,7 @@ namespace oShopSolution.Application.Catalog.Products
 			return await _context.SaveChangesAsync() > 0;
 		}
 
-		public async Task<PageResult<ProductView>> GetAllByCategoryId(GetPublicProductPageRequest request)
+		public async Task<List<ProductView>> GetAllByCategoryId(GetPublicProductPageRequest request)
 		{
 			var query = from p in _context.Products
 						join pi in _context.ProductImgs on p.Id equals pi.ProductId
@@ -159,9 +150,7 @@ namespace oShopSolution.Application.Catalog.Products
 			{
 				query = query.Where(p => p.c.Id== request.CategoryId);
 			}
-			int totalRow = await query.CountAsync();
-			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
-				.Select(x => new ProductView()
+			var data = await query.Select(x => new ProductView()
 				{
 					Id = x.p.Id,
 					Name = x.p.Name,
@@ -172,14 +161,7 @@ namespace oShopSolution.Application.Catalog.Products
 					CreateDate = x.p.CreateDate,
 					ThumbImg = x.pi.ImgPath
 				}).ToListAsync();
-			var pageResult = new PageResult<ProductView>()
-			{
-				TotalRecord = totalRow,
-				PageSize = request.PageSize,
-				PageIndex = request.PageIndex,
-				Items = data,
-			};
-			return pageResult;
+			return data;
 		}
 
 		public async Task<List<ProductView>> GetAll()

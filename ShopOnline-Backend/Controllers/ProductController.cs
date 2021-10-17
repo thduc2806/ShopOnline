@@ -24,8 +24,9 @@ namespace ShopOnline_Backend.Controllers
 			return Ok(product);
 		}
 
-		[HttpGet("Page")]
-		public async Task<IActionResult> Get([FromQuery] GetPublicProductPageRequest request)
+		[HttpGet("page")]
+		[AllowAnonymous]
+		public async Task<IActionResult> GetAllPagings([FromQuery] GetPublicProductPageRequest request)
 		{
 			var product = await _manageProductService.GetAllByCategoryId(request);
 			return Ok(product);

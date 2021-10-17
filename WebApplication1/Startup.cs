@@ -47,6 +47,7 @@ namespace WebApplication1
 
 
 			services.AddTransient<IProductAPI, ProductAPI>();
+			services.AddTransient<ICategoryAPI, CategoryAPI>();
 			services.AddTransient<IUserAPI, UserAPI>();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -76,6 +77,14 @@ namespace WebApplication1
 
 			app.UseEndpoints(endpoints =>
 			{
+				endpoints.MapControllerRoute(
+					name: "Product Category",
+					pattern: "{category}/{id}", new
+					{
+						controllers = "product",
+						action = "category"
+					});
+
 				endpoints.MapControllerRoute(
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");

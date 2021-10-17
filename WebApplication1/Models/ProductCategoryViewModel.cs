@@ -1,5 +1,6 @@
 ﻿using oShopSolution.ViewModels.Catalog.Categories;
 using oShopSolution.ViewModels.Catalog.Products;
+using oShopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-	public class HomeViewModels
+	public class ProductCategoryViewModel
 	{
-		public List<ProductView> Product { get; set; }
-		public List<CategoryView> Category { get; set; }
+		public CategoryView Category { get; set; }
+		public List<ProductView> Products { get; set; }
 	}
 }

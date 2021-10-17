@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace oShopSolution.ViewModels.Catalog.Products
 {
-	public class GetManageProductPageRequest : PageRequestBase
+	public class GetManageProductPageRequest
 	{
 		public string Keyword { get; set; }
 		public int? CategoryId { get; set; }

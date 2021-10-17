@@ -48,6 +48,7 @@ namespace WebApplication1.Helper
             return JsonConvert.DeserializeObject<TResponse>(body);
         }
 
+
         public async Task<List<T>> GetListAsync<T>(string url, bool requiredLogin = false)
         {
             var sessions = _httpContextAccessor

@@ -17,13 +17,14 @@ namespace WebApplication1.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
 		private readonly IProductAPI _productApi;
+		private readonly ICategoryAPI _categoryApi;
 
-		public HomeController(ILogger<HomeController> logger , IProductAPI productApiClient)
+
+		public HomeController(IProductAPI productApi, ICategoryAPI categoryApi)
 		{
-			_logger = logger;
-			_productApi = productApiClient;
+			_productApi = productApi;
+			_categoryApi = categoryApi;
 		}
 
 		public async Task<IActionResult> Index()
@@ -31,6 +32,8 @@ namespace WebApplication1.Controllers
 			var viewModel = new HomeViewModels 
 			{
 				Product =  await _productApi.GetAll(),
+				Category = await _categoryApi.GetAll()
+
 			};
 			return View(viewModel);
 		}
