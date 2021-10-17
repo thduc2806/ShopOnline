@@ -12,7 +12,7 @@ namespace oShopSolution.ViewModels.System.Users
 		public LoginRequestValidator()
 		{
 			RuleFor(x => x.Username).NotEmpty().WithMessage("Username required");
-			RuleFor(x => x.Password).NotEmpty().WithMessage("Username required")
+			RuleFor(x => x.Password).NotEmpty().WithMessage("Password required")
 				.MinimumLength(6).WithMessage("Password less than 6 characters");
 
 		}

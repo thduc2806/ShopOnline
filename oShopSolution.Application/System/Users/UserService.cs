@@ -54,9 +54,18 @@ namespace oShopSolution.Application.System.Users
 			return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
 		}
 
-		public async Task<bool> Register(RegisterRequest request)
+		public async Task<ApiResult<bool>> Register(RegisterRequest request)
 		{
-			var user = new AppUser()
+			var user = await _userManager.FindByNameAsync(request.Username);
+			if (user != null)
+			{
+				return new ApiErrorResult<bool>("Username already exists");
+			}
+			if (await _userManager.FindByEmailAsync(request.Email) != null)
+			{
+				return new ApiErrorResult<bool>("Email already exists");
+			}
+			user = new AppUser()
 			{
 				DOB = request.DOB,
 				FullName = request.FullName,
@@ -64,12 +73,12 @@ namespace oShopSolution.Application.System.Users
 				Email = request.Email,
 				PhoneNumber = request.Phone,
 			};
-			var rs = await _userManager.CreateAsync(user, request.Password);
-			if (rs.Succeeded)
+			var result = await _userManager.CreateAsync(user, request.Password);
+			if (result.Succeeded)
 			{
-				return true;
+				return new ApiSuccessResult<bool>();
 			}
-			else return false;
+			return new ApiErrorResult<bool>("Register Success");
 		}
 
 		public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleRequest request)

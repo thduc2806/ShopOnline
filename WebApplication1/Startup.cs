@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using WebApplication1.Helper;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using FluentValidation.AspNetCore;
+using oShopSolution.ViewModels.System.Users;
 
 namespace WebApplication1
 {
@@ -27,7 +29,9 @@ namespace WebApplication1
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllersWithViews();
+			services.AddControllersWithViews()
+				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterRequestValidator>())
+				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 			services.AddHttpClient();
 			
 			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

@@ -36,16 +36,17 @@ namespace ShopOnline_Backend.Controllers
 
 		[HttpPost("register")]
 
-		public async Task<IActionResult> Authenticate([FromForm] RegisterRequest request)
+		public async Task<IActionResult> Register([FromBody] RegisterRequest request)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
-			var rs = await _userService.Register(request);
-			if (!rs)
+
+			var result = await _userService.Register(request);
+			if (!result.IsSuccessed)
 			{
-				return BadRequest("Register Faild");
+				return BadRequest(result);
 			}
-			return Ok();
+			return Ok(result);
 		}
 	}
 }

@@ -41,12 +41,13 @@ namespace WebApplication1.Controllers
 		public async Task<IActionResult> Login(LoginRequest request)
 		{
             if (!ModelState.IsValid)
-                return View(ModelState);
-
+			{
+                return View(request);
+            }                
             var result = await _userAPI.Authenticate(request);
             if (result.ResultObj == null)
             {
-                ModelState.AddModelError("", result.Message);
+                ModelState.AddModelError("", result.Message = "Login fail");
                 return View();
             }
             var userPrincipal = this.ValidateToken(result.ResultObj);
@@ -70,6 +71,48 @@ namespace WebApplication1.Controllers
             await HttpContext.SignOutAsync(
 						CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+		{
+            return View();
+		}
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequest registerRequest)
+        {
+            if (!ModelState.IsValid)
+			{
+                return View(registerRequest);
+            }                
+
+            var result = await _userAPI.RegisterUser(registerRequest);
+            if (!result.IsSuccessed)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View();
+            }
+            var loginRs = await _userAPI.Authenticate(new LoginRequest()
+            {
+                Username = registerRequest.Username,
+                Password = registerRequest.Password,
+                RememberMe = true
+            });
+            var userPrincipal = this.ValidateToken(loginRs.ResultObj);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false
+            };
+            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, loginRs.ResultObj);
+            await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        userPrincipal,
+                        authProperties);
+
+            return RedirectToAction("Index", "Home");
+
         }
 
         private ClaimsPrincipal ValidateToken(string jwtToken)

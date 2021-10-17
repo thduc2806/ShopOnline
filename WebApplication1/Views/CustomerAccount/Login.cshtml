@@ -1,4 +1,4 @@
-﻿
+﻿@model oShopSolution.ViewModels.System.Users.LoginRequest
 @{
 	ViewData["Title"] = "Login";
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,9 +12,11 @@
 				<div class="login-form">
 					<!--login form-->
 					<h2>Login to your account</h2>
-					<form action="/CustomerAccount/Login" method="post">
-						<input type="text" name="Username" placeholder="Username" />
-						<input type="password" name="Password" placeholder="Password" />
+					<form asp-action="Login" asp-controller="CustomerAccount" method="post">
+						<span asp-validation-for="Username" class="text-warning"></span>
+						<input type="text" asp-for="Username" placeholder="Username" />
+						<span asp-validation-for="Password" class="text-warning"></span>
+						<input type="password" asp-for="Password" placeholder="Password" />
 						<span>
 							<input type="checkbox" class="checkbox">
 							Keep me signed in
@@ -22,21 +24,6 @@
 						<button type="submit" class="btn btn-default">Login</button>
 					</form>
 				</div><!--/login form-->
-			</div>
-			<div class="col-sm-1">
-				<h2 class="or">OR</h2>
-			</div>
-			<div class="col-sm-4">
-				<div class="signup-form">
-					<!--sign up form-->
-					<h2>New User Signup!</h2>
-					<form action="#">
-						<input type="text" placeholder="Name" />
-						<input type="email" placeholder="Email Address" />
-						<input type="password" placeholder="Password" />
-						<button type="submit" class="btn btn-default">Signup</button>
-					</form>
-				</div><!--/sign up form-->
 			</div>
 		</div>
 	</div>
