@@ -3,12 +3,12 @@
 	ViewData["Title"] = "Detail";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 <div class="product-details">
 	<!--product-details-->
 	<div class="col-sm-5">
 		<div class="view-product">
-			<img src="@Model.Product.ThumbPath" alt="@Model.Product.Name" />
+			<img src="@(Configuration["BaseAddress"] + Model.Product.ThumbImg)" alt="@Model.Product.Name" />
 		</div>
 	</div>
 	<div class="col-sm-7">

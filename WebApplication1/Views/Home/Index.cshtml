@@ -1,4 +1,5 @@
 ﻿@model HomeViewModels
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 
 @{
@@ -199,7 +200,7 @@
 							<div class="product-image-wrapper">
 								<div class="single-products">
 									<div class="productinfo text-center">
-										<img src="@product.ThumbPath" alt="@product.Name" />
+										<img src="@(Configuration["BaseAddress"] + product.ThumbImg)" alt="@product.Name" />
 										<h2>@product.Price</h2>
 										<p>@product.Description</p>
 										<a href="/product/detail/@product.Id" class="btn btn-default add-to-cart">Detail</a>

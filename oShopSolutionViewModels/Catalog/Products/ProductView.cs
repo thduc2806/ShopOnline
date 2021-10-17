@@ -15,8 +15,8 @@ namespace oShopSolution.ViewModels.Catalog.Products
 		public int Rating { get; set; }
 		public int CategoryId { get; set; }
 		public DateTime CreateDate { get; set; }
-		public string ThumbPath { get; set; }
-		public List<string> Category { get; set; } = new List<string>();
-		public List<string> ProductImg { get; set; } = new List<string>();
+		public string ThumbImg { get; set; }
+		public string Category { get; set; }
+		//public List<string> Category { get; set; } = new List<string>();
 	}
 }

@@ -36,10 +36,10 @@ namespace oShopSolution.Data.Extensions
            new Product()
            {
                Id = 1,
-               Name = "Iphone 11 Promax",
+               Name = "Iphone 12 Promax",
                CreateDate = DateTime.Now,
                Price = 100000,
-               Description = "This is Iphone 11 Promax",
+               Description = "This is Iphone 12 Promax",
                Rating = 5,
                CategoryId = 1,
                ThumbPath = "https://www.imagevenue.com/ME13YCXU][IMG]https://cdn-thumbs.imagevenue.com/b5/a4/b5/ME13YCXU_t.png"

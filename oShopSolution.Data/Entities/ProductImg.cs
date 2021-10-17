@@ -12,6 +12,7 @@ namespace oShopSolution.Data.Entities
 		public int ProductId { get; set; }
 		public string ImgPath { get; set; }
 		public long FileSize { get; set; }
+		public bool IsDefault { get; set; }
 
 		public Product Product { get; set; }
 	}

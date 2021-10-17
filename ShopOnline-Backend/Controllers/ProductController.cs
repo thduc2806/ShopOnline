@@ -42,6 +42,7 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpPost]
+		[Consumes("multipart/form-data")]
 		public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
 		{
 			var rs = await _manageProductService.Create(request);
@@ -52,6 +53,7 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpPut]
+		[Consumes("multipart/form-data")]
 		public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
 		{
 			var rs = await _manageProductService.Update(request);
