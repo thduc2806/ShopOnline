@@ -40,6 +40,7 @@ namespace oShopSolution.Application.System.Users
 			var claims = new[]
 			{
 				new Claim(ClaimTypes.Email, user.Email),
+				new Claim(ClaimTypes.Name, user.UserName),
 				new Claim(ClaimTypes.GivenName, user.FullName),
 				new Claim(ClaimTypes.Role, string.Join(";", role))
 			};
