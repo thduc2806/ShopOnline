@@ -29,6 +29,8 @@ namespace oShopSolution.Data.EF
 			modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
 			modelBuilder.ApplyConfiguration(new AppUserConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductImgConfiguration());
+			modelBuilder.ApplyConfiguration(new ProductCommentConfiguration());
+
 
 			modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
 			modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -50,6 +52,8 @@ namespace oShopSolution.Data.EF
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<OrderDetail> OrderDetails { get; set; }
 		public DbSet<Cart> Carts { get; set; }
+		public DbSet<ProductComment> ProductComments { get; set; }
+
 
 		public DbSet<ProductImg> ProductImgs { get; set; }
 

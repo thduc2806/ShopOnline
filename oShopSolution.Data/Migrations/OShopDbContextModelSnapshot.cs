@@ -180,7 +180,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "7d777b4f-6121-4c0b-88c8-13bcd0ce4e1e",
+                            ConcurrencyStamp = "5dc8c871-07d2-4bf2-a364-84348e52a6d9",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -252,7 +252,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3da02329-b914-4eb6-9597-6e6b4ab2934b",
+                            ConcurrencyStamp = "353a3013-648d-4f30-a344-8305f198f854",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -260,7 +260,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKMlCWB0dUkPsrwvT+aHMW8MX0BSw7d5iO4orD7BVB/agJuEqLOLQSz5AB6Y7t+nbg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPFQvNE0PLii6J/JKlwz4pVDJpOh5rdAGtzh32AzEK4iVUhjV8sRHkbFZt3DjfQmSQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -421,9 +421,9 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2021, 10, 17, 17, 6, 32, 115, DateTimeKind.Local).AddTicks(4304),
-                            Description = "This is Iphone 11 Promax",
-                            Name = "Iphone 11 Promax",
+                            CreateDate = new DateTime(2021, 10, 21, 18, 2, 6, 292, DateTimeKind.Local).AddTicks(3625),
+                            Description = "This is Iphone 12 Promax",
+                            Name = "Iphone 12 Promax",
                             Price = 100000m,
                             Rating = 5,
                             ThumbPath = "https://www.imagevenue.com/ME13YCXU][IMG]https://cdn-thumbs.imagevenue.com/b5/a4/b5/ME13YCXU_t.png"
@@ -432,12 +432,37 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2021, 10, 17, 17, 6, 32, 115, DateTimeKind.Local).AddTicks(9267),
+                            CreateDate = new DateTime(2021, 10, 21, 18, 2, 6, 292, DateTimeKind.Local).AddTicks(8120),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,
                             Rating = 10
                         });
+                });
+
+            modelBuilder.Entity("oShopSolution.Data.Entities.ProductComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TextComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.ProductImg", b =>
@@ -530,6 +555,15 @@ namespace oShopSolution.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("oShopSolution.Data.Entities.ProductComment", b =>
+                {
+                    b.HasOne("oShopSolution.Data.Entities.Product", "Product")
+                        .WithMany("ProductComments")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("oShopSolution.Data.Entities.ProductImg", b =>
                 {
                     b.HasOne("oShopSolution.Data.Entities.Product", "Product")
@@ -563,6 +597,8 @@ namespace oShopSolution.Data.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductComments");
 
                     b.Navigation("ProductImgs");
                 });

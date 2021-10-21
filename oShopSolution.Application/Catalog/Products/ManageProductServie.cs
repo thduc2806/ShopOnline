@@ -77,7 +77,7 @@ namespace oShopSolution.Application.Catalog.Products
 						join pi in _context.ProductImgs on p.Id equals pi.ProductId into ppi
 						from pi in ppi.DefaultIfEmpty()
 						where pi.IsDefault == true
-						select new { p, pc, pi };
+						select new { p, pc, pi,c };
 			if (!string.IsNullOrEmpty(request.Keyword))
 				query = query.Where(x => x.p.Name.Contains(request.Keyword));
 			if (request.CategoryId != null && request.CategoryId != 0)
@@ -93,6 +93,7 @@ namespace oShopSolution.Application.Catalog.Products
 					Rating = x.p.Rating,
 					CategoryId = x.p.CategoryId,
 					CreateDate = x.p.CreateDate,
+					Category = x.c.Name,
 					ThumbImg = x.pi.ImgPath
 					
 				}).ToListAsync();
@@ -102,7 +103,8 @@ namespace oShopSolution.Application.Catalog.Products
 		public async Task<ProductView> GetById(int productId)
 		{
 			var product = await _context.Products.FindAsync(productId);
-			var category = await _context.Categories.FirstOrDefaultAsync();
+			var comment = await _context.ProductComments.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
+			var category = await _context.Categories.Where(x=> product.CategoryId == x.Id).FirstOrDefaultAsync();
 			var img = await _context.ProductImgs.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefaultAsync();
 			var productView = new ProductView()
 			{
@@ -172,7 +174,7 @@ namespace oShopSolution.Application.Catalog.Products
 						join c in _context.Categories on p.CategoryId equals c.Id into pc
 						from c in pc.DefaultIfEmpty()
 						where (pi == null || pi.IsDefault == true)
-						select new { p, c, pi };
+						select new { p, c, pi};
 
 			var product = await query.OrderByDescending(z => z.p.CreateDate) .Select(z => new ProductView()
 			{

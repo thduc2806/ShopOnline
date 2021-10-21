@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using oShopSolution.Data.EF;
+using oShopSolution.Data.Entities;
+using oShopSolution.ViewModels.Catalog.Comments;
 using oShopSolution.ViewModels.Catalog.Products;
 using System;
 using System.Collections.Generic;
@@ -13,20 +16,35 @@ namespace WebApplication1.Controllers
 	{
 		private readonly IProductAPI _productAPI;
 		private readonly ICategoryAPI _categoryAPI;
+		private readonly ICommentAPI _commentAPI;
+		private readonly OShopDbContext _context;
 
 
-		public ProductController(IProductAPI productAPI, ICategoryAPI categoryAPI)
+		public ProductController(IProductAPI productAPI, ICategoryAPI categoryAPI, ICommentAPI commentAPI, OShopDbContext context)
 		{
 			_productAPI = productAPI;
 			_categoryAPI = categoryAPI;
+			_commentAPI = commentAPI;
+			_context = context;
+
 		}
 		public async Task<IActionResult> Detail(int id)
 		{
 			var product = await _productAPI.GetById(id);
-			return View(new ProductDetailViewModel()
+			ViewBag.product = product;
+			var comment = new ProductComment()
 			{
-				Product = product,
-			});
+				ProductId = id
+			};
+			return View("Detail", comment);
+		}
+		[HttpPost]
+		public ActionResult SendReview(ProductComment comment, int rating)
+		{
+			comment.Rating = rating;
+			_context.ProductComments.Add(comment);
+			_context.SaveChanges();
+			return RedirectToAction("Detail", "Product", new { id = comment.ProductId });
 		}
 
 		public async Task<IActionResult> Category(int id)

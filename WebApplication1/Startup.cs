@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using FluentValidation.AspNetCore;
 using oShopSolution.ViewModels.System.Users;
+using oShopSolution.Data.EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1
 {
@@ -29,6 +31,8 @@ namespace WebApplication1
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDbContext<OShopDbContext>(options =>
+				options.UseSqlServer(Configuration.GetConnectionString("oShopSolutionDb")));
 			services.AddControllersWithViews()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterRequestValidator>())
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
@@ -48,6 +52,7 @@ namespace WebApplication1
 
 			services.AddTransient<IProductAPI, ProductAPI>();
 			services.AddTransient<ICategoryAPI, CategoryAPI>();
+			services.AddTransient<ICommentAPI, CommentAPI>();
 			services.AddTransient<IUserAPI, UserAPI>();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
