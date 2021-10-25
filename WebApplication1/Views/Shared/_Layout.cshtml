@@ -70,15 +70,8 @@
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
 								@if (User.Identity.IsAuthenticated)
 								{
-								}
-								else
-								{
-									<li><a href="/CustomerAccount/Register"><i class="fa fa-lock"></i> Register</a></li>
-								}
-								@if (User.Identity.IsAuthenticated)
-								{
 									<li>
-										<form action="/CustomerAccount/Logout" method="post" style="margin-top: 7px; border: none; background-color: transparent">
+										<form asp-action="SignOut" asp-controller="Account" style="margin-top: 7px; border: none; background-color: transparent">
 									<li>Hello @User.Identity.Name</li>
 									<button type="submit" style="border: none; background-color: transparent; color: gray">
 										<i class="fa fa-lock"></i> Logout
@@ -89,7 +82,7 @@
 								}
 								else
 								{
-									<li><a href="/CustomerAccount/Login"><i class="fa fa-lock"></i> Login</a></li>
+									<li><a asp-action="SignIn" asp-controller="Account"><i class="fa fa-lock"></i> Login</a></li>
 								}
 
 							</ul>

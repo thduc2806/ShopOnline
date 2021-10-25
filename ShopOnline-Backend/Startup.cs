@@ -3,14 +3,11 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using oShopSolution.Application.Catalog.Category;
@@ -21,10 +18,9 @@ using oShopSolution.Application.System.Users;
 using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
 using oShopSolution.ViewModels.System.Users;
+using ShopOnline_Backend.IdentityServer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShopOnline_Backend
 {
@@ -45,6 +41,23 @@ namespace ShopOnline_Backend
 			services.AddIdentity<AppUser, AppRole>()
 				.AddEntityFrameworkStores<OShopDbContext>()
 				.AddDefaultTokenProviders();
+			services.ConfigureApplicationCookie(config =>
+			{
+				config.LoginPath = "/Account/Login";
+			});
+			services.AddIdentityServer(options =>
+			{
+				options.Events.RaiseErrorEvents = true;
+				options.Events.RaiseInformationEvents = true;
+				options.Events.RaiseFailureEvents = true;
+				options.Events.RaiseSuccessEvents = true;
+				options.EmitStaticAudienceClaim = true;
+			})
+				.AddInMemoryIdentityResources(Config.IdentityResources)
+				.AddInMemoryApiScopes(Config.ApiScopes)
+				.AddInMemoryClients(Config.Clients)
+				.AddAspNetIdentity<AppUser>()
+				.AddDeveloperSigningCredential();
 
 			services.AddControllers()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
@@ -60,69 +73,71 @@ namespace ShopOnline_Backend
 			services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 
 
+			services.AddControllersWithViews();
 
-
+			services.AddAuthentication()
+				.AddLocalApi("Bearer", option =>
+				{
+					option.ExpectedScope = "shop.api";
+				});
 
 
 			services.AddSwaggerGen(c =>
 			{
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShopOnline_Backend", Version = "v1" });
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Shop Api", Version = "v1" });
 				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
-					Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
-					Name = "Authorization",
-					In = ParameterLocation.Header,
-					Type = SecuritySchemeType.ApiKey,
-					Scheme = "Bearer"
-				});
-
-				c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-				  {
+					Type = SecuritySchemeType.OAuth2,
+					Flows = new OpenApiOAuthFlows
 					{
-					  new OpenApiSecurityScheme
-					  {
-						Reference = new OpenApiReference
-						  {
-							Type = ReferenceType.SecurityScheme,
-							Id = "Bearer"
-						  },
-						  Scheme = "oauth2",
-						  Name = "Bearer",
-						  In = ParameterLocation.Header,
+						AuthorizationCode = new OpenApiOAuthFlow
+						{
+							TokenUrl = new Uri("/connect/token", UriKind.Relative),
+							AuthorizationUrl = new Uri("/connect/authorize", UriKind.Relative),
+							Scopes = new Dictionary<string, string> { { "shop.api", "Online Shop Api" } }
 						},
-						new List<string>()
-					  }
-					});
-			});
-
-			string issuer = Configuration.GetValue<string>("Tokens:Issuer");
-			string signingKey = Configuration.GetValue<string>("Tokens:Key");
-			byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
-
-			services.AddAuthentication(opt =>
-			{
-				opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-				opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-			})
-			.AddJwtBearer(options =>
-			{
-				options.RequireHttpsMetadata = false;
-				options.SaveToken = true;
-				options.TokenValidationParameters = new TokenValidationParameters()
+					},
+				});
+				c.AddSecurityRequirement(new OpenApiSecurityRequirement
 				{
-					ValidateIssuer = true,
-					ValidIssuer = issuer,
-					ValidateAudience = true,
-					ValidAudience = issuer,
-					ValidateLifetime = true,
-					ValidateIssuerSigningKey = true,
-					ClockSkew = System.TimeSpan.Zero,
-					IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
-				};
+					{
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+						},
+						new List<string>{ "shop.api" }
+					}
+				});
 			});
+
+			services.AddRazorPages();
+			//string issuer = Configuration.GetValue<string>("Tokens:Issuer");
+			//string signingKey = Configuration.GetValue<string>("Tokens:Key");
+			//byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
+
+			//services.AddAuthentication(opt =>
+			//{
+			//	opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			//	opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			//})
+			//.AddJwtBearer(options =>
+			//{
+			//	options.RequireHttpsMetadata = false;
+			//	options.SaveToken = true;
+			//	options.TokenValidationParameters = new TokenValidationParameters()
+			//	{
+			//		ValidateIssuer = true,
+			//		ValidIssuer = issuer,
+			//		ValidateAudience = true,
+			//		ValidAudience = issuer,
+			//		ValidateLifetime = true,
+			//		ValidateIssuerSigningKey = true,
+			//		ClockSkew = System.TimeSpan.Zero,
+			//		IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
+			//	};
+			//});
 		}
+
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -136,16 +151,29 @@ namespace ShopOnline_Backend
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-			app.UseAuthentication();
+			//app.UseAuthentication();
 			app.UseRouting();
+			app.UseIdentityServer();
 			app.UseAuthorization();
 			app.UseSwagger();
-			app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShopOnline_Backend v1"));
+			app.UseSwaggerUI(
+				c =>
+				{
+					c.OAuthClientId("swagger");
+					c.OAuthClientSecret("secret");
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShopOnline_Backend v1");
+				}); 
+				
+				
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapControllers();
+				//endpoints.MapControllers();
+				endpoints.MapControllerRoute(
+					name: "default",
+					pattern: "{controller=Home}/{action=Index}/{id?}");
+				endpoints.MapRazorPages();
 			});
 		}
 	}

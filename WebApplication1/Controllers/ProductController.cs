@@ -32,19 +32,19 @@ namespace WebApplication1.Controllers
 		{
 			var product = await _productAPI.GetById(id);
 			ViewBag.product = product;
-			var comment = new ProductComment()
+			var comment = new CommentRequest()
 			{
 				ProductId = id
 			};
 			return View("Detail", comment);
 		}
 		[HttpPost]
-		public ActionResult SendReview(ProductComment comment, int rating)
+		public ActionResult SendReview(CommentRequest request, int rating, int productId)
 		{
-			comment.Rating = rating;
-			_context.ProductComments.Add(comment);
+			request.Rating = rating;
+			_commentAPI.Create(request);
 			_context.SaveChanges();
-			return RedirectToAction("Detail", "Product", new { id = comment.ProductId });
+			return RedirectToAction("Detail", "Product", new { id = request.ProductId });
 		}
 
 		public async Task<IActionResult> Category(int id)

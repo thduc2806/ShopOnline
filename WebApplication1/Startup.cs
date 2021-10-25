@@ -16,6 +16,7 @@ using FluentValidation.AspNetCore;
 using oShopSolution.ViewModels.System.Users;
 using oShopSolution.Data.EF;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApplication1
 {
@@ -37,12 +38,41 @@ namespace WebApplication1
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterRequestValidator>())
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 			services.AddHttpClient();
-			
-			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-				.AddCookie(options =>
+
+			//services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			//	.AddCookie(options =>
+			//	{
+			//		options.LoginPath = "/CustomerAccount/Login";
+			//		options.AccessDeniedPath = "/User/Forbidden/";
+			//	});
+
+			services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = "Cookies";
+				options.DefaultChallengeScheme = "oidc";
+			})
+				.AddCookie("Cookies")
+				.AddOpenIdConnect("oidc", options =>
 				{
-					options.LoginPath = "/CustomerAccount/Login";
-					options.AccessDeniedPath = "/User/Forbidden/";
+					options.Authority = "https://localhost:5001";
+					options.RequireHttpsMetadata = false;
+					options.GetClaimsFromUserInfoEndpoint = true;
+
+					options.ClientId = "mvc";
+					options.ClientSecret = "secret";
+					options.ResponseType = "code";
+
+					options.SaveTokens = true;
+
+					options.Scope.Add("openid");
+					options.Scope.Add("profile");
+					options.Scope.Add("shop.api");
+
+					options.TokenValidationParameters = new TokenValidationParameters
+					{
+						NameClaimType = "name",
+						RoleClaimType = "role"
+					};
 				});
 			services.AddSession(options =>
 			{
@@ -74,8 +104,8 @@ namespace WebApplication1
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
-			app.UseAuthentication();
 			app.UseRouting();
+			app.UseAuthentication();
 
 			app.UseAuthorization();
 			app.UseSession();

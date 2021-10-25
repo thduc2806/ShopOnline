@@ -23,7 +23,8 @@ namespace oShopSolution.Application.Catalog.Comment
 			var comment = new ProductComment()
 			{
 				TextComment = request.TextComment,
-				Rating = request.Rating
+				Rating = request.Rating,
+				ProductId = request.ProductId
 			};
 			_context.ProductComments.Add(comment);
 			await _context.SaveChangesAsync();
@@ -37,7 +38,8 @@ namespace oShopSolution.Application.Catalog.Comment
 			{
 				Id = x.cm.Id,
 				TextComment = x.cm.TextComment,
-				Rating = x.cm.Rating
+				Rating = x.cm.Rating,
+				ProductId = x.cm.ProductId
 			}).ToListAsync();
 			return comment;
 		}

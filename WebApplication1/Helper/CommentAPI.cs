@@ -40,7 +40,8 @@ namespace WebApplication1.Helper
             var requestContent = new MultipartFormDataContent();
 
             requestContent.Add(new StringContent(request.Rating.ToString()), "rating");
-            requestContent.Add(new StringContent(request.TextComment.ToString()), "TextComment");
+            requestContent.Add(new StringContent(request.TextComment.ToString()), "textComment");
+			requestContent.Add(new StringContent(request.ProductId.ToString()), "productId");
             var response = await client.PostAsync($"/api/Comment/", requestContent);
             return response.IsSuccessStatusCode;
         }
