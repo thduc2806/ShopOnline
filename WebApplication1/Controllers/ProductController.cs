@@ -32,9 +32,9 @@ namespace WebApplication1.Controllers
 		{
 			var product = await _productAPI.GetById(id);
 			ViewBag.product = product;
-			var comment = new CommentRequest()
+			var comment = new CommentView()
 			{
-				ProductId = id
+				ProductId = id,
 			};
 			return View("Detail", comment);
 		}

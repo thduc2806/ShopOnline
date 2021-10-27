@@ -111,11 +111,12 @@ namespace oShopSolution.Application.Catalog.Products
 				Id = product.Id,
 				Name = product.Name,
 				Price = product.Price,
-				Rating = product.Rating,
+				Rating = comment != null ? comment.Rating : 0,
 				Description = product.Description,
 				CreateDate = product.CreateDate,
 				CategoryId = product.CategoryId,
 				Category = category.Name,
+				TextComment = comment != null ? comment.TextComment : "",
 				ThumbImg = img != null ? img.ImgPath : "no-img-jpg"
 			};
 			return productView;

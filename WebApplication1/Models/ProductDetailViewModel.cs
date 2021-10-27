@@ -9,8 +9,8 @@ namespace WebApplication1.Models
 {
 	public class ProductDetailViewModel
 	{
-		public ProductView Product { get; set; }
+		//public ProductView Product { get; set; }
+		public CommentRequest Commentrq { get; set; }
 		public List<CommentView> Comment { get; set; }
-		public CommentRequest CommentRequest { get; set; }
 	}
 }

@@ -1,6 +1,6 @@
-﻿@*@model ProductDetailViewModel*@
-@model oShopSolution.ViewModels.Catalog.Comments.CommentRequest
-@*@model oShopSolution.Data.Entities.ProductComment*@
+﻿
+@model oShopSolution.ViewModels.Catalog.Comments.CommentView
+
 @{
 	ViewData["Title"] = "Detail";
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -28,6 +28,16 @@
 			<p>@ViewBag.product.Description</p>
 			<p>Create Date: @ViewBag.product.CreateDate</p>
 			<p>Category: @ViewBag.product.Category</p>
+			<p>
+				@for (int i = 0; i < ViewBag.product.Rating; i++)
+				{
+					<span class="fa fa-star" style="font-size: 50px"></span>
+				}
+				@for (int i = ViewBag.product.Rating; i < 5; i++)
+				{
+					<span class="fa fa-star-o" style="font-size: 50px"></span>
+				}
+			</p>
 			<a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
 		</div><!--/product-information-->
 	</div>
