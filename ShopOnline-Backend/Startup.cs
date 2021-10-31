@@ -26,12 +26,9 @@ namespace ShopOnline_Backend
 {
 	public class Startup
 	{
-		readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-
 		}
 
 		public IConfiguration Configuration { get; }
@@ -113,18 +110,6 @@ namespace ShopOnline_Backend
 				});
 			});
 
-			services.AddCors(options =>
-			{
-				options.AddPolicy(name: MyAllowSpecificOrigins,
-								  builder =>
-								  {
-									  builder.WithOrigins("http://localhost:3000")
-															  .AllowAnyHeader()
-														.AllowAnyMethod();
-								  });
-			});
-
-
 			services.AddRazorPages();
 			//string issuer = Configuration.GetValue<string>("Tokens:Issuer");
 			//string signingKey = Configuration.GetValue<string>("Tokens:Key");
@@ -163,7 +148,7 @@ namespace ShopOnline_Backend
 
 				
 			}
-			app.UseCors(MyAllowSpecificOrigins);
+
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			//app.UseAuthentication();

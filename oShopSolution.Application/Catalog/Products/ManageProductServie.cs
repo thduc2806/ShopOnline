@@ -32,6 +32,7 @@ namespace oShopSolution.Application.Catalog.Products
 			{
 				Name = request.Name,
 				Description = request.Description,
+				Rating = request.Rating,
 				Price = request.Price,
 				CreateDate = DateTime.Now,
 				CategoryId = request.CategoryId,

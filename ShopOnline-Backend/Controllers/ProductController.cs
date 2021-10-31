@@ -8,6 +8,7 @@ namespace ShopOnline_Backend.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class ProductController : ControllerBase
 	{
 		private readonly IManageProductService _manageProductService;
