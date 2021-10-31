@@ -85,7 +85,7 @@
 
 								<div class="single-products">
 									<div class="productinfo text-center">
-										<img src="@(Configuration["BaseAddress"] + product.ThumbImg)" alt="@product.Name" />
+										<img src="@(Configuration["BaseAddress"] + product.ThumbImg)" alt="@product.Name" width="100" height="200"/>
 										<h2>@product.Price</h2>
 										<p>@product.Description</p>
 										<a href="/product/detail/@product.Id" class="btn btn-default add-to-cart">Detail</a>

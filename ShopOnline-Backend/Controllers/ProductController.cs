@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using oShopSolution.Application.Catalog.Products;
+using oShopSolution.Data.EF;
 using oShopSolution.ViewModels.Catalog.Products;
 using System.Threading.Tasks;
 
@@ -11,9 +12,11 @@ namespace ShopOnline_Backend.Controllers
 	public class ProductController : ControllerBase
 	{
 		private readonly IManageProductService _manageProductService;
-		public ProductController(IManageProductService manageProductService)
+		private readonly OShopDbContext _context;
+		public ProductController(IManageProductService manageProductService, OShopDbContext context)
 		{
 			_manageProductService = manageProductService;
+			_context = context;
 		}
 		[HttpGet]
 		[AllowAnonymous]
@@ -49,17 +52,19 @@ namespace ShopOnline_Backend.Controllers
 			if (rs == 0)
 				return BadRequest();
 			var product = await _manageProductService.GetById(rs);
-			return CreatedAtAction(nameof(GetById), new { id = rs}, product);
+			return CreatedAtAction(nameof(GetById), new { id = rs }, product);
 		}
 
-		[HttpPut]
-		[Consumes("multipart/form-data")]
-		public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
+		[HttpPut("{id}")]
+		//[Consumes("multipart/form-data")]
+		public async Task<IActionResult> Put([FromBody] ProductUpdateRequest request, int id)
 		{
-			var rs = await _manageProductService.Update(request);
-			if (rs == 0)
-				return BadRequest();
-			return Ok();
+			var product = _context.Products.Find(id);
+			product.Name = request.Name;
+			product.Description = request.Description;
+			product.Price = request.Price;
+			await _context.SaveChangesAsync();
+			return Ok(1);
 		}
 
 		[HttpDelete("{id}")]

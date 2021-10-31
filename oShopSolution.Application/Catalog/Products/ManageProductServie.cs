@@ -121,15 +121,14 @@ namespace oShopSolution.Application.Catalog.Products
 			return productView;
 		}
 
-		public async Task<int> Update(ProductUpdateRequest request)
+		public async Task<int> Update(ProductUpdateRequest request, int id)
 		{
-			var product = await _context.Products.FindAsync(request.Id);
-			if (product == null) throw new OShopException($"Can not find witd id : {request.Id}");
+			var product = await _context.Products.FindAsync(id);
+			if (product == null) throw new OShopException($"Can not find witd id : {id}");
 
 			product.Name = request.Name;
 			product.Description = request.Description;
-			product.Rating = request.Rating;
-			product.ThumbPath = request.ThumbPath;
+			product.Price = request.Price;
 
 			return await _context.SaveChangesAsync();
 		}
