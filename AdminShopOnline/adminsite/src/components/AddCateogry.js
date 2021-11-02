@@ -9,7 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import { Redirect } from 'react-router-dom';
 
 /*Import api */
-import { GET_PRODUCT_ID, PUT_EDIT_PRODUCT } from '../api/apiService';
+import { POST_ADD_CATEGORY } from '../api/apiService';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -36,25 +36,13 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
-export default function EditProduct({ match, location }) {
+
+
+export default function Category() {
     const classes = useStyles();
-    const [checkUpdate, setCheckUpdate] = useState(false);
-    const [id, setId] = useState(0);
+    const [checkAdd, setCheckAdd] = useState(false);
     const [name, setName] = useState(null)
     const [description, setDescription] = useState(null)
-    const [price, setPrice] = useState(null)
-
-    useEffect(() => {
-        console.log(location)
-        console.log(match.params.id)
-        GET_PRODUCT_ID(`product`, match.params.id).then(product => {
-            setId(product.data.id)
-            setName(product.data.name);
-            setDescription(product.data.description);
-            setPrice(product.data.price);
-        })
-
-    }, [])
 
     const handleChangeName = (event) => {
         setName(event.target.value)
@@ -62,32 +50,27 @@ export default function EditProduct({ match, location }) {
     const handleChangeDescription = (event) => {
         setDescription(event.target.value)
     }
-    const handleChangePrice = (event) => {
-        setPrice(event.target.value)
-    }
 
-    const EditProduct = (event) => {
+    const addCategory = (event) => {
         event.preventDefault();
-        if (name !== "" && description !== "" && price !== "" && id > 0) {
-            let product = {
+        if (name !== "" && description !== "") {
+            let category = {
                 Name: name,
                 Description: description,
-                Price: price,
             }
-            PUT_EDIT_PRODUCT(`product/${id}`, product).then(item => {
+            POST_ADD_CATEGORY(`category`, category).then(item => {
                 if (item.data === 1) {
-                    setCheckUpdate(true);
+                    setCheckAdd(true);
                 }
             })
         }
         else {
-            alert("You have not entered enough information!");
+            alert("Information Emty");
         }
     }
 
-    /* CHECK setAdd, if true redirect to Home component */
-    if (checkUpdate) {
-        return <Redirect to="/" />
+    if (checkAdd) {
+        return <Redirect to="/category" />
     }
 
     return (
@@ -96,30 +79,24 @@ export default function EditProduct({ match, location }) {
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Typography className={classes.title} variant="h4">
-                            Edit Product
+                            Add Category
                         </Typography>
                         <Grid item xs={12} sm container>
                             <Grid item xs={12}>
                                 <Typography gutterBottom variant="subtitle1">
                                     Name
                                 </Typography>
-                                <TextField id="Name" onChange={handleChangeName} value={name} name="Name" variant="outlined" className={classes.txtInput} size="small" />
+                                <TextField id="Name" onChange={handleChangeName} name="Name" label="Name" variant="outlined" className={classes.txtInput} size="small" />
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography gutterBottom variant="subtitle1">
                                     Description
                                 </Typography>
-                                <TextField id="outlined-multiline-static" onChange={handleChangeDescription} defaultValue={description} name="Description" className={classes.txtInput} multiline rows={4} variant="outlined" />
+                                <TextField id="outlined-multiline-static" onChange={handleChangeDescription} label="Description" name="Description" className={classes.txtInput} multiline rows={4} defaultValue="Description" variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography gutterBottom variant="subtitle1">
-                                    Price
-                                </Typography>
-                                <TextField id="Price" onChange={handleChangePrice} value={price} name="Price" variant="outlined" className={classes.txtInput} size="small" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button type="button" onClick={EditProduct} fullWidth variant="contained" color="primary" className={classes.submit} >
-                                    Update product
+                                <Button type="button" onClick={addCategory} fullWidth variant="contained" color="primary" className={classes.submit} >
+                                    Add Category
                                 </Button>
                             </Grid>
                         </Grid>

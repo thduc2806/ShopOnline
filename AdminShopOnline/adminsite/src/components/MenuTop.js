@@ -47,7 +47,7 @@ export default function MenuTop() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleMenuClose}><Link to="/product" className={classes.linkTo}>Product</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to="/category" className={classes.linkTo}>Category</Link></MenuItem>
+            <MenuItem onClick={handleMenuClose}><Link to="/addcategory" className={classes.linkTo}>AddCategory</Link></MenuItem>
         </Menu>
     );
     return (
@@ -59,6 +59,9 @@ export default function MenuTop() {
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
                         <Link to="/" className={classes.linkHome}>Admin Site Shop Online</Link>
+                    </Typography>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link to="/category" className={classes.linkHome}>Category</Link>
                     </Typography>
                     <IconButton edge="end" color="inherit" aria-label="MoreVert" aria-controls={menuId}
                         aria-haspopup="true"

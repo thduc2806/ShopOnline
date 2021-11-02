@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using oShopSolution.Application.Catalog.Category;
+using oShopSolution.Data.EF;
+using oShopSolution.Data.Entities;
+using oShopSolution.ViewModels.Catalog.Categories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +16,11 @@ namespace ShopOnline_Backend.Controllers
 	public class CategoryController : ControllerBase
 	{
 		private readonly ICategoryService _categoryService;
-		public CategoryController(ICategoryService categoryService)
+		private readonly OShopDbContext _context;
+		public CategoryController(ICategoryService categoryService, OShopDbContext context)
 		{
 			_categoryService = categoryService;
+			_context = context;
 		}
 
 		[HttpGet]
@@ -31,5 +36,44 @@ namespace ShopOnline_Backend.Controllers
 			var category = await _categoryService.GetById(id);
 			return Ok(category);
 		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(int id)
+
+		{
+			var category = _context.Categories.Find(id);
+			_context.Categories.Remove(category);
+			await _context.SaveChangesAsync();
+			return Ok();
+		}
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> Put(int id, [FromBody] CategoryUpdateRequest request)
+		{
+			var category = _context.Categories.Find(id);
+			category.Name = request.Name;
+			category.Description = request.Description;
+			await _context.SaveChangesAsync();
+			return Ok();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Post([FromBody] CategoryUpdateRequest request)
+		{
+			var cate = new Category()
+			{
+				Name = request.Name,
+				Description = request.Description
+			};
+			_context.Categories.Add(cate);
+			await _context.SaveChangesAsync();
+			if (cate.Id > 0)
+			{
+				return Ok();
+			}
+			return BadRequest();
+		}
+
+
 	}
 }

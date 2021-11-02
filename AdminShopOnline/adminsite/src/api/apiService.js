@@ -28,3 +28,15 @@ export function DELETE_PRODUCT_ID(endpoint) {
 export function GET_ALL_CATEGORY(endpoint) {
     return callApi(endpoint, "GET");
 }
+export function GET_CATEGORY_ID(endpoint, id) {
+    return callApi(endpoint + "/" + id, "GET");
+}
+export function DELETE_CATEGORY_ID(endpoint) {
+    return callApi(endpoint, "DELETE");
+}
+export function POST_ADD_CATEGORY(endpoint, data) {
+    return callApi(endpoint, "POST", data);
+}
+export function PUT_EDIT_CATEGORY(endpoint, data) {
+    return callApi(endpoint, "PUT", data);
+}
