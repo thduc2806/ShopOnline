@@ -6,10 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 /*Import api */
 import { GET_ALL_CATEGORY, POST_ADD_PRODUCT } from '../api/apiService';
+import { Col, Form, Row } from 'react-bootstrap';
+import { FormGroup } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -37,14 +39,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-export default function Product() {
+const Product = () => {
     const classes = useStyles();
-    const [checkAdd, setCheckAdd] = useState(false);
-    const [name, setName] = useState(null)
-    const [description, setDescription] = useState(null)
-    const [price, setPrice] = useState(null)
-    const [img, setImg] = useState(null)
+    const [formValue, setFormValue] = useState({})
+    const [imgPatch, setImgPatch] = useState(null)
 
     const [category, setCategory] = useState(0);
     const [categories, setCategories] = useState({});
@@ -56,114 +54,104 @@ export default function Product() {
 
     }, [])
 
-    const handleChangeName = (event) => {
-        setName(event.target.value)
-    }
-    const handleChangeDescription = (event) => {
-        setDescription(event.target.value)
-    }
-    const handleChangePrice = (event) => {
-        setPrice(event.target.value)
-    }
-    const handleChangeImg = (event) => {
-        setImg(event.target.value)
-    }
-    const handleChangeCategory = (event) => {
-        setCategory(event.target.value);
-    };
-
-    const addProduct = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        if (name !== "" && description !== "" && price !== "" && img !== "" && category > 0) {
-            let product = {
-                Name: name,
-                Description: description,
-                Price: price,
-                ThumbImg: img,
-                CategoryId: category
-            }
-            POST_ADD_PRODUCT(`product`, product).then(item => {
-                if (item.data === 1) {
-                    setCheckAdd(true);
-                }
-            })
-        }
-        else {
-            alert("Information Emty");
-        }
-    }
 
-    if (checkAdd) {
-        return <Redirect to="/" />
+        const formData = new FormData();
+        formData.append('Name', formValue.Name);
+        formData.append('Description', formValue.Description);
+        formData.append('Price', formValue.Price);
+        formData.append('CreateDate', formValue.CreateDate);
+        formData.append('CategoryId', formValue.CategoryId);
+        formData.append('ImagePatch', imgPatch);
+
+        POST_ADD_PRODUCT(formData).then((response) => {
+            console.log(response);
+            console.log(formData);
+        }).catch((erro) => {
+            console.log(erro);
+            console.log(formData);
+        })
     }
 
     return (
         <div className={classes.root}>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <Paper className={classes.paper}>
-                        <Typography className={classes.title} variant="h4">
-                            Add Product
-                        </Typography>
-                        <Grid item xs={12} sm container>
-                            <Grid item xs={12}>
-                                <Typography gutterBottom variant="subtitle1">
-                                    Name
-                                </Typography>
-                                <TextField id="Name" onChange={handleChangeName} name="Name" label="Name" variant="outlined" className={classes.txtInput} size="small" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography gutterBottom variant="subtitle1">
-                                    Description
-                                </Typography>
-                                <TextField id="outlined-multiline-static" onChange={handleChangeDescription} label="Description" name="Description" className={classes.txtInput} multiline rows={4} defaultValue="Description" variant="outlined" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography gutterBottom variant="subtitle1">
-                                    Price
-                                </Typography>
-                                <TextField id="Price" onChange={handleChangePrice} name="Price" label="Price" variant="outlined" className={classes.txtInput} size="small" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography gutterBottom variant="subtitle1">
-                                    ThumbImg
-                                </Typography>
-                                <TextField id="ThumbImg" onChange={handleChangeImg} name="ThumbImg" label="ThumbImg" variant="outlined" className={classes.txtInput} size="small" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography gutterBottom variant="subtitle1">
-                                    Choose Category
-                                </Typography>
-                                <TextField
-                                    id="outlined-select-currency-native"
-                                    name="CategoryId"
-                                    select
-                                    value={category}
-                                    onChange={handleChangeCategory}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
-                                    helperText="Please select your currency"
-                                    variant="outlined"
-                                    className={classes.txtInput}
-                                >
-                                    <option value="0">Choose category</option>
-                                    {categories.length > 0 && categories.map((option) => (
-                                        <option key={option.CategoryId} value={option.CategoryId}>
-                                            {option.name}
-                                        </option>
-                                    ))}
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button type="button" onClick={addProduct} fullWidth variant="contained" color="primary" className={classes.submit} >
-                                    Add product
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-            </Grid>
+            <Form onSubmit={handleSubmit}>
+                <Row className="mb-3">
+                    <Form.Group as={Col} controlId="formGridEmail">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Name"
+                            onChange={({ target }) =>
+                                setFormValue((state) => ({
+                                    ...state,
+                                    Name: target.value,
+                                }))
+                            } />
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="formGridEmail">
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Description"
+                            onChange={({ target }) =>
+                                setFormValue((state) => ({
+                                    ...state,
+                                    Description: target.value,
+                                }))
+                            } />
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="formGridEmail">
+                        <Form.Label>Price</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Price"
+                            onChange={({ target }) =>
+                                setFormValue((state) => ({
+                                    ...state,
+                                    Price: target.value,
+                                }))
+                            } />
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="formGridDate">
+                        <Form.Label>CreateDate</Form.Label>
+                        <Form.Control
+                            type="date"
+                            placeholder="Date"
+                            onChange={({ target }) =>
+                                setFormValue((state) => ({
+                                    ...state,
+                                    Price: target.value,
+                                }))
+                            } />
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="formGridEmail">
+                        <Form.Label>Category</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Category"
+                            onChange={({ target }) =>
+                                setFormValue((state) => ({
+                                    ...state,
+                                    Price: target.value,
+                                }))
+                            } />
+                    </Form.Group>
+                </Row>
+                <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Image</Form.Label>
+                    <Form.Control
+                        type="file"
+                        onChange={(event) =>
+                            setImgPatch(event.target.files[0])}>
+                    </Form.Control>
+                </Form.Group>
+                <Button variant="primary" type="submit">Add Product</Button>
+                <Link to="/" type="button" className="btn btn-secondary">Back to Home</Link>
+            </Form>
         </div>
-    )
-}
+    );
+};
+
+export default Product;

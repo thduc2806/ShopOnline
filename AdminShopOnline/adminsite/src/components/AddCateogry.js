@@ -10,6 +10,7 @@ import { Redirect } from 'react-router-dom';
 
 /*Import api */
 import { POST_ADD_CATEGORY } from '../api/apiService';
+import { Description } from '@material-ui/icons';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -92,7 +93,7 @@ export default function Category() {
                                 <Typography gutterBottom variant="subtitle1">
                                     Description
                                 </Typography>
-                                <TextField id="outlined-multiline-static" onChange={handleChangeDescription} label="Description" name="Description" className={classes.txtInput} multiline rows={4} defaultValue="Description" variant="outlined" />
+                                <TextField id="outlined-multiline-static" onChange={handleChangeDescription} label="Description" name="Description" className={classes.txtInput} multiline rows={4} variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
                                 <Button type="button" onClick={addCategory} fullWidth variant="contained" color="primary" className={classes.submit} >

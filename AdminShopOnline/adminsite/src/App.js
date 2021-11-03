@@ -11,6 +11,7 @@ import EditProduct from './components/EditProduct';
 import Category from './components/Category';
 import EditCategory from './components/EditCategory';
 import AddCategory from './components/AddCateogry'
+import AddProduct from './components/AddProduct'
 
 export default class App extends Component {
   displayName = App.name;
@@ -24,7 +25,7 @@ export default class App extends Component {
           <Route path='/home' component={Home} />
           <Route path='/category' component={Category} />
           <Route path='/edit/category/:id' component={EditCategory} />
-          <Route path='/product' component={Product} />
+          <Route path='/addproduct' component={AddProduct} />
           <Route path='/edit/product/:id' component={EditProduct} />
           <Route path='/addcategory' component={AddCategory} />
         </Container>

@@ -5,6 +5,9 @@ export function callApi(endpoint, method = 'GET', body) {
         method,
         url: `${API_URL}/${endpoint}`,
         data: body,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
     }).catch(e => {
         console.log(e)
     })

@@ -45,7 +45,7 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpPost]
-		[Consumes("multipart/form-data")]
+		//[Consumes("multipart/form-data")]
 		public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
 		{
 			var rs = await _manageProductService.Create(request);
