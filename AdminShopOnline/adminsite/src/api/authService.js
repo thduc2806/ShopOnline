@@ -9,7 +9,7 @@ const oidcSettings = {
     post_logout_redirect_uri: CallBackEndpoints.post_logout_redirect_uri,
     response_type: "id_token token",
     scope: "shop.api openid profile offline_access",
-    automaticSilentRenew: true,
+    automaticSilentRenew: false,
     includeIdTokenInSilentRenew: true,
 };
 

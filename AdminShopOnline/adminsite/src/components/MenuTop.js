@@ -93,14 +93,14 @@ export default function MenuTop() {
                             <button
                                 className="btn btn-danger"
                                 type="button"
-                                onClick={handleLogin()}>
+                                onClick={handleLogin}>
                                 Login
                             </button>
                         ) : (
                             <button
                                 className="btn btn-danger"
                                 type="button"
-                                onClick={handleLogout()}>
+                                onClick={handleLogout}>
                                 Logout
                             </button>
                         )}
