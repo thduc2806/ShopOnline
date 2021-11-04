@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
@@ -6,6 +6,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { render } from '@testing-library/react';
+import AuthService from '../api/authService';
+import { USER_PROFILE_STORAGE_KEY } from '../Constants/oidc-config';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,6 +53,23 @@ export default function MenuTop() {
             <MenuItem onClick={handleMenuClose}><Link to="/addcategory" className={classes.linkTo}>AddCategory</Link></MenuItem>
         </Menu>
     );
+    const [userName, setUserName] = useState(undefined);
+    const handleLogin = () => {
+        console.log("ádasdas")
+        AuthService.loginAsync();
+    }
+    const handleLogout = () => {
+        AuthService.logoutAsync();
+    }
+
+    useEffect(() => {
+        let user = JSON.parse(localStorage.getItem(USER_PROFILE_STORAGE_KEY));
+        console.log('Information User: ', user);
+        if (user !== undefined) {
+            setUserName(user?.name)
+        }
+    }, []);
+
     return (
         <div className={classes.root}>
             <AppBar position="static" color="primary">
@@ -68,9 +88,29 @@ export default function MenuTop() {
                         onClick={handleProfileMenuOpen}>
                         <MoreVertIcon />
                     </IconButton>
+                    <div>
+                        {userName === undefined ? (
+                            <button
+                                className="btn btn-danger"
+                                type="button"
+                                onClick={handleLogin()}>
+                                Login
+                            </button>
+                        ) : (
+                            <button
+                                className="btn btn-danger"
+                                type="button"
+                                onClick={handleLogout()}>
+                                Logout
+                            </button>
+                        )}
+                    </div>
+
+
                 </Toolbar>
             </AppBar>
             {renderMenu}
         </div>
-    )
+    );
 }
+
