@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using oShopSolution.Application.System.Users;
+using oShopSolution.Data.EF;
+using oShopSolution.Data.Entities;
 using oShopSolution.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,11 @@ namespace ShopOnline_Backend.Controllers
 	public class UsersController : ControllerBase
 	{
 		private readonly IUserService _userService;
-		public UsersController(IUserService userService)
+		private readonly OShopDbContext _context;
+		public UsersController(IUserService userService, OShopDbContext context)
 		{
 			_userService = userService;
+			_context = context;
 		}
 
 		[HttpPost("authenticate")]
@@ -34,7 +38,7 @@ namespace ShopOnline_Backend.Controllers
 			return Ok(rsToken);
 		}
 
-		[HttpPost("register")]
+		[HttpPost]
 
 		public async Task<IActionResult> Register([FromBody] RegisterRequest request)
 		{
@@ -48,5 +52,78 @@ namespace ShopOnline_Backend.Controllers
 			}
 			return Ok(result);
 		}
+
+		[HttpGet]
+		public IEnumerable<AppUser> GetUser()
+		{
+			var user = _context.Users.Select(s => new AppUser
+			{
+				Id = s.Id,
+				FullName = s.FullName,
+				DOB = s.DOB,
+				PhoneNumber = s.PhoneNumber,
+				UserName = s.UserName,
+				Email = s.Email,
+			}).ToList();
+			return user;
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(Guid id)
+
+		{
+			var user = _context.Users.Find(id);
+			_context.Users.Remove(user);
+			await _context.SaveChangesAsync();
+			return Ok();
+		}
+
+		[HttpPut("{id}")]
+		[Consumes("application/json")]
+		public async Task<IActionResult> Put([FromBody] UserViewModel request, Guid id)
+		{
+			var user = _context.Users.Find(id);
+			user.FullName = request.FullName;
+			//user.DOB = request.DOB;
+			user.PhoneNumber = request.PhoneNumber;
+			await _context.SaveChangesAsync();
+			return Ok(1);
+		}
+
+		[HttpGet("{id}")]
+		public AppUser Get(Guid id)
+		{
+			var user = _context.Users.Select(s => new AppUser
+			{
+				Id = s.Id,
+				FullName = s.FullName,
+				DOB = s.DOB,
+				PhoneNumber = s.PhoneNumber,
+				UserName = s.UserName,
+				Email = s.Email,
+			}).Where(a => a.Id == id).FirstOrDefault();
+			return user;
+		}
+
+		//[HttpPost]
+		//public async Task<IActionResult> Post([FromBody] CreateUserVm request)
+		//{
+		//	var user = new AppUser()
+		//	{
+		//		UserName = request.UseName,
+		//		DOB = request.DOB,
+		//		FullName = request.FullName,
+		//		Email = request.Email,
+		//		PhoneNumber = request.PhoneNumber,
+		//		Description = request.Description
+		//	};
+		//	_context.Categories.Add(cate);
+		//	await _context.SaveChangesAsync();
+		//	if (cate.Id > 0)
+		//	{
+		//		return Ok();
+		//	}
+		//	return BadRequest();
+		//}
 	}
 }

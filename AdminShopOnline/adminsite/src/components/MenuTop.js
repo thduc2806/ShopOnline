@@ -51,6 +51,7 @@ export default function MenuTop() {
         >
             <MenuItem onClick={handleMenuClose}><Link to="/addproduct" className={classes.linkTo}>Product</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to="/addcategory" className={classes.linkTo}>AddCategory</Link></MenuItem>
+            <MenuItem onClick={handleMenuClose}><Link to="/addusers" className={classes.linkTo}>AddUsers</Link></MenuItem>
         </Menu>
     );
     const [userName, setUserName] = useState(undefined);
@@ -82,6 +83,9 @@ export default function MenuTop() {
                     </Typography>
                     <Typography variant="h6" className={classes.title}>
                         <Link to="/category" className={classes.linkHome}>Category</Link>
+                    </Typography>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link to="/users" className={classes.linkHome}>Users</Link>
                     </Typography>
                     <IconButton edge="end" color="inherit" aria-label="MoreVert" aria-controls={menuId}
                         aria-haspopup="true"

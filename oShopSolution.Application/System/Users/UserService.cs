@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
 using oShopSolution.ViewModels.Common;
 using oShopSolution.ViewModels.System.Users;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -19,12 +21,14 @@ namespace oShopSolution.Application.System.Users
 		private readonly SignInManager<AppUser> _signInManager;
 		private readonly RoleManager<AppRole> _roleManager;
 		private readonly IConfiguration _config;
-		public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration condfig)
+		private readonly OShopDbContext _context;
+		public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration condfig, OShopDbContext context)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_roleManager = roleManager;
 			_config = condfig;
+			_context = context;
 		}
 		public async Task<ApiResult<string>> Authencate(LoginRequest request)
 		{
@@ -54,6 +58,7 @@ namespace oShopSolution.Application.System.Users
 				signingCredentials: creds);
 			return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
 		}
+
 
 		public async Task<ApiResult<bool>> Register(RegisterRequest request)
 		{

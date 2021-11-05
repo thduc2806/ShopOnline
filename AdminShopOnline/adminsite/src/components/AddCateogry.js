@@ -74,6 +74,8 @@ export default function Category() {
         return <Redirect to="/category" />
     }
 
+
+
     return (
         <div className={classes.root}>
             <Grid container spacing={3}>

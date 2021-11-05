@@ -13,5 +13,6 @@ namespace oShopSolution.Application.System.Users
 		Task<ApiResult<string>> Authencate(LoginRequest request);
 		Task<ApiResult<bool>> Register(RegisterRequest request);
 		Task<ApiResult<bool>> RoleAssign(Guid id, RoleRequest request);
+		//Task<List<UserViewModel>> GetAllUser();
 	}
 }

@@ -31,11 +31,17 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<IActionResult> GetById(int id)
+		public Category Get(int id)
 		{
-			var category = await _categoryService.GetById(id);
-			return Ok(category);
+			var category = _context.Categories.Select(s => new Category
+			{
+				Id = s.Id,
+				Name = s.Name,
+				Description = s.Description
+			}).Where(a => a.Id == id).FirstOrDefault();
+			return category;
 		}
+
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(int id)
@@ -54,7 +60,7 @@ namespace ShopOnline_Backend.Controllers
 			category.Name = request.Name;
 			category.Description = request.Description;
 			await _context.SaveChangesAsync();
-			return Ok();
+			return Ok(1);
 		}
 
 		[HttpPost]

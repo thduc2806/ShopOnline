@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { Redirect } from 'react-router-dom';
 
-import { POST_ADD_PRODUCT } from '../api/apiService';
+import { POST_ADD_PRODUCT } from '../api/PostApiService';
 import { Form } from 'react-bootstrap';
 const useStyles = makeStyles((theme) => ({
     root: {

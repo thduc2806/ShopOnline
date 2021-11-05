@@ -5,9 +5,9 @@ export function callApi(endpoint, method = 'GET', body) {
         method,
         url: `${API_URL}/${endpoint}`,
         data: body,
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
+        // headers: {
+        //     'Content-Type': 'multipart/form-data'
+        // }
     }).catch(e => {
         console.log(e)
     })
@@ -42,4 +42,19 @@ export function POST_ADD_CATEGORY(endpoint, data) {
 }
 export function PUT_EDIT_CATEGORY(endpoint, data) {
     return callApi(endpoint, "PUT", data);
+}
+export function GET_ALL_USERS(endpoint) {
+    return callApi(endpoint, "GET");
+}
+export function GET_USERS_ID(endpoint, id) {
+    return callApi(endpoint + "/" + id, "GET");
+}
+export function DELETE_USERS_ID(endpoint) {
+    return callApi(endpoint, "DELETE");
+}
+export function PUT_EDIT_USERS(endpoint) {
+    return callApi(endpoint, "PUT");
+}
+export function POST_ADD_USERS(endpoint, data) {
+    return callApi(endpoint, "POST", data);
 }

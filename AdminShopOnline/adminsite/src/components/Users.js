@@ -13,9 +13,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import Url from '../Utils/Url';
-import { GET_ALL_CATEGORY, DELETE_CATEGORY_ID } from '../api/apiService';
+import { GET_ALL_USERS, DELETE_USERS_ID } from '../api/apiService';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -29,36 +29,33 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none'
     }
 }));
-export default function Home() {
+export default function Users() {
     const classes = useStyles();
-    const [category, setCategory] = useState({});
-    const [checkDeleteCategory, setCheckDeleteCategory] = useState(false);
+    const [users, setUsers] = useState({});
+    const [checkDeleteUsers, setCheckDeleteUsers] = useState(false);
     const [close, setClose] = React.useState(false);
     useEffect(() => {
-        GET_ALL_CATEGORY(`category`).then(item => setCategory(item.data))
+        GET_ALL_USERS(`Users`).then(item => setUsers(item.data))
 
     }, [])
-    const RawHTML = (description, className) =>
-        <div className={className} dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, '<br />') }} />
 
-    const deleteCategoryId = (id) => {
+    const deleteUsersId = (id) => {
 
-        DELETE_CATEGORY_ID(`category/${id}`).then(item => {
+        DELETE_USERS_ID(`Users/${id}`).then(item => {
             console.log(item)
             if (item.data === 1) {
-                setCheckDeleteCategory(true);
-                setCategory(category.filter(key => key.id !== id));
+                setCheckDeleteUsers(true);
+                setUsers(users.filter(key => key.id !== id))
             }
         })
     }
-
 
     return (
         <div className={classes.root}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
-                        {checkDeleteCategory && <Alert
+                        {checkDeleteUsers && <Alert
                             action={
                                 <IconButton
                                     aria-label="close"
@@ -66,7 +63,7 @@ export default function Home() {
                                     size="small"
                                     onClick={() => {
                                         setClose(true);
-                                        setCheckDeleteCategory(false)
+                                        setCheckDeleteUsers(false)
                                     }}
                                 >
                                     <CloseIcon fontSize="inherit" />
@@ -77,24 +74,29 @@ export default function Home() {
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Id</TableCell>
-                                        <TableCell align="center">Name</TableCell>
-                                        <TableCell align="center">Description</TableCell>
+                                        <TableCell>Username</TableCell>
+                                        <TableCell align="center">FullName</TableCell>
+                                        <TableCell align="center">DOB</TableCell>
+                                        <TableCell align="center">PhoneNumber</TableCell>
+                                        <TableCell align="center">Email</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {category.length > 0 && category.map((row) => (
+                                    {users.length > 0 && users.map((row) => (
                                         <TableRow key={row.Id}>
-                                            <TableCell component="th" scope="row">{row.id}</TableCell>
-                                            <TableCell align="center">{row.name}</TableCell>
-                                            <TableCell align="center">{row.description}</TableCell>
+                                            <TableCell component="th" scope="row">{row.userName}</TableCell>
+                                            <TableCell align="center">{row.fullName}</TableCell>
+                                            <TableCell align="center">{row.dob}</TableCell>
+                                            <TableCell align="center">{row.phoneNumber}</TableCell>
+                                            <TableCell align="center">{row.email}</TableCell>
                                             <TableCell align="center">
-                                                <Link to={`/edit/category/${row.id}`} className={classes.removeLink}>
+                                                <Link to={`/edit/Users/${row.id}`} className={classes.removeLink}>
                                                     <Button size="small" variant="contained" color="primary">Edit</Button></Link>
                                             </TableCell>
                                             <TableCell align="center">
 
-                                                <Button size="small" variant="contained" color="secondary" onClick={() => deleteCategoryId(row.id)} onLoad="Home()">Remove</Button>
+                                                <Button size="small" variant="contained" color="secondary" onClick={() => deleteUsersId(row.id)}>Remove</Button>
+
                                             </TableCell>
                                         </TableRow>
                                     ))}

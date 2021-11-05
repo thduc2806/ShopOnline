@@ -14,6 +14,9 @@ import AddCategory from './components/AddCateogry'
 import AddProduct from './components/AddProduct'
 import { AUTH } from './Constants/pages';
 import Auth from './components/Auth'
+import Users from './components/Users';
+import EditUsers from './components/EditUsers';
+import addUsers from './components/AddUsers'
 
 // const Auth = lazy(() => import('./components/Auth'));
 
@@ -28,6 +31,9 @@ export default class App extends Component {
           <Route exact path='/' component={Home} />
           <Route path='/home' component={Home} />
           <Route path='/category' component={Category} />
+          <Route path='/users' component={Users} />
+          <Route path='/edit/users/:id' component={EditUsers} />
+          <Route path='/addusers' component={addUsers} />
           <Route path={AUTH}>
             <Auth />
           </Route>

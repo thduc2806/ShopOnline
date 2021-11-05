@@ -9,8 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import { Redirect } from 'react-router-dom';
 
 /*Import api */
-import { GET_CATEGORY_ID, PUT_EDIT_CATEGORY } from '../api/apiService';
-import { Category } from '@material-ui/icons';
+import { GET_USERS_ID, PUT_EDIT_USERS } from '../api/apiService';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -37,42 +36,39 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
-export default function EditCategory({ match, location }) {
+export default function EditUsers({ match, location }) {
     const classes = useStyles();
     const [checkUpdate, setCheckUpdate] = useState(false);
-    const [id, setId] = useState(0);
-    const [name, setName] = useState(null)
-    const [description, setDescription] = useState(null)
-
+    const [id, setId] = useState({});
+    const [fullName, setFullName] = useState(null)
+    const [phoneNumber, setPhoneNumber] = useState(null)
 
     useEffect(() => {
         console.log(location)
         console.log(match.params.id)
-        GET_CATEGORY_ID(`Category`, match.params.id).then(categories => {
-            setId(categories.data.id)
-            setName(categories.data.name);
-            setDescription(categories.data.description);
+        GET_USERS_ID(`users`, match.params.id).then(users => {
+            setId(users.data.id)
+            setFullName(users.data.fullName);
+            setPhoneNumber(users.data.phoneNumber);
         })
-
 
     }, [])
 
     const handleChangeName = (event) => {
-        setName(event.target.value)
+        setFullName(event.target.value)
     }
-    const handleChangeDescription = (event) => {
-        setDescription(event.target.value)
+    const handleChangePhoneNumber = (event) => {
+        setPhoneNumber(event.target.value)
     }
 
-
-    const EditCategory = (event) => {
+    const EditUsers = (event) => {
         event.preventDefault();
-        if (name !== "" && description !== "" && id > 0) {
-            let categories = {
-                Name: name,
-                Description: description,
+        if (fullName !== "" && phoneNumber !== "") {
+            let users = {
+                FullName: fullName,
+                PhoneNumber: phoneNumber,
             }
-            PUT_EDIT_CATEGORY(`Category/${id}`, categories).then(item => {
+            PUT_EDIT_USERS(`Users/${id}`, users).then(item => {
                 if (item.data === 1) {
                     setCheckUpdate(true);
                 }
@@ -85,7 +81,7 @@ export default function EditCategory({ match, location }) {
 
     /* CHECK setAdd, if true redirect to Home component */
     if (checkUpdate) {
-        return <Redirect to="/category" />
+        return <Redirect to="/users" />
     }
 
     return (
@@ -94,24 +90,24 @@ export default function EditCategory({ match, location }) {
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Typography className={classes.title} variant="h4">
-                            Edit Cateogry
+                            Edit Product
                         </Typography>
                         <Grid item xs={12} sm container>
                             <Grid item xs={12}>
                                 <Typography gutterBottom variant="subtitle1">
-                                    Name
+                                    Full Name
                                 </Typography>
-                                <TextField id="Name" onChange={handleChangeName} value={name} name="Name" variant="outlined" className={classes.txtInput} size="small" />
+                                <TextField id="FullName" onChange={handleChangeName} value={fullName} name="FullName" variant="outlined" className={classes.txtInput} size="small" />
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography gutterBottom variant="subtitle1">
-                                    Description
+                                    Phone Number
                                 </Typography>
-                                <TextField id="outlined-multiline-static" onChange={handleChangeDescription} defaultValue={description} name="Description" className={classes.txtInput} multiline rows={4} variant="outlined" />
+                                <TextField id="PhoneNumber" onChange={handleChangePhoneNumber} value={phoneNumber} name="PhoneNumber" variant="outlined" className={classes.txtInput} size="small" />
                             </Grid>
                             <Grid item xs={12}>
-                                <Button type="button" onClick={EditCategory} fullWidth variant="contained" color="primary" className={classes.submit} >
-                                    Update Cateogy
+                                <Button type="button" onClick={EditUsers} fullWidth variant="contained" color="primary" className={classes.submit} >
+                                    Update User
                                 </Button>
                             </Grid>
                         </Grid>
