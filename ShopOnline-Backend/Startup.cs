@@ -93,10 +93,10 @@ namespace ShopOnline_Backend
 					Type = SecuritySchemeType.OAuth2,
 					Flows = new OpenApiOAuthFlows
 					{
-						AuthorizationCode = new OpenApiOAuthFlow
+						Implicit = new OpenApiOAuthFlow
 						{
-							TokenUrl = new Uri("/connect/token", UriKind.Relative),
-							AuthorizationUrl = new Uri("/connect/authorize", UriKind.Relative),
+							TokenUrl = new Uri(Configuration["AuthorityUrl"] + "/connect/authorize"),
+							AuthorizationUrl = new Uri(Configuration["AuthorityUrl"] + "/connect/authorize"),
 							Scopes = new Dictionary<string, string> { { "shop.api", "Online Shop Api" } }
 						},
 					},
@@ -125,7 +125,18 @@ namespace ShopOnline_Backend
 			});
 
 
-			services.AddRazorPages();
+			//services.AddRazorPages(option =>
+			//{
+			//	option.Conventions.AddAreaFolderRouteModelConvention("Identity", "/Account/", model =>
+			//	{
+			//		foreach (var selector in model.Selectors)
+			//		{
+			//			var attributeRouteModel = selector.AttributeRouteModel;
+			//			attributeRouteModel.Order = -1;
+			//			attributeRouteModel.Template = attributeRouteModel.Template.Remove(0, "Identity".Length);
+			//		}
+			//	});
+			//});
 			//string issuer = Configuration.GetValue<string>("Tokens:Issuer");
 			//string signingKey = Configuration.GetValue<string>("Tokens:Key");
 			//byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
@@ -157,19 +168,15 @@ namespace ShopOnline_Backend
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-
-				
-			}
+			app.UseDeveloperExceptionPage();
 			app.UseCors(MyAllowSpecificOrigins);
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-			//app.UseAuthentication();
+			app.UseAuthentication();
 			app.UseRouting();
-			app.UseIdentityServer();
 			app.UseAuthorization();
+			app.UseCors();
+			app.UseIdentityServer();
 			app.UseSwagger();
 			app.UseSwaggerUI(
 				c =>
@@ -177,19 +184,14 @@ namespace ShopOnline_Backend
 					c.OAuthClientId("swagger");
 					c.OAuthClientSecret("secret");
 					c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShopOnline_Backend v1");
-				}); 
-				
-				
-			app.UseAuthorization();
-
+				});
 			app.UseEndpoints(endpoints =>
 			{
-				//endpoints.MapControllers();
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-				endpoints.MapRazorPages();
+				endpoints.MapDefaultControllerRoute();
+				//endpoints.MapRazorPages();
+
 			});
+			
 		}
 	}
 }

@@ -59,11 +59,12 @@ namespace ShopOnline_Backend.IdentityServer
                 new Client
                 {
                     ClientId = "swagger",
+                    ClientName = "Swagger Client",
                     ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Code,
-
-                    RequireConsent = false,
-                    RequirePkce = true,
+                    AllowedGrantTypes = GrantTypes.Implicit,
+					AllowAccessTokensViaBrowser = true,
+					RequireConsent = false,
+                    //RequirePkce = true,
 
                     RedirectUris =           { $"https://localhost:5001/swagger/oauth2-redirect.html" },
                     PostLogoutRedirectUris = { $"https://localhost:5001/swagger/oauth2-redirect.html" },
