@@ -20,7 +20,7 @@ namespace ShopOnline_Backend.Controllers
 			_context = context;
 		}
 		[HttpGet]
-		//[AllowAnonymous]
+		[AllowAnonymous]
 		public async Task<IActionResult> Get()
 		{
 			var product = await _manageProductService.GetAll();
