@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using oShopSolution.Application.Catalog.Products;
 using oShopSolution.Data.EF;
 using oShopSolution.ViewModels.Catalog.Products;
+using oShopSolution.ViewModels.Common;
 using System.Threading.Tasks;
 
 namespace ShopOnline_Backend.Controllers
@@ -12,15 +16,15 @@ namespace ShopOnline_Backend.Controllers
 	[Authorize]
 	public class ProductController : ControllerBase
 	{
-		private readonly IManageProductService _manageProductService;
+		private readonly IProductService _manageProductService;
 		private readonly OShopDbContext _context;
-		public ProductController(IManageProductService manageProductService, OShopDbContext context)
+		public ProductController(IProductService manageProductService, OShopDbContext context)
 		{
 			_manageProductService = manageProductService;
 			_context = context;
 		}
 		[HttpGet]
-		//[AllowAnonymous]
+		[AllowAnonymous]
 		public async Task<IActionResult> Get()
 		{
 			var product = await _manageProductService.GetAll();
@@ -49,6 +53,19 @@ namespace ShopOnline_Backend.Controllers
 		//[Consumes("multipart/form-data")]
 		public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
 		{
+			if (request.ThumbImg == null || request.ThumbImg.Length == 0)
+			{
+                return BadRequest(new ResponseDto() { Code = "file_is_empty", Message = "the uploaded file is empty" });
+            }
+			var isExel = _manageProductService.IsExelFileAsync(request.ThumbImg);
+			if (!isExel)
+			{
+				return BadRequest(new ResponseDto()
+				{
+					Code = "file_is_invalid",
+					Message = "File is not Image"
+				});
+			}
 			var rs = await _manageProductService.Create(request);
 			if (rs == 0)
 				return BadRequest();

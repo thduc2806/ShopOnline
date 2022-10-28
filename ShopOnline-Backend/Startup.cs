@@ -14,6 +14,7 @@ using oShopSolution.Application.Catalog.Category;
 using oShopSolution.Application.Catalog.Comment;
 using oShopSolution.Application.Catalog.Products;
 using oShopSolution.Application.Common;
+using oShopSolution.Application.Option;
 using oShopSolution.Application.System.Users;
 using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
@@ -21,6 +22,7 @@ using oShopSolution.ViewModels.System.Users;
 using ShopOnline_Backend.IdentityServer;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ShopOnline_Backend
 {
@@ -41,6 +43,7 @@ namespace ShopOnline_Backend
 		{
 			services.AddDbContext<OShopDbContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("oShopSolutionDb")));
+			services.Configure<ImageConfigOption>(Configuration.GetSection(ImageConfigOption.ImageConfig));
 			services.AddIdentity<AppUser, AppRole>()
 				.AddEntityFrameworkStores<OShopDbContext>()
 				.AddDefaultTokenProviders();
@@ -64,7 +67,7 @@ namespace ShopOnline_Backend
 
 			services.AddControllers()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
-			services.AddTransient<IManageProductService, ManageProductServie>();
+			services.AddTransient<IProductService, ProductServie>();
 			services.AddTransient<ICategoryService, CategoryService>();
 			services.AddTransient<ICommentService, CommentService>();
 			services.AddTransient<IStorageService, FileStorageService>();
@@ -78,42 +81,62 @@ namespace ShopOnline_Backend
 
 			services.AddControllersWithViews();
 
-			services.AddAuthentication()
-				.AddLocalApi("Bearer", option =>
-				{
-					option.ExpectedScope = "shop.api";
-				});
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
 
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Shop Api", Version = "v1" });
-				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-				{
-					Type = SecuritySchemeType.OAuth2,
-					Flows = new OpenApiOAuthFlows
-					{
-						Implicit = new OpenApiOAuthFlow
-						{
-							TokenUrl = new Uri(Configuration["AuthorityUrl"] + "/connect/authorize"),
-							AuthorizationUrl = new Uri(Configuration["AuthorityUrl"] + "/connect/authorize"),
-							Scopes = new Dictionary<string, string> { { "shop.api", "Online Shop Api" } }
-						},
-					},
-				});
-				c.AddSecurityRequirement(new OpenApiSecurityRequirement
-				{
-					{
-						new OpenApiSecurityScheme
-						{
-							Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-						},
-						new List<string>{ "shop.api" }
-					}
-				});
-			});
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
 
-			services.AddCors(options =>
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                  {
+                    {
+                      new OpenApiSecurityScheme
+                      {
+                        Reference = new OpenApiReference
+                          {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                          },
+                          Scheme = "oauth2",
+                          Name = "Bearer",
+                          In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                      }
+                    });
+            });
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
+
+            services.AddCors(options =>
 			{
 				options.AddPolicy(name: MyAllowSpecificOrigins,
 								  builder =>
@@ -176,7 +199,6 @@ namespace ShopOnline_Backend
 			app.UseRouting();
 			app.UseAuthorization();
 			app.UseCors();
-			app.UseIdentityServer();
 			app.UseSwagger();
 			app.UseSwaggerUI(
 				c =>

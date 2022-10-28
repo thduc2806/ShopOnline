@@ -81,10 +81,10 @@ namespace ShopOnline_Backend.IdentityServer
                new Client {
                     ClientName = "admin",
                     ClientId = "admin",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
                     // AccessTokenType = AccessTokenType.Reference,
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
-                    RequireClientSecret = false,
                     RequireConsent = false,
                     // RequirePkce = true,
                     AlwaysSendClientClaims = true,

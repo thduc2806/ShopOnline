@@ -30,16 +30,20 @@ namespace oShopSolution.Application.System.Users
 			_config = condfig;
 			_context = context;
 		}
-		public async Task<ApiResult<string>> Authencate(LoginRequest request)
+		public async Task<string> Authencate(LoginRequest request)
 		{
 			var user = await _userManager.FindByNameAsync(request.Username);
-			if (user == null) return new ApiErrorResult<string>("Account does not exist");
+
+			if (user == null) 
+				return null;
 
 			var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+
 			if (!result.Succeeded)
 			{
-				return new ApiErrorResult<string>("Login fail");
+				return null;
 			}
+
 			var role = _userManager.GetRolesAsync(user);
 			var claims = new[]
 			{
@@ -51,12 +55,13 @@ namespace oShopSolution.Application.System.Users
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-			var token = new JwtSecurityToken(_config["Tokens:Issuer"],
-				_config["Tokens:Issuer"],
+			var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+				_config["Jwt:Issuer"],
 				claims,
 				expires: DateTime.Now.AddHours(3),
 				signingCredentials: creds);
-			return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+
+			return new JwtSecurityTokenHandler().WriteToken(token);
 		}
 
 

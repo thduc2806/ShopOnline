@@ -18,9 +18,9 @@ namespace oShopSolution.ViewModels.Catalog.Products
 		public DateTime CreateDate { get; set; }
 		public string ThumbImg { get; set; }
 		public string Category { get; set; }
-		public string TextComment { get; set; }
-		public List<CommentView> commentViews { get; set; }
+		//public string TextComment { get; set; }
+		//public List<CommentView> commentViews { get; set; }
 		//public ICollection<CommentView> ProductComments { get; set; }
-		public List<string> ProductComment { get; set; } = new List<string>();
+		//public List<string> ProductComment { get; set; } = new List<string>();
 	}
 }
