@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using oShopSolution.Application.Catalog.Category;
@@ -20,7 +19,6 @@ using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
 using oShopSolution.ViewModels.System.Users;
 using ShopOnline_Backend.IdentityServer;
-using System;
 using System.Collections.Generic;
 using System.Text;
 
