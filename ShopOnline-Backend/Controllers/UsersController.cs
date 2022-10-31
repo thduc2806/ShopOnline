@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ShopOnline_Backend.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/user")]
 	[ApiController]
 	public class UsersController : ControllerBase
 	{
@@ -31,7 +31,7 @@ namespace ShopOnline_Backend.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 			var rsToken = await _userService.Authencate(request);
-			if (string.IsNullOrEmpty(rsToken.ResultObj))
+			if (string.IsNullOrEmpty(rsToken))
 			{
 				return BadRequest(rsToken);
 			}
