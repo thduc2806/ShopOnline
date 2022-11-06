@@ -76,7 +76,7 @@ namespace oShopSolution.Application.Catalog.Products
 		}
 
 
-		public async Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request)
+		public async Task<PageResult<ProductView>> GetAllPagings(GetManageProductPageRequest request)
 		{
 			var query = from p in _context.Products
 						join c in _context.Categories on p.CategoryId equals c.Id into pc
@@ -91,20 +91,28 @@ namespace oShopSolution.Application.Catalog.Products
 			{
 				query = query.Where(p => p.p.CategoryId == request.CategoryId);
 			}
-			var data = await query.Select(x => new ProductView()
-				{
-					Id = x.p.Id,
-					Name = x.p.Name,
-					Description = x.p.Description,
-					Price = x.p.Price,
-					Rating = x.p.Rating,
-					CategoryId = x.p.CategoryId,
-					CreateDate = x.p.CreateDate,
-					Category = x.c.Name,
-					ThumbImg = x.pi.ImgPath
-					
-				}).ToListAsync();
-			return data;
+
+			int total = await query.CountAsync();
+
+			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new ProductView()
+			{
+				Id = x.p.Id,
+				Name = x.p.Name,
+				Description = x.p.Description,
+				Price = x.p.Price,
+				Category = x.c.Name,
+				CreateDate = x.p.CreateDate,
+				ThumbImg = x.p.ThumbPath,
+			}).ToListAsync();
+
+			var pageResult = new PageResult<ProductView>
+			{
+				TotalRecord = total,
+				PageSize = request.PageSize,
+				PageIndex = request.PageIndex,
+				Items = data
+			};
+			return pageResult;
 		}
 
 		public async Task<ProductView> GetById(int productId)

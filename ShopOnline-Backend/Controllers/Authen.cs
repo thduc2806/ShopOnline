@@ -78,7 +78,7 @@ namespace ShopOnline_Backend.Controllers
 					return Ok(new
 					{
 						User = user.UserName,
-						token = new JwtSecurityTokenHandler().WriteToken(token),
+						accessToken = new JwtSecurityTokenHandler().WriteToken(token),
 					});
 				}
 			}

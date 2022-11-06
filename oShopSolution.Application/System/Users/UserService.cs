@@ -121,9 +121,5 @@ namespace oShopSolution.Application.System.Users
 			return new ApiSuccessResult<bool>();
 		}
 
-		Task<ApiResult<string>> IUserService.Authencate(LoginRequest request)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

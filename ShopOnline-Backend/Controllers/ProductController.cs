@@ -25,9 +25,13 @@ namespace ShopOnline_Backend.Controllers
 		}
 		[HttpGet]
 		[AllowAnonymous]
-		public async Task<IActionResult> Get()
+		public async Task<IActionResult> Get([FromQuery] GetManageProductPageRequest request)
 		{
-			var product = await _manageProductService.GetAll();
+			var product = await _manageProductService.GetAllPagings(request);
+			if (product == null)
+			{
+				return BadRequest();
+			}
 			return Ok(product);
 		}
 
