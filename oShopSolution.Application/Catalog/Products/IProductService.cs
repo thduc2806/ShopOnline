@@ -22,8 +22,10 @@ namespace oShopSolution.Application.Catalog.Products
 		Task<PageResult<ProductView>> GetAllPagings(GetManageProductPageRequest request);
 		Task<ProductImg> ImportFileAsync(IFormFile file, int producId);
 		bool IsExelFileAsync(IFormFile file);
+		Task<PageResult<ProductView>> GetAllPagingByCateId(int cateId, GetManageProductPageRequest request);
 
-        Task<List<ProductView>> GetAll();
+
+		Task<List<ProductView>> GetAll();
 		//Task<List<ProductView>> GetAll();
 		//Task<PageResult<ProductView>> GetAllPaging(GetManageProductPageRequest request);
 		//Task<int> AddImg(int productId, List<IFormFile> files);
