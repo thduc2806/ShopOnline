@@ -84,13 +84,7 @@ namespace oShopSolution.Application.Catalog.Products
 						join pi in _context.ProductImgs on p.Id equals pi.ProductId into ppi
 						from pi in ppi.DefaultIfEmpty()
 						where pi.IsDefault == true
-						select new { p, pc, pi,c };
-			if (!string.IsNullOrEmpty(request.Keyword))
-				query = query.Where(x => x.p.Name.Contains(request.Keyword));
-			if (request.CategoryId != null && request.CategoryId != 0)
-			{
-				query = query.Where(p => p.p.CategoryId == request.CategoryId);
-			}
+						select new { p, pc, pi, c };
 
 			int total = await query.CountAsync();
 
@@ -148,6 +142,38 @@ namespace oShopSolution.Application.Catalog.Products
 
 			return await _context.SaveChangesAsync();
 		}
+
+		public async Task<PageResult<ProductView>> GetAllPagingByCateId(int cateId, GetManageProductPageRequest request)
+        {
+			var query = from p in _context.Products
+						join pi in _context.ProductImgs on p.Id equals pi.ProductId
+						join c in _context.Categories on p.CategoryId equals c.Id
+						where p.CategoryId == cateId
+						select new { p, pi, c };
+
+			int total = await query.CountAsync();
+
+			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new ProductView()
+			{
+				Id = x.p.Id,
+				Name = x.p.Name,
+				Description = x.p.Description,
+				Price = x.p.Price,
+				CreateDate = x.p.CreateDate,
+				Category = x.c.Name,
+				ThumbImg = x.pi.ImgPath,
+			}).ToListAsync();
+
+			var pageResult = new PageResult<ProductView>()
+			{
+				TotalRecord = total,
+				PageIndex = request.PageIndex,
+				PageSize = request.PageSize,
+				Items = data
+			};
+
+			return pageResult;
+        }
 
 		public async Task<bool> UpdatePrice(int producId, decimal newPrice)
 		{

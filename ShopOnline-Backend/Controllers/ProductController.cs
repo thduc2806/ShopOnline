@@ -37,11 +37,19 @@ namespace ShopOnline_Backend.Controllers
 
 		[HttpGet("page")]
 		[AllowAnonymous]
-		public async Task<IActionResult> GetAllPagings([FromQuery] GetPublicProductPageRequest request)
+		public async Task<IActionResult> GetAllPagings([FromQuery] GetManageProductPageRequest request)
 		{
-			var product = await _manageProductService.GetAllByCategoryId(request);
+			var product = await _manageProductService.GetAllPagings(request);
 			return Ok(product);
 		}
+
+		[AllowAnonymous]
+		[HttpGet("page/{cateId}")]
+		public async Task<IActionResult> GetAllPageByCateId([FromQuery] GetManageProductPageRequest request, int cateId)
+        {
+			var product = await _manageProductService.GetAllPagingByCateId(cateId, request);
+			return Ok(product);
+        }
 
 		[HttpGet("{id}")]
 		[AllowAnonymous]
