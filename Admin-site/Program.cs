@@ -1,7 +1,12 @@
+using Admin_site.Interface;
+using Admin_site.Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+builder.Services.AddTransient<IProductApi, ProductApi>();
 
 var app = builder.Build();
 

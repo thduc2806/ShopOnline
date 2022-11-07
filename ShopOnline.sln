@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopOnlineTest", "ShopOnlin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{51B0ACDF-1C72-4E6B-902B-06A8B679CAAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin-site", "Admin-site\Admin-site.csproj", "{25FC4496-B6E3-4E02-BA52-DAB6927DB8A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adminsite", "Admin-site\Adminsite.csproj", "{25FC4496-B6E3-4E02-BA52-DAB6927DB8A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

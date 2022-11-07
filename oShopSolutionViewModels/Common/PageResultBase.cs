@@ -12,13 +12,13 @@ namespace oShopSolution.ViewModels.Common
 
         public int PageSize { get; set; }
 
-        public int TotalRecord { get; set; }
+        public int TotalItems { get; set; }
 
-        public int PageCount
+        public int TotalPages
         {
             get
             {
-                var pageCount = (double)TotalRecord / PageSize;
+                var pageCount = (double)TotalItems / PageSize;
                 return (int)Math.Ceiling(pageCount);
             }
         }

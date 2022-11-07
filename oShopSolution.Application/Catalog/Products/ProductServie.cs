@@ -101,7 +101,7 @@ namespace oShopSolution.Application.Catalog.Products
 
 			var pageResult = new PageResult<ProductView>
 			{
-				TotalRecord = total,
+				TotalItems = total,
 				PageSize = request.PageSize,
 				PageIndex = request.PageIndex,
 				Items = data
@@ -166,7 +166,7 @@ namespace oShopSolution.Application.Catalog.Products
 
 			var pageResult = new PageResult<ProductView>()
 			{
-				TotalRecord = total,
+				TotalItems = total,
 				PageIndex = request.PageIndex,
 				PageSize = request.PageSize,
 				Items = data

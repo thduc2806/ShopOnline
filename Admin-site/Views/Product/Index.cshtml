@@ -1,4 +1,7 @@
-﻿@{
+﻿@using oShopSolution.ViewModels.Catalog.Products;
+@using oShopSolution.ViewModels.Common;
+@model PageResult<ProductView>
+@{
     ViewBag.Title = "Product";
     ViewBag.pTitle = "Product";
     ViewBag.pageTitle = "Ecommerce";
@@ -7,14 +10,12 @@
 
 <!-- ION Slider -->
 <link href="~/assets/libs/ion-rangeslider/css/ion.rangeSlider.min.css" rel="stylesheet" type="text/css" />
-
 <div class="row">
     <div class="col-xl-3 col-lg-4">
         <div class="card">
             <div class="card-header bg-transparent border-bottom">
                 <h5 class="mb-0">Filters</h5>
             </div>
-
             <div class="card-body">
                 <h5 class="font-size-14 mb-3">Categories</h5>
 
@@ -91,7 +92,7 @@
                 </div>
 
             </div>
-
+            <vc:page-navigation />
             <div class="card-body border-top">
                 <div>
                     <h5 class="font-size-14 mb-4">Price</h5>
@@ -369,31 +370,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="float-sm-end">
-                                <ul class="pagination pagination-rounded mb-sm-0">
-                                    <li class="page-item disabled">
-                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">1</a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a href="#" class="page-link">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">5</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-end"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <pagenavigation asp-query-param="1" asp-show-first="true" asp-show-last="true" asp-show-total-summary="true"/>
                         </div>
                     </div>
                 </div>

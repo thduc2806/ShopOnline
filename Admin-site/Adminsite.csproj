@@ -192,4 +192,9 @@
     <Folder Include="wwwroot\assets\libs\twitter-bootstrap-wizard\examples\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\oShopSolution.Utilities\oShopSolution.Utilities.csproj" />
+    <ProjectReference Include="..\oShopSolutionViewModels\oShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>
