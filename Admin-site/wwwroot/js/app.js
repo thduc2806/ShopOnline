@@ -231,7 +231,8 @@ File: Main Js File
     }
 
     $(document).ready(function () {
-        init();
+        //init();
+        console.log(1);
     })
 
 })(jQuery)

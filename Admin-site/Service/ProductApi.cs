@@ -23,9 +23,15 @@ namespace Admin_site.Service
         public async Task<PageResult<ProductView>> GetAllProduct(GetManageProductPageRequest request)
         {
             var data = await GetAsync<PageResult<ProductView>>(
-                $"/api/products/paging?pageIndex={request.PageIndex}" +
+                $"/api/product/page?pageIndex={request.PageIndex}" +
                 $"&pageSize={request.PageSize}");
 
+            return data;
+        }
+
+        public async Task<ProductView> GetProductById(int Id)
+        {
+            var data = await GetAsync<ProductView>($"/api/product/{Id}");
             return data;
         }
     }
