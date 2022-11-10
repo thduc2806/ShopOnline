@@ -78,6 +78,7 @@ namespace oShopSolution.Application.Catalog.Products
 
 		public async Task<PageResult<ProductView>> GetAllPagings(GetManageProductPageRequest request)
 		{
+
 			var query = from p in _context.Products
 						join c in _context.Categories on p.CategoryId equals c.Id into pc
 						from c in pc.DefaultIfEmpty()
@@ -87,6 +88,13 @@ namespace oShopSolution.Application.Catalog.Products
 						select new { p, pc, pi, c };
 
 			int total = await query.CountAsync();
+
+			if(!string.IsNullOrEmpty(request.Keyword))
+			{
+				query = query.Where(c => c.p.Name.Contains(request.Keyword));
+			}	
+
+			query = query.OrderByDescending(c => c.p.CreateDate);
 
 			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new ProductView()
 			{

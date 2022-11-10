@@ -20,11 +20,11 @@ namespace Admin_site.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Products( int start = 0, int length = 4, int draw = 0)
+        public async Task<IActionResult> Products(int start = 0, int length = 4, int draw = 0)
         {
             int page = 1;
             int pageSize = length;
-            if ( start == 0)
+            if (start == 0)
             {
                 page = 1;
             }
@@ -38,13 +38,20 @@ namespace Admin_site.Controllers
                 PageIndex = page,
                 PageSize = pageSize,
             };
+            foreach (var item in Request.Query)
+            {
+                if (item.Key.ToLower() == "search[value]")
+                    request.Keyword = item.Value;
+            }
 
             var data = await _productApi.GetAllProduct(request);
-            return Json(new { 
+            return Json(new
+            {
                 draw = draw,
                 recordsTotal = data.TotalItems,
                 recordsFiltered = data.TotalItems,
-                data = data.Items });
+                data = data.Items
+            });
         }
 
 
@@ -54,6 +61,11 @@ namespace Admin_site.Controllers
         {
             var result = await _productApi.GetProductById(Id);
             return View(result);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
         }
 
 

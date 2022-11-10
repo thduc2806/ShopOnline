@@ -24,7 +24,7 @@ namespace Admin_site.Service
         {
             var data = await GetAsync<PageResult<ProductView>>(
                 $"/api/product/page?pageIndex={request.PageIndex}" +
-                $"&pageSize={request.PageSize}");
+                $"&pageSize={request.PageSize}" + $"&keyword={request.Keyword}");
 
             return data;
         }
