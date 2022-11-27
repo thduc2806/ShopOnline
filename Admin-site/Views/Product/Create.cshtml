@@ -48,22 +48,22 @@
                             <h4 class="card-title">Basic Information</h4>
                             <p class="card-title-desc">Fill all information below</p>
 
-                            <form>
+                            <form asp-action="Create" enctype="multipart/form-data" method="post">
                                 <div class="mb-3">
-                                    <label class="form-label" for="productname">Product Name</label>
-                                    <input id="productname" name="productname" type="text" class="form-control">
-                                    <span asp-validation-for="Name"></span>
+                                    <label class="form-label" asp-for="Name">Product Name</label>
+                                    <input id="name" asp-for="Name" type="text" class="form-control">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">                        
-                                    <label class="form-label" for="price">Price</label>
-                                    <input id="price" name="price" type="text" class="form-control">
-                                    <span asp-validation-for="Price"></span>
+                                    <label class="form-label" asp-for="Price">Price</label>
+                                    <input id="price" asp-for="Price" type="text" class="form-control">
+                                    <span asp-validation-for="Price" class="text-danger"></span>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" class="control-label">Category</label>
-                                            <select class="form-control select2">
+                                            <label class="form-label" asp-for="CategoryId">Category</label>
+                                            <select asp-for="CategoryId" class="form-control select2" >
                                                 <option>Select</option>
                                                 <option value="1">APPLE</option>
                                                 <option value="2">Samsung</option>
@@ -74,62 +74,30 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="productdesc">Product Description</label>
-                                    <textarea class="form-control" id="productdesc" rows="5"></textarea>
+                                    <label class="form-label" asp-for="Description">Product Description</label>
+                                    <textarea class="form-control" id="productdesc" rows="5" asp-for="Description"></textarea>
                                 </div>
-                            </form>
-
-                        </div>
-                        <div class="tab-pane" id="product-img">
-                            <h4 class="card-title">Product Images</h4>
-                            <p class="card-title-desc">Upload product image</p>
-                            <form action="/" method="post" class="dropzone">
-                                <div class="fallback">
-                                    <input name="file" type="file" multiple />
-                                </div>
-
-                                <div class="dz-message needsclick">
-                                    <div class="mb-3">
-                                        <i class="display-4 text-muted ri-upload-cloud-2-line"></i>
+                                <div class="tab-pane" id="product-img">
+                                    <h4 class="card-title">Product Images</h4>
+                                    <p class="card-title-desc">Upload product image</p>
+                                    <div class="fallback">
+                                        <input asp-for="ThumbImg" type="file"/>
                                     </div>
-
+                                    <div class="dz-message needsclick">
+                                        <div class="mb-3">
+                                            <i class="display-4 text-muted ri-upload-cloud-2-line"></i>
+                                        </div>
                                     <h4>Drop files here or click to upload.</h4>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="tab-pane" id="metadata">
-                            <h4 class="card-title">Meta Data</h4>
-                            <p class="card-title-desc">Fill all information below</p>
-
-                            <form>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="metatitle">Meta title</label>
-                                            <input id="metatitle" name="metatitle" type="text" class="form-control">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="metakeywords">Meta Keywords</label>
-                                            <input id="metakeywords" name="metakeywords" type="text" class="form-control">
-                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label" for="metadescription">Meta Description</label>
-                                    <textarea class="form-control" id="metadescription" rows="5"></textarea>
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn btn-primary me-2 waves-effect waves-light">ADD</button>
                                 </div>
                             </form>
 
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary me-2 waves-effect waves-light">Save Changes</button>
-                                <button type="submit" class="btn btn-light waves-effect">Cancel</button>
-                            </div>
                         </div>
+                        
+                    
                     </div>
                     <ul class="pager wizard twitter-bs-wizard-pager-link">
                         <li class="previous"><a href="#">Previous</a></li>

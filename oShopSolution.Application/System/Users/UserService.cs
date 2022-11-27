@@ -30,19 +30,21 @@ namespace oShopSolution.Application.System.Users
 			_config = condfig;
 			_context = context;
 		}
-		public async Task<string> Authencate(LoginRequest request)
+		public async Task<ApiResult<string>> Authencate(LoginRequest request)
 		{
 			var user = await _userManager.FindByNameAsync(request.Username);
 
-			if (user == null) 
-				return null;
+			if (user == null)
+			{
+				return new ApiErrorResult<string>("Login Fail");
+			}
 
-			//var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+			var result = await _signInManager.PasswordSignInAsync(user, request.Password,true, true);
 
-			//if (!result.Succeeded)
-			//{
-			//	return null;
-			//}
+			if (!result.Succeeded)
+			{
+				return new ApiErrorResult<string>("Login Fail");
+			}
 
 			var role = _userManager.GetRolesAsync(user);
 			var claims = new[]
@@ -52,7 +54,7 @@ namespace oShopSolution.Application.System.Users
 				new Claim(ClaimTypes.GivenName, user.FullName),
 				new Claim(ClaimTypes.Role, string.Join(";", role))
 			};
-			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
 			var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -61,7 +63,7 @@ namespace oShopSolution.Application.System.Users
 				expires: DateTime.Now.AddHours(3),
 				signingCredentials: creds);
 
-			return new JwtSecurityTokenHandler().WriteToken(token);
+			return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
 		}
 
 

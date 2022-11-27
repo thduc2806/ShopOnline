@@ -23,6 +23,7 @@
                                 <th>CreateDate</th>
                                 <th>Category</th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                     </table>
@@ -57,7 +58,10 @@
         $('#table-product').DataTable({
             serverSide: true,
             processing: true,
-            ajax: 'product/products',
+            ajax: {
+                "url": "products",
+                "type": "GET"
+            },
             columns: [
                 { data: 'id' },
                 {   
@@ -74,7 +78,13 @@
                 { 
                     data: null,
                     render: function(data, type, row, meta){
-                        return "<a href='/product/details/" + data['id'] + "'>Details</a>"
+                        return "<a href='/product/update/" + data['id'] + "'> <button>Update</a>"
+                    }
+                },
+                { 
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        return "<a href='/product/delete/" + data['id'] + "'> <button>Delete</a>"
                     }
                 }
             ],
@@ -90,6 +100,7 @@
         });
     });
 </script>
+
 
 
 

@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Headers;
+using System.Text;
 using Admin_site.Interface;
+using Newtonsoft.Json;
 using oShopSolution.Utilities.Constants;
 using oShopSolution.ViewModels.Catalog.Products;
 using oShopSolution.ViewModels.Common;
@@ -58,16 +60,45 @@ namespace Admin_site.Service
                     data = br.ReadBytes((int)request.ThumbImg.OpenReadStream().Length);
                 }
                 ByteArrayContent bytes = new ByteArrayContent(data);
-                content.Add(bytes, "thumbnailImage", request.ThumbImg.FileName);
+                content.Add(bytes, "thumbImg", request.ThumbImg.FileName);
             }
 
             content.Add(new StringContent(request.Name.ToString()), "name");
             content.Add(new StringContent(request.Price.ToString()), "price");
             content.Add(new StringContent(request.Description.ToString()), "description");
+            content.Add(new StringContent(request.CategoryId.ToString()), "categoryId");
 
             var response = await client.PostAsync($"/api/product/", content);
             return response.IsSuccessStatusCode;
 
         }
-    }
+
+		public async Task<bool> UpdateProduct(ProductUpdateRequest request)
+		{
+			var client = _httpClientFactory.CreateClient();
+			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+			var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+			var json = JsonConvert.SerializeObject(request);
+			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+			var response = await client.PutAsync($"/api/product/{request.Id}/", httpContent);
+			return response.IsSuccessStatusCode;
+
+		}
+
+        public async Task<bool> DeleteProduct(int id)
+        {
+			var client = _httpClientFactory.CreateClient();
+			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+			var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+			var response = await client.DeleteAsync($"/api/product/{id}/");
+			return response.IsSuccessStatusCode;
+		}
+	}
 }

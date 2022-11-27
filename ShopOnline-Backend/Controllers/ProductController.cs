@@ -13,7 +13,6 @@ namespace ShopOnline_Backend.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize]
 	public class ProductController : ControllerBase
 	{
 		private readonly IProductService _manageProductService;
@@ -36,7 +35,7 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpGet("page")]
-		[AllowAnonymous]
+		//[AllowAnonymous]
 		public async Task<IActionResult> GetAllPagings([FromQuery] GetManageProductPageRequest request)
 		{
 			var product = await _manageProductService.GetAllPagings(request);
@@ -61,6 +60,7 @@ namespace ShopOnline_Backend.Controllers
 			return Ok(product);
 		}
 
+		[AllowAnonymous]
 		[HttpPost]
 		//[Consumes("multipart/form-data")]
 		public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
@@ -85,9 +85,9 @@ namespace ShopOnline_Backend.Controllers
 			return CreatedAtAction(nameof(GetById), new { id = rs }, product);
 		}
 
+		[AllowAnonymous]
 		[HttpPut("{id}")]
-		//[Consumes("multipart/form-data")]
-		public async Task<IActionResult> Put([FromBody] ProductUpdateRequest request, int id)
+		public async Task<IActionResult> Update([FromBody] ProductUpdateRequest request, int id)
 		{
 			var product = _context.Products.Find(id);
 			product.Name = request.Name;

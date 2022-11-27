@@ -47,16 +47,16 @@ namespace WebApplication1.Controllers
 			return RedirectToAction("Detail", "Product", new { id = request.ProductId });
 		}
 
-		public async Task<IActionResult> Category(int id)
-		{
-			var product = await _productAPI.GetAllPagings(new GetManageProductPageRequest()
-			{
-				CategoryId = id,
-			});
-			return View(new ProductCategoryViewModel() 
-			{
-				Products = product
-			});
-		}
+		//public async Task<IActionResult> Category(int id)
+		//{
+		//	var product = await _productAPI.GetAllPagings(new GetManageProductPageRequest()
+		//	{
+		//		 CategoryId = id,
+		//	});
+		//	return View(new ProductCategoryViewModel() 
+		//	{
+		//		Products = product
+		//	});
+		//}
 	}
 }

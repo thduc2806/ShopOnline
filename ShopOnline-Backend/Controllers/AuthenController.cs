@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using oShopSolution.Application.System.Users;
 using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
+using oShopSolution.ViewModels.Common;
 using oShopSolution.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,8 @@ namespace ShopOnline_Backend.Controllers
 			_configuration = configuration;
 		}
 
+		[Route("login")]
 		[HttpPost]
-		[AllowAnonymous]
 		public async Task<IActionResult> Login([FromBody] LoginRequest request)
 		{
 			if (ModelState.IsValid)
@@ -78,7 +79,7 @@ namespace ShopOnline_Backend.Controllers
 					return Ok(new
 					{
 						User = user.UserName,
-						accessToken = new JwtSecurityTokenHandler().WriteToken(token),
+						accessToken = new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token)),
 					});
 				}
 			}

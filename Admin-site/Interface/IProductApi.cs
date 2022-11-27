@@ -8,5 +8,8 @@ namespace Admin_site.Interface
         Task<PageResult<ProductView>> GetAllProduct(GetManageProductPageRequest request);
         Task<ProductView> GetProductById(int Id);
         Task<bool> CreateProduct(ProductCreateRequest request);
-    }
+        Task<bool> UpdateProduct(ProductUpdateRequest request);
+        Task<bool> DeleteProduct(int id);
+
+	}
 }

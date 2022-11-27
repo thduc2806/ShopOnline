@@ -31,7 +31,7 @@ namespace ShopOnline_Backend.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 			var rsToken = await _userService.Authencate(request);
-			if (string.IsNullOrEmpty(rsToken))
+			if (string.IsNullOrEmpty(rsToken.ResultObj))
 			{
 				return BadRequest(rsToken);
 			}

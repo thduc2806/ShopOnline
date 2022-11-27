@@ -10,10 +10,10 @@ namespace oShopSolution.ViewModels.Catalog.Products
 {
 	public class ProductCreateRequest
 	{
-		[Required]
+		[Required(ErrorMessage="Please Input Name")]
 		public string Name { get; set; }
 
-		[Required]
+		[Required(ErrorMessage = "Please Input Price")]
 		public decimal Price { get; set; }
 		public string Description { get; set; }
 		public int CategoryId { get; set; }

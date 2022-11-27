@@ -42,12 +42,12 @@ namespace WebApplication1.Helper
             return data;
         }
 
-		public async Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request)
-		{
-            var data = await GetAsync<List<ProductView>>(
-                 $"/api/product/page?categoryId={request.CategoryId}");
+		//public async Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request)
+		//{
+  //          var data = await GetAsync<List<ProductView>>(
+  //               $"/api/product/page?categoryId={request.CategoryId}");
 
-            return data;
-        }
+  //          return data;
+  //      }
 	}
 }

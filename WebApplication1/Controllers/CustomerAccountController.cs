@@ -97,7 +97,6 @@ namespace WebApplication1.Controllers
             {
                 Username = registerRequest.Username,
                 Password = registerRequest.Password,
-                RememberMe = true
             });
             var userPrincipal = this.ValidateToken(loginRs.ResultObj);
             var authProperties = new AuthenticationProperties

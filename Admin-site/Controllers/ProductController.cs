@@ -1,12 +1,14 @@
 ﻿using Admin_site.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using oShopSolution.Utilities.Constants;
 using oShopSolution.ViewModels.Catalog.Products;
 
 namespace Admin_site.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly IProductApi _productApi;
 
@@ -15,6 +17,7 @@ namespace Admin_site.Controllers
             _productApi = productApi;
         }
         // GET: ProductController
+
         public IActionResult Index()
         {
             return View();
@@ -63,11 +66,93 @@ namespace Admin_site.Controllers
             return View(result);
         }
 
-        public IActionResult Create()
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View();
+		}
+
+		[HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
-            return View();
+			if (!ModelState.IsValid)
+				return View(request);
+			var product = await _productApi.CreateProduct(request);
+
+			if (product)
+			{
+				TempData["product"] = "Add success";
+				return RedirectToAction("Index");
+			}
+
+			ModelState.AddModelError("", "Add Fail");
+			return View(request);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Update(int Id)
+		{
+
+			var product = await _productApi.GetProductById(Id);
+			var editVm = new ProductUpdateRequest()
+			{
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+			};
+			return View(editVm);
+		}
+
+		[HttpPost]
+        public async Task<IActionResult> Update(ProductUpdateRequest request)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            var product = await _productApi.UpdateProduct(request);
+
+            if(product)
+            {
+				TempData["product"] = "Update success";
+				return RedirectToAction("Index");
+			}
+
+			ModelState.AddModelError("", "Add Fail");
+			return View(request);
         }
 
+		[HttpGet]
+		public async Task<IActionResult> Delete(int id)
+		{
+			var product = await _productApi.GetProductById(id);
+			return View(new ProductView()
+            {
+                Id = id,
+                Name = product?.Name,
+                Description = product?.Description,
+                Price = product.Price,
+                Category = product?.Category,
+                CreateDate = product.CreateDate
+            });
+		}
 
-    }
+		[HttpPost]
+		public async Task<IActionResult> Delete(ProductDeleteRequest request)
+		{
+			var result = await _productApi.DeleteProduct(request.Id);
+			if (result)
+			{
+				TempData["result"] = "Delete success";
+				return RedirectToAction("Index");
+			}
+
+			return View();
+		}
+
+
+	}
 }
