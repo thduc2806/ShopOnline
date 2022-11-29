@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using oShopSolution.Data.EF;
@@ -33,7 +35,7 @@ namespace oShopSolution.Application.System.Users
 		public async Task<ApiResult<string>> Authencate(LoginRequest request)
 		{
 			var user = await _userManager.FindByNameAsync(request.Username);
-
+			var userId = user.Id;
 			if (user == null)
 			{
 				return new ApiErrorResult<string>("Login Fail");
@@ -47,16 +49,11 @@ namespace oShopSolution.Application.System.Users
 			}
 
 			var role = _userManager.GetRolesAsync(user);
-			var claims = new[]
-			{
-				new Claim(ClaimTypes.Email, user.Email),
-				new Claim(ClaimTypes.Name, user.UserName),
-				new Claim(ClaimTypes.GivenName, user.FullName),
-				new Claim(ClaimTypes.Role, string.Join(";", role))
-			};
+			var claims = JwtTokenHelper.GetUserClaims(request);
+			var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+			var users = new ClaimsPrincipal(claimsIdentity);
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
 			var token = new JwtSecurityToken(_config["Jwt:Issuer"],
 				_config["Jwt:Issuer"],
 				claims,

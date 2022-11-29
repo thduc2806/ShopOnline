@@ -17,6 +17,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IProductApi, ProductApi>();
 builder.Services.AddTransient<IAuthenApi, AuthenApi>();
+builder.Services.AddScoped<IWorkContext, WorkContext>();
 builder.Services.AddSession();
 var app = builder.Build();
 

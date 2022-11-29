@@ -196,6 +196,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\oShopSolution.Application\oShopSolution.Application.csproj" />
     <ProjectReference Include="..\oShopSolution.Utilities\oShopSolution.Utilities.csproj" />
     <ProjectReference Include="..\oShopSolutionViewModels\oShopSolution.ViewModels.csproj" />
   </ItemGroup>

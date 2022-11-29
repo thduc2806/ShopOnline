@@ -12,9 +12,10 @@ namespace Admin_site.Controllers
     {
         private readonly IProductApi _productApi;
 
-        public ProductController(IProductApi productApi)
+        public ProductController(IProductApi productApi, IWorkContext workContext) : base(workContext)
         {
             _productApi = productApi;
+           
         }
         // GET: ProductController
 
@@ -25,6 +26,7 @@ namespace Admin_site.Controllers
 
         public async Task<IActionResult> Products(int start = 0, int length = 4, int draw = 0)
         {
+            var userId = WorkContext.CurrentUser.UserId;
             int page = 1;
             int pageSize = length;
             if (start == 0)

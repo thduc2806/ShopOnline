@@ -38,6 +38,7 @@ namespace ShopOnline_Backend.Controllers
 		//[AllowAnonymous]
 		public async Task<IActionResult> GetAllPagings([FromQuery] GetManageProductPageRequest request)
 		{
+			var user = HttpContext.User;
 			var product = await _manageProductService.GetAllPagings(request);
 			return Ok(product);
 		}

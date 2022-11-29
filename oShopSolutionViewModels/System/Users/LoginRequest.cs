@@ -9,6 +9,8 @@ namespace oShopSolution.ViewModels.System.Users
 {
 	public class LoginRequest
 	{
+		public string UserId { get; set; }
+		public string Role { get; set; }
 		[Required]
 		public string Username { get; set; }
 
