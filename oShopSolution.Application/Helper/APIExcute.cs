@@ -1,0 +1,66 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
+
+namespace oShopSolution.Application.Helper
+{
+    public class APIExcute
+    {
+        private readonly HttpClient httpClient;
+
+        public APIExcute()
+        {
+            httpClient = new HttpClient();
+        }
+
+        public virtual async Task<BaseResponse<TResponse>> GetData<TResponse>(string url, Dictionary<string, object> requestParams = null, string token = null)
+        {
+            BaseResponse<TResponse> result = new BaseResponse<TResponse>();
+            try
+            {
+                if (requestParams != null)
+                {
+                    if (!url.Contains("?"))
+                        url += "?";
+                    foreach (KeyValuePair<string, object> k in requestParams)
+                    {
+                        url += $"{k.Key}={k.Value}&";
+                    }
+                    url = url.TrimEnd('&');
+
+                }
+                if (token != null)
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                HttpResponseMessage response = await httpClient.GetAsync(url);
+                string responseData = await response.Content.ReadAsStringAsync();
+                result.FullResponseString = responseData;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result = JsonConvert.DeserializeObject<BaseResponse<TResponse>>(responseData);
+
+                }
+                else
+                {
+                    result.StatusCode = response.StatusCode;
+                }
+                result.FullResponseString = responseData;
+            }
+            catch (Exception ex)
+            {
+                result.StatusCode = HttpStatusCode.InternalServerError;
+                result.Message = ex.ToString();
+            }
+            return result;
+        }
+    }
+}
