@@ -1,4 +1,4 @@
-﻿@model oShopSolution.ViewModels.System.Users.LoginRequest
+﻿@model oShopSolution.ViewModels.System.Users.AuthenModel
 @{
     ViewData["Title"] = "Login";
     Layout = "~/Views/_Shared/_BlankLayout.cshtml";
@@ -15,13 +15,13 @@
                                 <div class="text-center">
                                     <div>
                                         <a href=@Url.Action("Index", "Product") class="">
-                                            <img src="~/assets/images/logo-dark.png" alt="" height="20" class="auth-logo logo-dark mx-auto">
-                                            <img src="~/assets/images/logo-light.png" alt="" height="20" class="auth-logo logo-light mx-auto">
+@*                                            <img src="~/assets/images/logo-dark.png" alt="" height="20" class="auth-logo logo-dark mx-auto">
+                                            <img src="~/assets/images/logo-light.png" alt="" height="20" class="auth-logo logo-light mx-auto">*@
                                         </a>
                                     </div>
 
                                     <h4 class="font-size-18 mt-4">Welcome Back !</h4>
-                                    <p class="text-muted">Sign in to continue to Nazox.</p>
+                                    <p class="text-muted">Sign in to continue to Admin Manage.</p>
                                     <h4 class="text-warning">@Html.ValidationMessage("Erro")</h4>
                                 </div>
 
@@ -31,8 +31,8 @@
                                         <div class="mb-3 auth-form-group-custom mb-4">
                                             <i class="ri-user-2-line auti-custom-input-icon"></i>
                                             <label for="username">Username</label>
-                                            <input type="text" asp-for="Username" class="form-control" id="username" placeholder="Enter username">
-                                            <span asp-validation-for="Username" class="text-warning"></span>
+                                            <input type="text" asp-for="Email" class="form-control" id="email" placeholder="Enter Email">
+                                            <span asp-validation-for="Email" class="text-warning"></span>
                                         </div>
 
                                         <div class="mb-3 auth-form-group-custom mb-4">
@@ -61,7 +61,7 @@
                                     <p>Don't have an account ? <a href=@Url.Action("Index", "AuthRegister") class="fw-medium text-primary"> Register </a> </p>
                                     <p>
                                         ©
-                                        <script>document.write(new Date().getFullYear())</script> Nazox. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                                        <script>document.write(new Date().getFullYear())</script><i class="mdi mdi-heart text-danger"></i>
                                     </p>
                                 </div>
                             </div>

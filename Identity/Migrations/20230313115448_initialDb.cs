@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Identity.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initialDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -38,6 +38,7 @@ namespace Identity.Migrations
                     City = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Country = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     IsActivated = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -52,7 +53,6 @@ namespace Identity.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -109,7 +109,7 @@ namespace Identity.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "ID", "AccessFailedCount", "City", "ConcurrencyStamp", "Country", "CreatedBy", "CreatedDate", "Birthday", "Email", "EmailConfirmed", "FirstName", "IsActivated", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshToken", "SecurityStamp", "State", "Street", "TokenEffectiveDate", "TokenEffectiveTimeStick", "TwoFactorEnabled", "UserId", "UserName" },
-                values: new object[] { 1, 0, "HCM", "fbc99968-a3b4-4303-9bce-5f1b2c9c3c39", "HCM", new Guid("68d9a794-563c-4544-95ab-c8855441fc36"), new DateTime(2022, 11, 30, 16, 44, 47, 94, DateTimeKind.Local).AddTicks(6169), new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "thduc.2000@gmail.com", true, "admin", true, "admin", true, null, "thduc.2000@gmail.com", "admin", "AQAAAAEAACcQAAAAEOF9ZqKDGZtQnzViBVV3tX2EPNRsh+bcyBiyh8wfLUc++0sHYNOM7Cyew6TsZygWRQ==", null, false, "", "", "", "", new DateTime(2022, 11, 30, 16, 44, 47, 88, DateTimeKind.Local).AddTicks(5311), 0L, false, new Guid("fe6eec2b-239b-4cb6-aeb1-25106220c7f0"), "thduc.2000@gmail.com" });
+                values: new object[] { 1, 0, "HCM", "7ba419c5-14a9-4a12-a6e7-91006753e8d2", "HCM", new Guid("de4fd7e2-de6c-4dc4-9f66-681a135d9a28"), new DateTime(2023, 3, 13, 18, 54, 48, 15, DateTimeKind.Local).AddTicks(4737), new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "thduc.2000@gmail.com", true, "admin", true, "admin", true, null, "thduc.2000@gmail.com", "admin", "AQAAAAEAACcQAAAAED/1qopLIrHQ5AZgDRBpDs0nzuY1DsTh+rKHqE2n91TrT7l3WyMEURqeRKHCegoMcg==", null, false, "", "", "", "", new DateTime(2023, 3, 13, 18, 54, 48, 9, DateTimeKind.Local).AddTicks(5047), 0L, false, new Guid("fe6eec2b-239b-4cb6-aeb1-25106220c7f0"), "thduc.2000@gmail.com" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleControls_SubordinateFid",

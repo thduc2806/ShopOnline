@@ -28,7 +28,7 @@ namespace Admin_site.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
 		{
 			var sessions = context.HttpContext.Session.GetString("Token");
-			if (sessions == null)
+			if (sessions != null)
 			{
 				context.Result = new RedirectToActionResult("Login", "Authen", null);
 			}

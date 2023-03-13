@@ -16,7 +16,7 @@ namespace oShopSolution.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -180,7 +180,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "5dc8c871-07d2-4bf2-a364-84348e52a6d9",
+                            ConcurrencyStamp = "7d299a0a-6f5f-46c1-ab04-de1ab1df198d",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -252,7 +252,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "353a3013-648d-4f30-a344-8305f198f854",
+                            ConcurrencyStamp = "a8fa2a57-0059-47e2-aac6-214a3107103d",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -260,7 +260,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPFQvNE0PLii6J/JKlwz4pVDJpOh5rdAGtzh32AzEK4iVUhjV8sRHkbFZt3DjfQmSQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECfH+uJ7nFOUrhK6ENSCRC9Xi+gX+C82XMPRxF2sysypervuykhCk7u0hIqxcRMjVw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -421,7 +421,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2021, 10, 21, 18, 2, 6, 292, DateTimeKind.Local).AddTicks(3625),
+                            CreateDate = new DateTime(2023, 3, 13, 19, 35, 23, 476, DateTimeKind.Local).AddTicks(1736),
                             Description = "This is Iphone 12 Promax",
                             Name = "Iphone 12 Promax",
                             Price = 100000m,
@@ -432,7 +432,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2021, 10, 21, 18, 2, 6, 292, DateTimeKind.Local).AddTicks(8120),
+                            CreateDate = new DateTime(2023, 3, 13, 19, 35, 23, 477, DateTimeKind.Local).AddTicks(2141),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,

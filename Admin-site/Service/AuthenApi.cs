@@ -21,14 +21,14 @@ namespace Admin_site.Service
 			_httpClientFactory = httpClientFactory;
 		}
 
-		public async Task<ApiResult<string>> Authenticate(LoginRequest request)
+		public async Task<ApiResult<string>> Authenticate(AuthenModel request)
 		{
 			var json = JsonConvert.SerializeObject(request);
 			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
 			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-			var response = await client.PostAsync("/api/user/authenticate/", httpContent);
+			client.BaseAddress = new Uri(_configuration["IdentityAddress"]);
+			var response = await client.PostAsync("/api/Auth", httpContent);
 			if (response.IsSuccessStatusCode)
 			{
 				return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync());

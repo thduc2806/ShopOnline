@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20221130100429_addPhoneNumber")]
-    partial class addPhoneNumber
+    [Migration("20230313115448_initialDb")]
+    partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -203,10 +203,10 @@ namespace Identity.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             City = "HCM",
-                            ConcurrencyStamp = "65b6f4fd-7a5b-4de6-9fbb-d1f80fdf1da9",
+                            ConcurrencyStamp = "7ba419c5-14a9-4a12-a6e7-91006753e8d2",
                             Country = "HCM",
-                            CreatedBy = new Guid("3a30ade3-de7b-449f-b990-bcd66940fdd1"),
-                            CreatedDate = new DateTime(2022, 11, 30, 17, 4, 29, 244, DateTimeKind.Local).AddTicks(3531),
+                            CreatedBy = new Guid("de4fd7e2-de6c-4dc4-9f66-681a135d9a28"),
+                            CreatedDate = new DateTime(2023, 3, 13, 18, 54, 48, 15, DateTimeKind.Local).AddTicks(4737),
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -216,13 +216,13 @@ namespace Identity.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJ6KCag7jnP4GJRxFZ6GLek/+3B9eT6Pu5Gm07xnxdUPkoFbQVIei6vxC2iwE1x82Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAED/1qopLIrHQ5AZgDRBpDs0nzuY1DsTh+rKHqE2n91TrT7l3WyMEURqeRKHCegoMcg==",
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             SecurityStamp = "",
                             State = "",
                             Street = "",
-                            TokenEffectiveDate = new DateTime(2022, 11, 30, 17, 4, 29, 238, DateTimeKind.Local).AddTicks(8461),
+                            TokenEffectiveDate = new DateTime(2023, 3, 13, 18, 54, 48, 9, DateTimeKind.Local).AddTicks(5047),
                             TokenEffectiveTimeStick = 0L,
                             TwoFactorEnabled = false,
                             UserId = new Guid("fe6eec2b-239b-4cb6-aeb1-25106220c7f0"),

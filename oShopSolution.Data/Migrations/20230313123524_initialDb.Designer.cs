@@ -10,15 +10,15 @@ using oShopSolution.Data.EF;
 namespace oShopSolution.Data.Migrations
 {
     [DbContext(typeof(OShopDbContext))]
-    [Migration("20211017100632_UpdateProductImg")]
-    partial class UpdateProductImg
+    [Migration("20230313123524_initialDb")]
+    partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -182,7 +182,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "7d777b4f-6121-4c0b-88c8-13bcd0ce4e1e",
+                            ConcurrencyStamp = "7d299a0a-6f5f-46c1-ab04-de1ab1df198d",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -254,7 +254,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3da02329-b914-4eb6-9597-6e6b4ab2934b",
+                            ConcurrencyStamp = "a8fa2a57-0059-47e2-aac6-214a3107103d",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -262,7 +262,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKMlCWB0dUkPsrwvT+aHMW8MX0BSw7d5iO4orD7BVB/agJuEqLOLQSz5AB6Y7t+nbg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECfH+uJ7nFOUrhK6ENSCRC9Xi+gX+C82XMPRxF2sysypervuykhCk7u0hIqxcRMjVw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -423,9 +423,9 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2021, 10, 17, 17, 6, 32, 115, DateTimeKind.Local).AddTicks(4304),
-                            Description = "This is Iphone 11 Promax",
-                            Name = "Iphone 11 Promax",
+                            CreateDate = new DateTime(2023, 3, 13, 19, 35, 23, 476, DateTimeKind.Local).AddTicks(1736),
+                            Description = "This is Iphone 12 Promax",
+                            Name = "Iphone 12 Promax",
                             Price = 100000m,
                             Rating = 5,
                             ThumbPath = "https://www.imagevenue.com/ME13YCXU][IMG]https://cdn-thumbs.imagevenue.com/b5/a4/b5/ME13YCXU_t.png"
@@ -434,12 +434,37 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2021, 10, 17, 17, 6, 32, 115, DateTimeKind.Local).AddTicks(9267),
+                            CreateDate = new DateTime(2023, 3, 13, 19, 35, 23, 477, DateTimeKind.Local).AddTicks(2141),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,
                             Rating = 10
                         });
+                });
+
+            modelBuilder.Entity("oShopSolution.Data.Entities.ProductComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TextComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.ProductImg", b =>
@@ -532,6 +557,15 @@ namespace oShopSolution.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("oShopSolution.Data.Entities.ProductComment", b =>
+                {
+                    b.HasOne("oShopSolution.Data.Entities.Product", "Product")
+                        .WithMany("ProductComments")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("oShopSolution.Data.Entities.ProductImg", b =>
                 {
                     b.HasOne("oShopSolution.Data.Entities.Product", "Product")
@@ -565,6 +599,8 @@ namespace oShopSolution.Data.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductComments");
 
                     b.Navigation("ProductImgs");
                 });

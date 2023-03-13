@@ -82,10 +82,7 @@ namespace oShopSolution.Application.Catalog.Products
 			var query = from p in _context.Products
 						join c in _context.Categories on p.CategoryId equals c.Id into pc
 						from c in pc.DefaultIfEmpty()
-						join pi in _context.ProductImgs on p.Id equals pi.ProductId into ppi
-						from pi in ppi.DefaultIfEmpty()
-						where pi.IsDefault == true
-						select new { p, pc, pi, c };
+						select new { p, pc, c };
 
 			int total = await query.CountAsync();
 
