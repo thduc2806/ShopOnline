@@ -6,6 +6,7 @@ namespace Admin_site.Interface
     public interface IAuthenApi
     {
 		Task<AuthenViewModel> Authenticate(AuthenModel request);
+		Task<AuthenViewModel> GetUser(string token);
 
 	}
 }

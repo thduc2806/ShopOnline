@@ -5,17 +5,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using oShopSolution.Utilities.Constants;
 using oShopSolution.ViewModels.Catalog.Products;
+using System.Security.Claims;
 
 namespace Admin_site.Controllers
 {
+    [Authorize]
     public class ProductController : BaseController
     {
         private readonly IProductApi _productApi;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IWorkContext _workContext;
 
-        public ProductController(IProductApi productApi) : base()
+        public ProductController(IProductApi productApi, IHttpContextAccessor httpContextAccessor, IWorkContext workContext) : base()
         {
             _productApi = productApi;
-           
+            _httpContextAccessor = httpContextAccessor;
+            _workContext = workContext;
         }
         // GET: ProductController
 
@@ -26,8 +31,8 @@ namespace Admin_site.Controllers
 
         public async Task<IActionResult> Products(int start = 0, int length = 4, int draw = 0)
         {
-            //var userId = WorkContext.CurrentUser.UserId;
-            var userId = WorkContext.CurrentUser.UserId;
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var test = _workContext.UserId;
             int page = 1;
             int pageSize = length;
             if (start == 0)

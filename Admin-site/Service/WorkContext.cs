@@ -10,12 +10,8 @@ namespace Admin_site.Service
 {
     public class WorkContext : IWorkContext
     {
-        private LoginRequest _currentUser = null;
-        private string _token;
-        private string _userId;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        LoginRequest IWorkContext.CurrentUser => GetCurrentUser();
 
 
         //LoginRequest IWorkContext.CurrentUser => throw new NotImplementedException();
@@ -25,29 +21,17 @@ namespace Admin_site.Service
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public string UserInfo
+		public string UserId
         {
             get
             {
                 if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 {
                     return null;
-                }
-
-                ClaimsIdentity identity = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
-                _userId = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
-                return _userId;
+                }  
+                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                return userId;
             }
-        }
-
-        private LoginRequest GetCurrentUser()
-        {
-            if (_currentUser != null)
-                return _currentUser;
-            if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated || _httpContextAccessor.HttpContext.User is WindowsPrincipal)
-                return null;
-            _currentUser = JwtTokenHelper.GetUserInfo(_httpContextAccessor.HttpContext.User);
-            return string.IsNullOrEmpty(_currentUser.UserId) ? null : _currentUser;
         }
     }
 }

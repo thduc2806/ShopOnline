@@ -35,12 +35,11 @@ namespace Admin_site.Controllers
         [AllowAnonymous]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Login(AuthenModel request, string returnUrl)
+        public async Task<IActionResult> Login(AuthenModel request, string returnUrl = "")
 		{
 			if (ModelState.IsValid)
 			{
 				var results = await _authenApi.Authenticate(request);
-				var test = HttpContext.User.Claims.FirstOrDefault();
 
 				if (results.AccessToken != null)
 				{
@@ -72,7 +71,7 @@ namespace Admin_site.Controllers
                 }
 				else
 				{
-                    ViewBag.Error = "User not valid: " + results.Message;
+                    ViewBag.Error = results.Message;
                     return View("Login", request);
                 }
 			}

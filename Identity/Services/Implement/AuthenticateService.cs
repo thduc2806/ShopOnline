@@ -39,7 +39,7 @@ namespace Identity.Services.Implement
                     return BaseResponse<AuthenticateViewModel>.Success(authResponseModel);
                 }
             }
-            return BaseResponse<AuthenticateViewModel>.BadRequest();
+            return BaseResponse<AuthenticateViewModel>.BadRequest(message: "Account is invalid!");
         }
 
         public async Task<BaseResponse<bool>> ValidateAccount(string email, string password)

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Omu.ValueInjecter;
 using oShopSolution.Application.Helper;
+using oShopSolution.ViewModels.System.Users;
 
 namespace Identity.Services.Implement
 {
@@ -112,16 +113,16 @@ namespace Identity.Services.Implement
                 return BaseResponse<bool>.BadRequest();
         }
 
-        public async Task<BaseResponse<UserProfileViewModel>> GetUserProfile(string key)
+        public async Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key)
         {
             Users user = await Find(key);
             if(user == null)
             {
-                return BaseResponse<UserProfileViewModel>.NotFound();
+                return BaseResponse<AuthenViewModel>.NotFound();
             }
             LoadRelated(user);
-            var model = _mapper.Map<Users,UserProfileViewModel>(user);
-            return BaseResponse<UserProfileViewModel>.Success(model);
+            var model = _mapper.Map<Users, AuthenViewModel>(user);
+            return BaseResponse<AuthenViewModel>.Success(model);
         }
     }
 }

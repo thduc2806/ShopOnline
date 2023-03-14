@@ -37,5 +37,16 @@ namespace Admin_site.Service
 			};
         }
 
+		public async Task<AuthenViewModel> GetUser(string token)
+		{
+			var url = "https://localhost:44321/api/account/profile";
+			var response = await _aPIExcute.GetData<AuthenViewModel>(url, token: token);
+			if (response.IsSuccessStatusCode)
+			{
+				return response.ResponseData;
+			}
+			return null;
+		}
+
 	}
 }

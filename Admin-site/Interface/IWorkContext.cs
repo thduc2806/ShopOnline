@@ -4,6 +4,6 @@ namespace Admin_site.Interface
 {
     public interface IWorkContext
     {
-        LoginRequest CurrentUser { get; }
-    }
+        public string UserId { get;}
+	}
 }

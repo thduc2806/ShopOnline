@@ -1,3 +1,5 @@
+using Admin_site.Interface;
+using Admin_site.Service;
 using Identity.Database;
 using Identity.Database.Entities;
 using Identity.Helper;
@@ -93,8 +95,8 @@ public static class ServiceCollectionExtension
         //********************************************************************//
         services.TryAddScoped<IAccountService, AccountService>();
         services.TryAddScoped<IAuthenticateService, AuthenticateService>();
-        //services.TryAddScoped<IRoleService, RoleService>();
-    }
+		//services.TryAddScoped<IRoleService, RoleService>();
+	}
 
     public static void AddStaticHelper(this IServiceCollection services)
     {
