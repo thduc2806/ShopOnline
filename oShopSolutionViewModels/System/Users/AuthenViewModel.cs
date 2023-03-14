@@ -17,6 +17,8 @@ namespace oShopSolution.ViewModels.System.Users
         public string RefreshToken { get; set; }
         public string TokenEffectiveDate { get; set; }
         public string TokenEffectiveTimeStick { get; set; }
+        public double Expired { get; set; }
+        public string Message { get; set; }
 
     }
 }

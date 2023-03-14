@@ -16,7 +16,7 @@ namespace Identity.Database
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-2URRFJ3;Initial Catalog=Identity;User=sa;Password=123456;Integrated Security=False;");
+            optionsBuilder.UseSqlServer("Data Source=66.42.55.66;Initial Catalog=Duc_Identity;User=dev;Password=123456!@#A;Integrated Security=False;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

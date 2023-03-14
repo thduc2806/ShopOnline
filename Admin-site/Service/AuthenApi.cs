@@ -1,5 +1,6 @@
 ﻿using Admin_site.Interface;
 using Newtonsoft.Json;
+using oShopSolution.Application.Helper;
 using oShopSolution.ViewModels.Common;
 using oShopSolution.ViewModels.System.Users;
 using System.Text;
@@ -8,34 +9,33 @@ namespace Admin_site.Service
 {
     public class AuthenApi : IAuthenApi
     {
-		private readonly IHttpClientFactory _httpClientFactory;
-		private readonly IConfiguration _configuration;
-		private readonly IHttpContextAccessor _httpContextAccessor;
+        protected APIExcute _aPIExcute;
 
-		public AuthenApi(IHttpClientFactory httpClientFactory,
-				   IHttpContextAccessor httpContextAccessor,
-					IConfiguration configuration)
+        public AuthenApi()
 		{
-			_configuration = configuration;
-			_httpContextAccessor = httpContextAccessor;
-			_httpClientFactory = httpClientFactory;
-		}
+            _aPIExcute = new APIExcute();
+        }
 
-		public async Task<ApiResult<string>> Authenticate(AuthenModel request)
+		public async Task<AuthenViewModel> Authenticate(AuthenModel request)
 		{
-			var json = JsonConvert.SerializeObject(request);
-			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+			string url = "https://localhost:44321/api/auth";
 
-			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["IdentityAddress"]);
-			var response = await client.PostAsync("/api/Auth", httpContent);
-			if (response.IsSuccessStatusCode)
+            var req = new BaseRequest<object>(new
 			{
-				return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync());
+				Email = request.Email,
+				request.Password
+			});
+			var res = await _aPIExcute.PostData<AuthenViewModel, object>(url: $"{url}", req);
+			
+			if (res.IsSuccessStatusCode)
+			{
+				return res.ResponseData;
 			}
-
-			return JsonConvert.DeserializeObject<ApiErrorResult<string>>(await response.Content.ReadAsStringAsync());
-		}
+			return new AuthenViewModel
+			{
+				Message = res.Message ?? "User is not valid"
+			};
+        }
 
 	}
 }

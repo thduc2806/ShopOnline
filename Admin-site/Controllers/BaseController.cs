@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Admin_site.Controllers
 {
+	[Authorize]
 	public class BaseController : Controller
 	{
-		private IWorkContext _workContext = null;
+		private IWorkContext _workContext;
 
 		public IWorkContext WorkContext
 		{
@@ -21,18 +22,14 @@ namespace Admin_site.Controllers
             }
 		}
 
-		public BaseController(IWorkContext workContext)
-		{
-			_workContext = workContext;
-		}
-        public override void OnActionExecuting(ActionExecutingContext context)
-		{
-			var sessions = context.HttpContext.Session.GetString("Token");
-			if (sessions != null)
-			{
-				context.Result = new RedirectToActionResult("Login", "Authen", null);
-			}
-			base.OnActionExecuting(context);
-		}
-	}
+        protected IActionResult Success(object id, string msg = null, string data = null)
+        {
+            return Ok(new { Id = id, msg = msg, data = data });
+        }
+
+        protected IActionResult Error(string message)
+        {
+            return Ok(new { Id = 0, Msg = message });
+        }
+    }
 }

@@ -9,58 +9,74 @@ using System.Text;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Admin_site.Helper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Admin_site.Controllers
 {
-	public class AuthenController : Controller
+	public class AuthenController : BaseController
 	{
 		private readonly IAuthenApi _authenApi;
-		private readonly IConfiguration _configuration;
 
-		public AuthenController(IAuthenApi authenApi,
-			IConfiguration configuration)
+		public AuthenController(IAuthenApi authenApi)
 		{
 			_authenApi = authenApi;
-			_configuration = configuration;
-		}
-		public IActionResult Login()
-		{
-			return View();
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> Login(AuthenModel request)
+        [AllowAnonymous]
+		[HttpGet]
+        public IActionResult Login(string returnUrl)
 		{
-			if (!ModelState.IsValid)
+            ViewBag.ReturnUrl = returnUrl;
+			var model = new AuthenModel();
+            return View(model);
+		}
+
+        [AllowAnonymous]
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Login(AuthenModel request, string returnUrl)
+		{
+			if (ModelState.IsValid)
 			{
-				return View(request);
+				var results = await _authenApi.Authenticate(request);
+				var test = HttpContext.User.Claims.FirstOrDefault();
+
+				if (results.AccessToken != null)
+				{
+					var claims = new List<Claim>()
+					{
+						new Claim(ClaimTypes.Name, results.Email),
+						new Claim(ClaimTypes.Rsa, results.AccessToken),
+						new Claim(ClaimTypes.NameIdentifier, results.UserId),
+						new Claim(ClaimTypes.Role, results.UserRole)
+					};
+
+                    var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = request.RememberMe,
+                        ExpiresUtc = WebHelper.ConvertUnixTimeToDate(results.Expired)
+                    };
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+
+                    if (!string.IsNullOrWhiteSpace(returnUrl))
+                        return Redirect(returnUrl);
+                    return RedirectToAction("Index", "Product");
+                }
+				else
+				{
+                    ViewBag.Error = "User not valid: " + results.Message;
+                    return View("Login", request);
+                }
 			}
-			var result = await _authenApi.Authenticate(request);
-			if (!result.IsSuccessed)
-			{
-				ModelState.AddModelError("Erro", result.Message = "Username or Passsword is Wrong! Please input again!!!");
-				return View();
-			}
-
-			return RedirectToAction("Index", "Product");
-		}
-
-		private ClaimsPrincipal ValidateToken(string jwtToken)
-		{
-			IdentityModelEventSource.ShowPII = true;
-
-			SecurityToken validatedToken;
-			TokenValidationParameters validationParameters = new TokenValidationParameters();
-
-			validationParameters.ValidateLifetime = true;
-
-			validationParameters.ValidAudience = _configuration["Jwt:Issuer"];
-			validationParameters.ValidIssuer = _configuration["Jwt:Issuer"];
-			validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-			ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
-
-			return principal;
+			return View("Login", request);
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Identity.Controllers
         public async Task<IActionResult> Auth(AuthModel model)
         {
             var result = await _authservice.AuthenticateByEmail(model.Email, model.Password);
-            var user = HttpContext.User;
+            //var user = HttpContext.User;
             return Ok(result);
         }
     }

@@ -8,11 +8,12 @@ using oShopSolution.ViewModels.Catalog.Products;
 
 namespace Admin_site.Controllers
 {
+    [Authorize]
     public class ProductController : BaseController
     {
         private readonly IProductApi _productApi;
 
-        public ProductController(IProductApi productApi, IWorkContext workContext) : base(workContext)
+        public ProductController(IProductApi productApi) : base()
         {
             _productApi = productApi;
            

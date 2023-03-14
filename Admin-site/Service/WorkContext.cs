@@ -10,6 +10,7 @@ namespace Admin_site.Service
     public class WorkContext : IWorkContext
     {
         private LoginRequest _currentUser = null;
+        private string _token;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         LoginRequest IWorkContext.CurrentUser => GetCurrentUser();

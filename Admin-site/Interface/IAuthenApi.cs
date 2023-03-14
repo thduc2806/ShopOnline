@@ -5,7 +5,7 @@ namespace Admin_site.Interface
 {
     public interface IAuthenApi
     {
-		Task<ApiResult<string>> Authenticate(AuthenModel request);
+		Task<AuthenViewModel> Authenticate(AuthenModel request);
 
 	}
 }
