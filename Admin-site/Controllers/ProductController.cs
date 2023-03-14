@@ -8,7 +8,6 @@ using oShopSolution.ViewModels.Catalog.Products;
 
 namespace Admin_site.Controllers
 {
-    [Authorize]
     public class ProductController : BaseController
     {
         private readonly IProductApi _productApi;
@@ -28,6 +27,7 @@ namespace Admin_site.Controllers
         public async Task<IActionResult> Products(int start = 0, int length = 4, int draw = 0)
         {
             //var userId = WorkContext.CurrentUser.UserId;
+            var userId = WorkContext.CurrentUser.UserId;
             int page = 1;
             int pageSize = length;
             if (start == 0)
