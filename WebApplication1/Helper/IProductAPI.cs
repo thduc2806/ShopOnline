@@ -11,7 +11,7 @@ namespace WebApplication1.Helper
     {
         Task<ProductView> GetById(int id);
 
-        Task<List<ProductView>> GetAll();
-        //Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request);
-    }
+		Task<PageResult<ProductView>> GetAllProduct(GetManageProductPageRequest request);
+		//Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request);
+	}
 }

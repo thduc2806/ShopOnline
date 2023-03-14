@@ -36,18 +36,21 @@ namespace WebApplication1.Helper
             return data;
         }
 
-        public async Task<List<ProductView>> GetAll()
-        {
-            var data = await GetListAsync<ProductView>("/api/product");
-            return data;
-        }
+		public async Task<PageResult<ProductView>> GetAllProduct(GetManageProductPageRequest request)
+		{
+			var data = await GetAsync<PageResult<ProductView>>(
+				$"/api/product/page?pageIndex={request.PageIndex}" +
+				$"&pageSize={request.PageSize}" + $"&keyword={request.Keyword}");
+
+			return data;
+		}
 
 		//public async Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request)
 		//{
-  //          var data = await GetAsync<List<ProductView>>(
-  //               $"/api/product/page?categoryId={request.CategoryId}");
+		//          var data = await GetAsync<List<ProductView>>(
+		//               $"/api/product/page?categoryId={request.CategoryId}");
 
-  //          return data;
-  //      }
+		//          return data;
+		//      }
 	}
 }

@@ -27,15 +27,17 @@ namespace WebApplication1.Controllers
 			_categoryApi = categoryApi;
 		}
 
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int pageSize, int pageIndex)
 		{
-			var viewModel = new HomeViewModels 
-			{
-				Product =  await _productApi.GetAll(),
-				Category = await _categoryApi.GetAll()
+			//var request = new GetManageProductPageRequest()
+			//{
+			//	PageIndex = pageIndex,
+			//	PageSize = pageSize,
+			//};
 
-			};
-			return View(viewModel);
+			//var product = await _productApi.GetAllProduct(request);
+
+			return View();
 		}
 
 		public IActionResult Privacy()
