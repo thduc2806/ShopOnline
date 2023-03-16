@@ -27,17 +27,24 @@ namespace WebApplication1.Controllers
 			_categoryApi = categoryApi;
 		}
 
-		public async Task<IActionResult> Index(int pageSize, int pageIndex)
+		public async Task<IActionResult> Index(int pageSize = 5, int pageIndex = 1)
 		{
-			//var request = new GetManageProductPageRequest()
-			//{
-			//	PageIndex = pageIndex,
-			//	PageSize = pageSize,
-			//};
+			var request = new GetManageProductPageRequest()
+			{
+				PageIndex = pageIndex,
+				PageSize = pageSize,
+			};
 
-			//var product = await _productApi.GetAllProduct(request);
+			var product = await _productApi.GetAllProduct(request);
 
-			return View();
+			return View(product.Items);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Detail(int id)
+		{
+			var result = await _productApi.GetProductById(id);
+			return PartialView(result);
 		}
 
 		public IActionResult Privacy()

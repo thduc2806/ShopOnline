@@ -18,7 +18,7 @@ namespace WebApplication1.Helper
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IHttpClientFactory _httpClientFactory;
 		private readonly IConfiguration _configuration;
-        public ProductAPI(IHttpClientFactory httpClientFactory,
+		public ProductAPI(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
             : base(httpClientFactory, httpContextAccessor, configuration)
@@ -45,12 +45,10 @@ namespace WebApplication1.Helper
 			return data;
 		}
 
-		//public async Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request)
-		//{
-		//          var data = await GetAsync<List<ProductView>>(
-		//               $"/api/product/page?categoryId={request.CategoryId}");
-
-		//          return data;
-		//      }
+		public async Task<ProductView> GetProductById(int Id)
+		{
+			var data = await GetAsync<ProductView>($"/api/product/{Id}");
+			return data;
+		}
 	}
 }

@@ -8,7 +8,7 @@ namespace WebApplication1.Helper
 {
 	public interface ICategoryAPI
 	{
-		Task<List<CategoryView>> GetAll();
+		//Task<List<CategoryView>> GetAll();
 
 		Task<CategoryView> GetById(int id);
 	}

@@ -46,11 +46,11 @@ namespace WebApplication1.Helper
             return response.IsSuccessStatusCode;
         }
 
-		public async Task<List<CommentView>> GetAll()
-		{
-			var data = await GetListAsync<CommentView>("/api/Comment");
-			return data;
-		}
+		//public async Task<List<CommentView>> GetAll()
+		//{
+		//	var data = await GetListAsync<CommentView>("/api/Comment");
+		//	return data;
+		//}
 
 		public async Task<List<CommentView>> GetAllByProductId(GetCommentPageRequest request)
 		{
