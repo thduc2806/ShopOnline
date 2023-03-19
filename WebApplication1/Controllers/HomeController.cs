@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using oShopSolution.Utilities.Constants;
 using oShopSolution.ViewModels.Catalog.Products;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,8 +28,23 @@ namespace WebApplication1.Controllers
 			_categoryApi = categoryApi;
 		}
 
-		public async Task<IActionResult> Index(int pageSize = 5, int pageIndex = 1)
+		public async Task<IActionResult> Index()
 		{
+			var pageIndex = 1;
+			var pageSize = 1;
+			var request = new GetManageProductPageRequest()
+			{
+				PageIndex = pageIndex,
+				PageSize = pageSize,
+			};
+			var product = await _productApi.GetAllProduct(request);
+			return View(product);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Index(int pageIndex)
+		{
+			int pageSize = 1;
 			var request = new GetManageProductPageRequest()
 			{
 				PageIndex = pageIndex,
@@ -37,7 +53,7 @@ namespace WebApplication1.Controllers
 
 			var product = await _productApi.GetAllProduct(request);
 
-			return View(product.Items);
+			return View(product);
 		}
 
 		[HttpGet]

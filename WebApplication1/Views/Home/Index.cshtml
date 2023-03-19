@@ -1,5 +1,6 @@
 ﻿@using oShopSolution.ViewModels.Catalog.Products
-@model List<ProductView>
+@using oShopSolution.ViewModels.Common
+@model PageResult<ProductView>
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 
@@ -32,7 +33,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-3 col-lg-4">
-                    @*Filter*@
+                    @await Component.InvokeAsync("Filter")
                 </div>
                 <div class="col-xl-9 col-lg-8">
                     <div class="shop__header bg__gray--color d-flex align-items-center justify-content-between mb-30">
@@ -101,93 +102,114 @@
                         </div>
                         <p class="product__showing--count">Showing 1–9 of 21 results</p>
                     </div>
-                    <div class="shop__product--wrapper">
-                        <div class="tab_content">
-                            <div id="product_grid" class="tab_pane active show">
-                                <div class="product__section--inner product__grid--inner">
-                                    <div class="row row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 mb--n30">
-                                        @foreach (var item in Model)
-                                        {
-                                            <div class="col custom-col-2 mb-30">
-                                                <article class="product__card">
-                                                    <div class="product__card--thumbnail">
-                                                        <a class="product__card--thumbnail__link display-block" href="product-details.html">
-                                                            <img class="product__card--thumbnail__img product__primary--img display-block" src="~/images/nav-logo.webp" alt="product-img">
-                                                        </a>
-                                                        <ul class="product__card--action d-flex align-items-center justify-content-center">
-                                                            <li class="product__card--action__list">
-                                                                <a class="product__card--action__btn" title="Wishlist" href="wishlist.html">
-                                                                    <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="25.51" height="22.443" viewBox="0 0 512 512"><path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
-                                                                    <span class="visually-hidden">Wishlist</span>
-                                                                </a>
-                                                            </li>
-                                                            <li class="product__card--action__list">
-                                                                <a class="product__card--action__btn" title="Quick View" data-bs-toggle="modal" data-bs-target="@("#examplemodal-"+item.Id)" href="@Url.Action("Detail","Home")">
-                                                                    <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="24.51" height="22.443" viewBox="0 0 512 512"><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448"></path></svg>
-                                                                    <span class="visually-hidden">Quick View</span>
-                                                                </a>
-                                                            </li>
-                                                            @*@await Html.PartialAsync("_ProductDetailPartialView",item)*@
-                                                            <li class="product__card--action__list">
-                                                                <a class="product__card--action__btn" title="Compare" href="compare.html">
-                                                                    <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="19.51" height="18.443" viewBox="0 0 20 20" fill="currentColor">
-                                                                        <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-                                                                    </svg>
-                                                                    <span class="visually-hidden">Compare</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                        @*<div class="product__badge">
-                                                            <span class="product__badge--items sale">SALE</span>
-                                                        </div>*@
-                                                    </div>
-                                                    <div class="product__card--content text-center">
-                                                        <span class="product__card--meta__tag">Watch,Woman</span>
-                                                        <h3 class="product__card--title"><a href="product-details.html">@item.Name</a></h3>
-                                                        <div class="product__card--price">
-                                                            <span class="current__price">@item.Price VNĐ</span>
-                                                            @*<span class="price__divided"></span>*@
+                    <form asp-action="Index" asp-controller="Home" method="post">
+                        <div class="shop__product--wrapper">
+                            <div class="tab_content">
+                                <div id="product_grid" class="tab_pane active show">
+                                    <div class="product__section--inner product__grid--inner">
+                                        <div class="row row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 mb--n30">
+                                            @foreach (var item in Model.Items)
+                                            {
+                                                <div class="col custom-col-2 mb-30">
+                                                    <article class="product__card">
+                                                        <div class="product__card--thumbnail">
+                                                            <a class="product__card--thumbnail__link display-block" href="product-details.html">
+                                                                <img class="product__card--thumbnail__img product__primary--img display-block" src="~/images/nav-logo.webp" alt="product-img">
+                                                            </a>
+                                                            <ul class="product__card--action d-flex align-items-center justify-content-center">
+                                                                <li class="product__card--action__list">
+                                                                    <a class="product__card--action__btn" title="Wishlist" href="wishlist.html">
+                                                                        <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="25.51" height="22.443" viewBox="0 0 512 512"><path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
+                                                                        <span class="visually-hidden">Wishlist</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="product__card--action__list">
+                                                                    <a class="product__card--action__btn" title="Quick View" data-bs-toggle="modal" data-bs-target="#examplemodal" href="@Url.Action("Detail","Home")">
+                                                                        <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="24.51" height="22.443" viewBox="0 0 512 512"><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448"></path></svg>
+                                                                        <span class="visually-hidden">Quick View</span>
+                                                                    </a>
+                                                                </li>
+                                                                @*@await Html.PartialAsync("_ProductDetailPartialView",item)*@
+                                                                <li class="product__card--action__list">
+                                                                    <a class="product__card--action__btn" title="Compare" href="compare.html">
+                                                                        <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="19.51" height="18.443" viewBox="0 0 20 20" fill="currentColor">
+                                                                            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+                                                                        </svg>
+                                                                        <span class="visually-hidden">Compare</span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            @*<div class="product__badge">
+                                                    <span class="product__badge--items sale">SALE</span>
+                                                    </div>*@
                                                         </div>
-                                                        <a class="product__card--btn primary__btn" href="cart.html">Add To Card</a>
-                                                    </div>
-                                                </article>
-                                            </div>
-                                            @await Html.PartialAsync("Detail",item)
-                                        }
+                                                        <div class="product__card--content text-center">
+                                                            <span class="product__card--meta__tag">Watch,Woman</span>
+                                                            <h3 class="product__card--title"><a href="product-details.html">@item.Name</a></h3>
+                                                            <div class="product__card--price">
+                                                                <span class="current__price">@item.Price VNĐ</span>
+                                                                @*<span class="price__divided"></span>*@
+                                                            </div>
+                                                            <a class="product__card--btn primary__btn" href="cart.html">Add To Card</a>
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                                @await Html.PartialAsync("Detail",item)
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="pagination__area bg__gray--color">
+                                <nav class="pagination justify-content-center">
+                                    <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
+                                        <li class="pagination__list">
+                                            <a class="pagination__item--arrow  link " href="javascript:PageClick(@(Model.PageIndex - 1))">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" /></svg>
+                                                <span class="visually-hidden">pagination arrow</span>
+                                            </a>
+                                        </li>
+                                        @for (int i = 1; i <= Model.TotalPages; i++)
+                                        {
+                                            <li class="pagination__list">
+                                                @if (i != Model.PageIndex)
+                                                {
+                                                    <a href="javascript:PageClick(@i);" class="pagination__item link">@i</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="pagination__item pagination__item--current">@i</a>
+                                                }
+                                            </li>
+                                        }
+                                        <li class="pagination__list">
+                                            <a class="pagination__item--arrow  link " href="javascript:PageClick(@(Model.PageIndex + 1))">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100" /></svg>
+                                                <span class="visually-hidden">pagination arrow</span>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+                                    <input type="hidden" id="hfPageIndex" name="pageIndex">
+                                </nav>
+                            </div>
                         </div>
-                        <div class="pagination__area bg__gray--color">
-                            <nav class="pagination justify-content-center">
-                                <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
-                                    <li class="pagination__list">
-                                        <a href="shop.html" class="pagination__item--arrow  link ">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" /></svg>
-                                            <span class="visually-hidden">pagination arrow</span>
-                                        </a>
-                                    <li>
-                                    <li class="pagination__list"><span class="pagination__item pagination__item--current">1</span></li>
-                                    <li class="pagination__list"><a href="shop.html" class="pagination__item link">2</a></li>
-                                    <li class="pagination__list"><a href="shop.html" class="pagination__item link">3</a></li>
-                                    <li class="pagination__list"><a href="shop.html" class="pagination__item link">4</a></li>
-                                    <li class="pagination__list">
-                                        <a href="shop.html" class="pagination__item--arrow  link ">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100" /></svg>
-                                            <span class="visually-hidden">pagination arrow</span>
-                                        </a>
-                                    <li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
+                    </form>
+                    
                 </div>
             </div>
         </div>
     </section>
     <!-- End shop section -->
-
 </main>
+
+<script type="text/javascript">
+    function PageClick(index)
+    {
+        document.getElementById("hfPageIndex").value=index;
+        document.forms[0].submit();
+    }
+</script>
 
 
 
