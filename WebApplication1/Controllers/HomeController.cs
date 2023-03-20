@@ -28,9 +28,9 @@ namespace WebApplication1.Controllers
 			_categoryApi = categoryApi;
 		}
 
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int pageIndex = 1)
 		{
-			var pageIndex = 1;
+			//var pageIndex = 1;
 			var pageSize = 1;
 			var request = new GetManageProductPageRequest()
 			{
@@ -41,20 +41,20 @@ namespace WebApplication1.Controllers
 			return View(product);
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> Index(int pageIndex)
-		{
-			int pageSize = 1;
-			var request = new GetManageProductPageRequest()
-			{
-				PageIndex = pageIndex,
-				PageSize = pageSize,
-			};
+		//[HttpPost]
+		//public async Task<IActionResult> Index(int pageIndex)
+		//{
+		//	int pageSize = 1;
+		//	var request = new GetManageProductPageRequest()
+		//	{
+		//		PageIndex = pageIndex,
+		//		PageSize = pageSize,
+		//	};
 
-			var product = await _productApi.GetAllProduct(request);
+		//	var product = await _productApi.GetAllProduct(request);
 
-			return View(product);
-		}
+		//	return View(product);
+		//}
 
 		[HttpGet]
 		public async Task<IActionResult> Detail(int id)

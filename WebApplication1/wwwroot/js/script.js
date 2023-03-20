@@ -200,9 +200,6 @@ var swiperSmallProduct2 = new Swiper(".product__media--nav__horizontal", {
 var productBig = new Swiper(".product__media--preview__horizontal", {
   loop: true,
   spaceBetween: 10,
-  thumbs: {
-    swiper: swiperSmallProduct2,
-  },
   
 });
 
@@ -240,10 +237,6 @@ var swiperSmallProduct2 = new Swiper(".product__media--nav__horizontal--two", {
 var productBig = new Swiper(".product__media--preview__horizontal--two", {
   loop: true,
   spaceBetween: 10,
-  thumbs: {
-    swiper: swiperSmallProduct2,
-  },
-  
 });
 
 

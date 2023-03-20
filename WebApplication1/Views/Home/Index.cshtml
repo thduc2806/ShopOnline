@@ -164,7 +164,7 @@
                                 <nav class="pagination justify-content-center">
                                     <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
                                         <li class="pagination__list">
-                                            <a class="pagination__item--arrow  link " href="javascript:PageClick(@(Model.PageIndex - 1))">
+                                            <a class="pagination__item--arrow  link " href="@Url.Action("Index", new { pageIndex = Model.PageIndex - 1 })">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" /></svg>
                                                 <span class="visually-hidden">pagination arrow</span>
                                             </a>
@@ -174,7 +174,7 @@
                                             <li class="pagination__list">
                                                 @if (i != Model.PageIndex)
                                                 {
-                                                    <a href="javascript:PageClick(@i);" class="pagination__item link">@i</a>
+                                                    <a href="@Url.Action("Index", new { pageIndex = i })" class="pagination__item link">@i</a>
                                                 }
                                                 else
                                                 {
@@ -183,7 +183,7 @@
                                             </li>
                                         }
                                         <li class="pagination__list">
-                                            <a class="pagination__item--arrow  link " href="javascript:PageClick(@(Model.PageIndex + 1))">
+                                            <a class="pagination__item--arrow  link " href="@Url.Action("Index", new { pageIndex = Model.PageIndex + 1 })">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100" /></svg>
                                                 <span class="visually-hidden">pagination arrow</span>
                                             </a>
