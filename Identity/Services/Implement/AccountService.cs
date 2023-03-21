@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Omu.ValueInjecter;
 using oShopSolution.Application.Helper;
-using oShopSolution.ViewModels.System.Users;
 
 namespace Identity.Services.Implement
 {
@@ -40,7 +39,7 @@ namespace Identity.Services.Implement
             }
         }
 
-        public BaseResponse<RegisterResultModel> Register(RegisterModel model, string creatorId)
+        public BaseResponse<RegisterResultModel> Register(RegisterModel model)
         {
             if (model == null)
             {
@@ -51,11 +50,8 @@ namespace Identity.Services.Implement
                     UserId = string.Empty
                 });
             }
-            var userId = Guid.NewGuid();
-            var createdById = !string.IsNullOrEmpty(creatorId) ? Guid.Parse(creatorId) : userId;
             var user = new Users(model.Email, model.FirstName ?? string.Empty, model.LastName ?? string.Empty)
             {
-                CreatedBy = createdById,
                 PhoneNumber = model.PhoneNumber,
             };
             var createResult = _userManager.CreateAsync(user, model.Password).Result;
@@ -113,16 +109,16 @@ namespace Identity.Services.Implement
                 return BaseResponse<bool>.BadRequest();
         }
 
-        public async Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key)
-        {
-            Users user = await Find(key);
-            if(user == null)
-            {
-                return BaseResponse<AuthenViewModel>.NotFound();
-            }
-            LoadRelated(user);
-            var model = _mapper.Map<Users, AuthenViewModel>(user);
-            return BaseResponse<AuthenViewModel>.Success(model);
-        }
+        //public async Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key)
+        //{
+        //    Users user = await Find(key);
+        //    if(user == null)
+        //    {
+        //        return BaseResponse<AuthenViewModel>.NotFound();
+        //    }
+        //    LoadRelated(user);
+        //    var model = _mapper.Map<Users, AuthenViewModel>(user);
+        //    return BaseResponse<AuthenViewModel>.Success(model);
+        //}
     }
 }

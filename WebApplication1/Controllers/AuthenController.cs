@@ -74,6 +74,11 @@ namespace WebApplication1.Controllers
             return View("Login", request);
         }
 
+        public IActionResult Register()
+        {
+            return PartialView("Register");
+        }
+
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

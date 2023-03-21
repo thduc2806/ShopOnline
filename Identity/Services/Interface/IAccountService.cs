@@ -1,15 +1,14 @@
 ﻿using Identity.Database.Entities;
 using Identity.ViewModel;
 using oShopSolution.Application.Helper;
-using oShopSolution.ViewModels.System.Users;
 
 namespace Identity.Services.Interface
 {
     public interface IAccountService
     {
         Task<BaseResponse<bool>> UpdateUser(Users user);
-        BaseResponse<RegisterResultModel> Register(RegisterModel model, string creatorId="");
+        BaseResponse<RegisterResultModel> Register(RegisterModel model);
 
-        Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key);
+        //Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key);
     }
 }
