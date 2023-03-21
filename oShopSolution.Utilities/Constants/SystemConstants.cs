@@ -11,7 +11,7 @@ namespace oShopSolution.Utilities.Constants
 		public const string MainConnectionString = "oShopSolutionDb";
         public class AppSettings
         {
-            public const string Token = "Token";
+            public const string Token = "Jwt";
             public const string BaseAddress = "BaseAddress";
         }
 

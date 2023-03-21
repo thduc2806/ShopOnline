@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
@@ -45,8 +46,8 @@ namespace WebApplication1
 			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 				.AddCookie(options =>
 				{
-					options.LoginPath = "/CustomerAccount/Login";
-					options.AccessDeniedPath = "/User/Forbidden/";
+					options.LoginPath = "/Authen/Login";
+					//options.AccessDeniedPath = "/User/Forbidden/";
 				});
 
 			services.AddSession(options =>
@@ -59,6 +60,7 @@ namespace WebApplication1
 			services.AddTransient<ICategoryAPI, CategoryAPI>();
 			services.AddTransient<ICommentAPI, CommentAPI>();
 			services.AddTransient<IUserAPI, UserAPI>();
+			services.AddTransient<IWorkContext, WorkContext>();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}

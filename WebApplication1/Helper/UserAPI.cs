@@ -1,81 +1,36 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using oShopSolution.ViewModels.Common;
+﻿using oShopSolution.Application.Helper;
 using oShopSolution.ViewModels.System.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Helper
 {
-	public class UserAPI : IUserAPI
+    public class UserAPI : IUserAPI
 	{
-		private readonly IHttpClientFactory _httpClientFactory;
-		private readonly IConfiguration _configuration;
-		private readonly IHttpContextAccessor _httpContextAccessor;
-		public UserAPI(IHttpClientFactory httpClientFactory,
-				   IHttpContextAccessor httpContextAccessor,
-					IConfiguration configuration)
+        protected APIExcute _aPIExcute;
+        public UserAPI()
 		{
-			_configuration = configuration;
-			_httpContextAccessor = httpContextAccessor;
-			_httpClientFactory = httpClientFactory;
-		}
+            _aPIExcute = new APIExcute();
+        }
 
-		public async Task<ApiResult<string>> Authenticate(LoginRequest request)
-		{
-			var json = JsonConvert.SerializeObject(request);
-			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+        public async Task<AuthenViewModel> Authenticate(AuthenModel request)
+        {
+            string url = "https://localhost:44321/api/auth";
 
-			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-			var response = await client.PostAsync("/api/users/authenticate", httpContent);
-			if (response.IsSuccessStatusCode)
-			{
-				return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync());
-			}
+            var req = new BaseRequest<object>(new
+            {
+                Email = request.Email,
+                request.Password
+            });
+            var res = await _aPIExcute.PostData<AuthenViewModel, object>(url: $"{url}", req);
 
-			return JsonConvert.DeserializeObject<ApiErrorResult<string>>(await response.Content.ReadAsStringAsync());
-		}
-
-		public async Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest)
-		{
-			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-
-			var json = JsonConvert.SerializeObject(registerRequest);
-			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-			var response = await client.PostAsync("/api/users/register", httpContent);
-			var result = await response.Content.ReadAsStringAsync();
-			if (response.IsSuccessStatusCode)
-				return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
-			return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
-		}
-
-		public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleRequest request)
-		{
-			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-			var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
-			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-
-			var json = JsonConvert.SerializeObject(request);
-			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-			var response = await client.PutAsync($"/api/users/{id}/roles", httpContent);
-			var result = await response.Content.ReadAsStringAsync();
-			if (response.IsSuccessStatusCode)
-				return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
-			return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
-		}
-	}
+            if (res.IsSuccessStatusCode)
+            {
+                return res.ResponseData;
+            }
+            return new AuthenViewModel
+            {
+                Message = res.Message ?? "User is not valid"
+            };
+        }
+    }
 }
