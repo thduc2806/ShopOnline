@@ -32,5 +32,20 @@ namespace WebApplication1.Helper
                 Message = res.Message ?? "User is not valid"
             };
         }
+
+        public async Task<BaseResponse<RegisterViewModel>> Register(RegisterModel request)
+        {
+            string url = "https://localhost:44321/api/account/Register";
+            var req = new BaseRequest<RegisterModel>(request);
+            var res = await _aPIExcute.PostData<RegisterViewModel, RegisterModel>(url, req);
+            return res;
+        }
+
+        public async Task<BaseResponse<bool>> CheckEmailExist(string email)
+        {
+            string url = $"https://localhost:44321/api/account/CheckEmail/{email}";
+            var res = await _aPIExcute.GetData<bool>(url);
+            return res;
+        }
     }
 }

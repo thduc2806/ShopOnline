@@ -1,6 +1,14 @@
-﻿<!doctype html>
+﻿@using System.Security.Claims
+<!doctype html>
 <html lang="en">
-
+@{
+    var userId = string.Empty;
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        userId = user.Value.ToString();
+    };
+}
 <head>
     <meta charset="utf-8">
     <title>Rokon - Shop Left Sidebar</title>
@@ -99,9 +107,25 @@
 
     <script src="~/js/swiper-bundle.min.js" defer="defer"></script>
     <script src="~/js/glightbox.min.js" defer="defer"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js" ></script>
 
     <!-- Customscript js -->
     <script src="~/js/script.js" defer="defer"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: 'https://localhost:5001/api/Cart/TotalItem',
+                type: 'GET',
+                data: {
+                    'userId': '@userId',
+                },
+                success: function (result) {
+                    $("#totalProductCount").text(result)
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

@@ -20,18 +20,20 @@ namespace Identity.Controllers
         [Route("Register")]
         public IActionResult Register([FromBody]RegisterModel register)
         {
-            register.RoleId = "1";
+            //register.RoleId = "1";
             var result = _accountService.Register(register);
             return Ok(result);
         }
 
-        [HttpGet("profile")]
-        public IActionResult GetProfile()
+
+        [HttpGet]
+        [Route("CheckEmail/{email}")]
+        public IActionResult CheckEmailExist(string email)
         {
-            var uid = GetUserId();
-            var profile = _accountService.GetUserProfile(uid);
-            return Ok(profile);
+            var result = _accountService.CheckEmailExist(email);
+            return Ok(result);
         }
+
 
         private string GetUserId()
         {
@@ -46,5 +48,6 @@ namespace Identity.Controllers
             }
             return string.Empty;
         }
+
     }
 }

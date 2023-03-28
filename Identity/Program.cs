@@ -48,16 +48,7 @@ builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer
                                                                                                 maxRetryDelay: System.TimeSpan.FromSeconds(30),
                                                                                                 errorNumbersToAdd: null)));
 const string ALLOWED_USERNAME_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/";
-builder.Services.AddIdentity<Users, Roles>(options =>
-{
-    options.User.AllowedUserNameCharacters = ALLOWED_USERNAME_CHARACTERS;
-    options.User.RequireUniqueEmail = true;
-    options.Password.RequiredLength = 8;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireDigit = false;
-})
+builder.Services.AddIdentity<Users, Roles>()
     .AddEntityFrameworkStores<IdentityDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddHttpContextAccessor();

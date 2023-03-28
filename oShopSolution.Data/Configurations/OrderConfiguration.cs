@@ -20,10 +20,6 @@ namespace oShopSolution.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             builder.Property(x => x.OrderDate);
-            builder.HasOne(x => x.AppUser).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
-
-
-
         }
     }
 }

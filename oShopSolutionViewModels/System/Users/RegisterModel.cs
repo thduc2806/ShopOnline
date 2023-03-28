@@ -1,23 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace oShopSolution.ViewModels.System.Users
 {
     public class RegisterModel
     {
         [Required]
-        public string UserName { get; set; }
-        [Required]
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-        [Required]
         public string Email { get; set; }
+
+        [Required]
+        [MinLength(8, ErrorMessage = "Password length at least 8 characters")]
+        public string Password { get; set; }
+
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string PasswordConfirm { get; set; }
+
+        public string? RoleId { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public DateTime DOB { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
+        [Required]
+        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Invalid Phone number")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Invalid Phone number")]
+        [MinLength(length: 8, ErrorMessage = "The Phone Number minimum length of 8 characters")]
+        public string PhoneNumber { get; set; }
     }
 }

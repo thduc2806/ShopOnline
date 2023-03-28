@@ -9,6 +9,8 @@ namespace Identity.Services.Interface
         Task<BaseResponse<bool>> UpdateUser(Users user);
         BaseResponse<RegisterResultModel> Register(RegisterModel model);
 
+        BaseResponse<bool> CheckEmailExist(string email);
+
         //Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key);
     }
 }

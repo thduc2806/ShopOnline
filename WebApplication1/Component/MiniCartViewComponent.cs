@@ -1,13 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using WebApplication1.Helper;
 
 namespace WebApplication1.Controllers.Component
 {
     public class MiniCartViewComponent : ViewComponent
     {
-		public async Task<IViewComponentResult> InvokeAsync()
+		private readonly ICartApi _cartApi;
+		public MiniCartViewComponent(ICartApi cartApi)
 		{
-			return View("MiniCart");
+			_cartApi = cartApi;
+		}
+        public async Task<IViewComponentResult> InvokeAsync(string userId)
+		{
+			var result = await _cartApi.GetCart(userId);
+			return View("MiniCart", result);
 		}
 	}
 }

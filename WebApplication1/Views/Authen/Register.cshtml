@@ -2,32 +2,38 @@
 @model RegisterModel
 
 <div class="col">
-    <form asp-action="Register" method="post">
+    <form asp-action="Register" asp-controller="Authen" method="post">
         <div class="account__login register">
             <div class="account__login--header mb-25">
                 <h2 class="account__login--header__title h3 mb-10">Create an Account</h2>
-                <p class="account__login--header__desc">Register here if you are a new customer</p>
+                <p class="account__login--header__desc">@ViewBag.Message</p>
             </div>
             <div class="account__login--inner">
-                <label>
-                    <input class="account__login--input" placeholder="Username" type="text" asp-for="UserName">
-                    <span asp-validation-for="UserName" class="text-warning"></span>
-                </label>
+                
                 <label>
                     <input class="account__login--input" placeholder="Email Addres" type="email" asp-for="Email">
-                    <span asp-validation-for="Email" class="text-warning"></span>
+                    @*<span asp-validation-for="Email" class="text-warning"></span>*@
                 </label>
                 <label>
                     <input class="account__login--input" placeholder="Password" type="password" asp-for="Password">
-                    <span asp-validation-for="Password" class="text-warning"></span>
+                    @*<span asp-validation-for="Password" class="text-warning"></span>*@
                 </label>
                 <label>
-                    <input class="account__login--input" placeholder="Confirm Password" type="password" asp-for="ConfirmPassword">
-                    @if(Model.ConfirmPassword != Model.Password)
-                    {
-                        <span class="text-warning"></span>
-                    }
+                    <input class="account__login--input" placeholder="Confirm Password" type="password" asp-for="PasswordConfirm">
                 </label>
+                <label>
+                    <input class="account__login--input" placeholder="First Name" type="text" asp-for="FirstName">
+                    @*<span asp-validation-for="FirstName" class="text-warning"></span>*@
+                </label>
+                <label>
+                    <input class="account__login--input" placeholder="Last Name" type="text" asp-for="LastName">
+                    @*<span asp-validation-for="LastName" class="text-warning"></span>*@
+                </label>
+                <label>
+                    <input class="account__login--input" placeholder="Phone" type="number" asp-for="PhoneNumber">
+                    @*<span asp-validation-for="PhoneNumber" class="text-warning"></span>*@
+                </label>
+                    <input type="hidden" value="2" asp-for="RoleId"/>
                 <label>
                     <button class="account__login--btn primary__btn mb-10" type="submit">Submit & Register</button>
                 </label>

@@ -12,7 +12,7 @@ namespace oShopSolution.Data.Entities
 		public string FullName { get; set; }
 		public DateTime DOB { get; set; }
 
-		public List<Cart> Carts { get; set; }
+		//public List<Cart> Carts { get; set; }
 		public List<Order> Orders { get; set; }
 	}
 }

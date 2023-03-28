@@ -1,4 +1,5 @@
-﻿using oShopSolution.ViewModels.Common;
+﻿using oShopSolution.Application.Helper;
+using oShopSolution.ViewModels.Common;
 using oShopSolution.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ namespace WebApplication1.Helper
 	public interface IUserAPI
 	{
 		Task<AuthenViewModel> Authenticate(AuthenModel request);
+		Task<BaseResponse<RegisterViewModel>> Register(RegisterModel request);
+		Task<BaseResponse<bool>> CheckEmailExist(string email);
 
-	}
+
+    }
 }

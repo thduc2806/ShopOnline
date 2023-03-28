@@ -13,6 +13,5 @@ namespace oShopSolution.Data.Entities
         public Guid UserId { set; get; }
 
         public List<OrderDetail> OrderDetails { get; set; }
-		public AppUser AppUser { get; set; }
 	}
 }

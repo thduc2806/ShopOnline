@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using oShopSolution.Application.Catalog.Cart;
 using oShopSolution.Application.Catalog.Category;
 using oShopSolution.Application.Catalog.Comment;
 using oShopSolution.Application.Catalog.Products;
@@ -75,7 +77,8 @@ namespace ShopOnline_Backend
 			services.AddTransient<IUserService, UserService>();
 			services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
 			services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
-
+			services.AddTransient<ICartService, CartService>();
+			//services.AddTransient<IStringLocalizer, StringLocalizer>();
 
 			services.AddControllersWithViews();
 
@@ -139,9 +142,9 @@ namespace ShopOnline_Backend
 				options.AddPolicy(name: MyAllowSpecificOrigins,
 								  builder =>
 								  {
-									  builder.WithOrigins("http://localhost:3000")
-															  .AllowAnyHeader()
-														.AllowAnyMethod();
+									  builder.AllowAnyOrigin()
+											.AllowAnyHeader()
+											.AllowAnyMethod();
 								  });
 			});
 

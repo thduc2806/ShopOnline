@@ -1,4 +1,6 @@
-﻿@using oShopSolution.ViewModels.Catalog.Products
+﻿@using Microsoft.AspNetCore.Http
+@using System.Security.Claims
+@using oShopSolution.ViewModels.Catalog.Products
 @using oShopSolution.ViewModels.Common
 @model PageResult<ProductView>
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
@@ -7,6 +9,14 @@
 @{
     ViewData["Title"] = "Home Page";
     Layout = "/Views/Shared/_LayoutMain.cshtml";
+}
+@{
+    var userId = string.Empty;
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        userId = user.Value.ToString();
+    };
 }
 
 <main class="main__content_wrapper">
@@ -150,7 +160,7 @@
                                                                 <span class="current__price">@item.Price VNĐ</span>
                                                                 @*<span class="price__divided"></span>*@
                                                             </div>
-                                                            <a class="product__card--btn primary__btn" href="cart.html">Add To Card</a>
+                                                            <a data-id="@item.Id" class="product__card--btn primary__btn" onclick="addToCart(@item.Id);return false;">Add To Card</a>
                                                         </div>
                                                     </article>
                                                 </div>
@@ -204,10 +214,22 @@
 </main>
 
 <script type="text/javascript">
-    function PageClick(index)
-    {
-        document.getElementById("hfPageIndex").value=index;
-        document.forms[0].submit();
+    function addToCart(id){
+        $.ajax({
+            url: "https://localhost:5001/api/Cart/addToCart",
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'productId' : id,
+                'customerId' : '@userId',
+                'quantity' : 1,
+            }),
+            success: (function(result) {
+                alert("Add successed!!!");
+                window.location.reload();
+            }),
+        })
     }
 </script>
 

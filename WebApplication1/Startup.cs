@@ -61,6 +61,7 @@ namespace WebApplication1
 			services.AddTransient<ICommentAPI, CommentAPI>();
 			services.AddTransient<IUserAPI, UserAPI>();
 			services.AddTransient<IWorkContext, WorkContext>();
+			services.AddTransient<ICartApi, CartApi>();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}

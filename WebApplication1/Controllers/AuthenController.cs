@@ -74,9 +74,34 @@ namespace WebApplication1.Controllers
             return View("Login", request);
         }
 
-        public IActionResult Register()
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterModel model)
         {
-            return PartialView("Register");
+            var result = await _userAPI.CheckEmailExist(model.Email);
+            if (!result.IsValidResponse || !result.ResponseData)
+            {
+                ViewBag.Message = result.Message;
+                return View("Login");
+            }
+            var registerResults = await _userAPI.Register(model);
+            if (registerResults.Message == null)
+            {
+                ViewBag.Message = "Please input field again";
+                return View("Login");
+            }
+            if (!registerResults.IsSuccessStatusCode)
+            {
+                ViewBag.Message = registerResults.Message;
+                return View("Login");
+            }    
+            var registerResult = registerResults.ResponseData;
+            if (registerResult.IsSuccess)
+            {
+                ViewBag.Message = "Register Successed!!!";
+                return View("Login");
+            }
+            return View("Login");
+
         }
 
         public async Task<IActionResult> Logout()
