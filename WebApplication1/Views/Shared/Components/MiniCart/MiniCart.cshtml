@@ -21,7 +21,7 @@
             <div class="minicart__text">
                 <h4 class="minicart__subtitle"><a href="product-details.html">@item.Name</a></h4>
                 <div class="minicart__price">
-                    <span class="current__price">@item.Price</span>
+                    <span class="current__price">@item.Price.ToString("N") VNĐ</span>
                     <span class="old__price"></span>
                 </div>
                 <div class="minicart__text--footer d-flex align-items-center">
@@ -39,13 +39,13 @@
         }
     </div>
     <div class="minicart__amount">
-        <div class="minicart__amount_list d-flex justify-content-between">
+        @*<div class="minicart__amount_list d-flex justify-content-between">
             <span>Sub Total:</span>
             <span><b>$240.00</b></span>
-        </div>
+        </div>*@
         <div class="minicart__amount_list d-flex justify-content-between">
             <span>Total:</span>
-            <span><b>$240.00</b></span>
+            <span><b>@ViewBag.TotalPrice.ToString("N") VNĐ</b></span>
         </div>
     </div>
     <div class="minicart__conditions text-center">
