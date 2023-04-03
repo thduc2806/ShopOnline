@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using oShopSolution.Data.EF;
 
 namespace oShopSolution.Data.Migrations
 {
     [DbContext(typeof(OShopDbContext))]
-    partial class OShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230403150556_changeTableOrderDetails")]
+    partial class changeTableOrderDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +182,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "cfd38d3a-93d2-49f0-a44d-a4a688ec3214",
+                            ConcurrencyStamp = "21866f30-e5ad-4ce7-90ea-f9d641ddbd7a",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -252,7 +254,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0a3e6d40-eee9-4d4f-8eed-39aa9011d0fc",
+                            ConcurrencyStamp = "ae5ed668-eba1-4c04-9c97-6939616df7b7",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -260,7 +262,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKGVuxyIOfl7PQW3nUIk+Yon+KvioMZp5/pzXsG1G2xZsOcWRdz/kMoMLuEoWcxLJw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGYg/w+FpJIn57wnjC5QnQP1t2dkDLN8/NK6yNR753F0wnCHCSPo/LNSM7ZtHuCKrw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -392,6 +394,8 @@ namespace oShopSolution.Data.Migrations
 
                     b.HasIndex("OrderId");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("OrderDetails");
                 });
 
@@ -438,7 +442,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 4, 3, 22, 11, 17, 10, DateTimeKind.Local).AddTicks(8666),
+                            CreateDate = new DateTime(2023, 4, 3, 22, 5, 55, 499, DateTimeKind.Local).AddTicks(3597),
                             Description = "This is Iphone 12 Promax",
                             Name = "Iphone 12 Promax",
                             Price = 100000m,
@@ -449,7 +453,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 4, 3, 22, 11, 17, 11, DateTimeKind.Local).AddTicks(8943),
+                            CreateDate = new DateTime(2023, 4, 3, 22, 5, 55, 500, DateTimeKind.Local).AddTicks(2693),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,
@@ -538,7 +542,15 @@ namespace oShopSolution.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("oShopSolution.Data.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.Product", b =>

@@ -15,5 +15,8 @@ namespace oShopSolution.Application.Catalog.Cart
         Task<List<CartViewModel>> GetCart(string userId);
 
         Task<int> GetTotalProduct(string userId);
-    }
+
+        Task<bool> UpdateQuantity(CartModel model);
+
+	}
 }

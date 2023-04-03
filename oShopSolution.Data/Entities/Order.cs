@@ -12,6 +12,12 @@ namespace oShopSolution.Data.Entities
         public DateTime OrderDate { set; get; }
         public Guid UserId { set; get; }
 
-        public List<OrderDetail> OrderDetails { get; set; }
+		public decimal Amount { get; set; }
+
+		public string CurrencyCode { get; set; }
+
+		public string PaymentId { get; set; }
+
+		public List<OrderDetail> OrderDetails { get; set; }
 	}
 }

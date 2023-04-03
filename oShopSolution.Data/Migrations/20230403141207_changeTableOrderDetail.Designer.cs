@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using oShopSolution.Data.EF;
 
 namespace oShopSolution.Data.Migrations
 {
     [DbContext(typeof(OShopDbContext))]
-    partial class OShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230403141207_changeTableOrderDetail")]
+    partial class changeTableOrderDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +182,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "cfd38d3a-93d2-49f0-a44d-a4a688ec3214",
+                            ConcurrencyStamp = "99e1f2f3-6d1d-4c4b-8880-a47be784c458",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -252,7 +254,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0a3e6d40-eee9-4d4f-8eed-39aa9011d0fc",
+                            ConcurrencyStamp = "c0884c3e-a61b-47b0-a0f8-62b7db8f7b0e",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -260,7 +262,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKGVuxyIOfl7PQW3nUIk+Yon+KvioMZp5/pzXsG1G2xZsOcWRdz/kMoMLuEoWcxLJw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDokgKMUjf/T6GEaZDo/LlQll6YL+fznG5HqyrMsv93LUxY9Q9bcOkwO6rVpQo1x3w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -372,8 +374,6 @@ namespace oShopSolution.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("OrderId")
@@ -391,6 +391,8 @@ namespace oShopSolution.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -438,7 +440,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 4, 3, 22, 11, 17, 10, DateTimeKind.Local).AddTicks(8666),
+                            CreateDate = new DateTime(2023, 4, 3, 21, 12, 7, 387, DateTimeKind.Local).AddTicks(4338),
                             Description = "This is Iphone 12 Promax",
                             Name = "Iphone 12 Promax",
                             Price = 100000m,
@@ -449,7 +451,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 4, 3, 22, 11, 17, 11, DateTimeKind.Local).AddTicks(8943),
+                            CreateDate = new DateTime(2023, 4, 3, 21, 12, 7, 388, DateTimeKind.Local).AddTicks(2955),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,
@@ -538,7 +540,15 @@ namespace oShopSolution.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("oShopSolution.Data.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.Product", b =>

@@ -15,5 +15,7 @@ namespace oShopSolution.ViewModels.Catalog.Cart
         public string ThumbImage { get; set; }
         public string UserId { get; set; } = Guid.NewGuid().ToString();
         public int TotalsItem { get; set; }
+
+        public int ProductId { get; set; }
     }
 }

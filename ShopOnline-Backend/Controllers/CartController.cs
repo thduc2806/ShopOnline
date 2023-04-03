@@ -36,5 +36,13 @@ namespace ShopOnline_Backend.Controllers
             var result = await _cartService.GetTotalProduct(userId);
             return Ok(result);
         }
-    }
+
+        [HttpPut("updateQuantity")]
+        public async Task<IActionResult> UpdateQuantity([FromBody] CartModel model)
+        {
+            var result = await _cartService.UpdateQuantity(model);
+            return Ok(result);
+        }
+
+	}
 }

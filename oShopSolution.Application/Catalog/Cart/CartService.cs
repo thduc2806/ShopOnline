@@ -95,7 +95,8 @@ namespace oShopSolution.Application.Catalog.Cart
                         Id = cart.Id,
                         Quantity = cart.Quantity,
                         ThumbImage = productInfo.ThumbPath,
-                        TotalsItem = carts.Count
+                        TotalsItem = carts.Count,
+                        ProductId = productInfo.Id,
                     };
                     results.Add(result);
                 }
@@ -109,5 +110,27 @@ namespace oShopSolution.Application.Catalog.Cart
             var total = await _context.Carts.Where(x => x.UserId.ToString() == userId).CountAsync();
             return total;
         }
-    }
+
+
+
+        public async Task<bool> UpdateQuantity(CartModel model)
+        {
+            return await UpdateQuantity(model.ProductId, model.CustomerId, model.Quantity);
+		}
+
+		public async Task<bool> UpdateQuantity(int productId, string userId, int quantity)
+		{
+			var cartProduct = await _context.Carts.Where(p => p.ProductId == productId && p.UserId.ToString() == userId).FirstOrDefaultAsync();
+            if (cartProduct == null)
+            {
+                return false;
+            }
+            else
+            {
+                cartProduct.Quantity = quantity;
+            }    
+			await _context.SaveChangesAsync();
+            return true;
+		}
+	}
 }

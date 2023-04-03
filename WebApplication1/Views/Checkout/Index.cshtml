@@ -306,6 +306,18 @@
 
     <script src="https://www.paypal.com/sdk/js?client-id=AWOZR50bz-V9rD2iU1VlmXBkHiFbazwlCwMnYOd82X4ERYpSMVYzLqrhe8msSNAQLoiy8u3is0c37T2l"></script>
     <script>
+        var orderItem = [
+            @foreach(var oder in Model)
+            {
+                <text>
+                    {
+                        productId: @oder.Id,
+                        quantity: @oder.Quantity,
+                        price: @oder.Price
+                    },
+                </text>
+            }
+        ];
         paypal.Buttons({
             createOrder: function(data, actions) {
                 return actions.order.create({
@@ -339,14 +351,18 @@
                 return actions.order.capture().then(function(details) {
                     $.ajax({
                         type: 'POST',
-                        url: '',
-                        data: {
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        url: 'https://localhost:5001/api/Order',
+                        data: JSON.stringify({
                             userId: '@User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString()',
                             amount: details.purchase_units[0].amount.value,
                             createDate: details.create_time,
-                        },
+                            paymentId: details.id,
+                            items: orderItem
+                        }),
                         success: function(response) {
-                            window.location.href = "/order/orderdetail"
+                            window.location.href = "/home"
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.log("Error saving payment: " + errorThrown);

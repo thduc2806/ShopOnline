@@ -7,6 +7,15 @@
     Layout = "/Views/Shared/_LayoutMain.cshtml";
 }
 
+@{
+    var userId = string.Empty;
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        userId = user.Value.ToString();
+    };
+}
+
 <main class="main__content_wrapper">
 
     <!-- Start breadcrumb section -->
@@ -66,11 +75,11 @@
                                             </td>
                                             <td class="cart__table--body__list">
                                                 <div class="quantity__box">
-                                                    <button type="button" class="quantity__value quickview__value--quantity decrease" aria-label="quantity value" value="Decrease Value">-</button>
+                                                        <button type="button" class="quantity__value quickview__value--quantity decrease" onclick="increase(@item.ProductId, @(item.Quantity - 1))" aria-label="quantity value" value="Decrease Value">-</button>
                                                     <label>
-                                                        <input type="number" class="quantity__number quickview__value--number" value="@item.Quantity" data-counter />
+                                                            <input type="number" oninput="increase(@item.ProductId, this.value)" class="quantity__number quickview__value--number" value="@item.Quantity" data-counter />
                                                     </label>
-                                                    <button type="button" class="quantity__value quickview__value--quantity increase" aria-label="quantity value" value="Increase Value">+</button>
+                                                        <button type="button" class="quantity__value quickview__value--quantity increase" onclick="increase(@item.ProductId, @(item.Quantity + 1))" aria-label="quantity value" value="Increase Value">+</button>
                                                 </div>
                                             </td>
                                             <td class="cart__table--body__list">
@@ -164,4 +173,22 @@
     </section>
     <!-- End newsletter section -->
 
+    <script type="text/javascript">
+        function increase(id,quantity) {
+            $.ajax({
+                url: "https://localhost:5001/api/Cart/updateQuantity",
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'productId': id,
+                    'customerId': '@userId',
+                    'quantity': quantity,
+                }),
+                success: (function (result) {
+                    window.location.reload();
+                }),
+            })
+        }
+    </script>
 </main>
