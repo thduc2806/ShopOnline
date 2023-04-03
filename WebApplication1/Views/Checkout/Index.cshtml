@@ -1,4 +1,9 @@
-﻿<main class="main__content_wrapper">
+﻿@using System.Security.Claims
+@using oShopSolution.ViewModels.Catalog.Cart
+@model List<CartViewModel>
+
+
+<main class="main__content_wrapper">
 
     <!-- Start breadcrumb section -->
     <section class="breadcrumb__section breadcrumb__bg">
@@ -201,57 +206,25 @@
                         <div class="cart__table checkout__product--table">
                             <table class="cart__table--inner">
                                 <tbody class="cart__table--body">
-                                    <tr class="cart__table--body__items">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="cart__table--body__items">
                                         <td class="cart__table--body__list">
                                             <div class="product__image two  d-flex align-items-center">
                                                 <div class="product__thumbnail border-radius-5">
                                                     <a class="display-block" href="product-details.html"><img class="display-block border-radius-5" src="assets/img/product/small-product1.webp" alt="cart-product"></a>
-                                                    <span class="product__thumbnail--quantity">1</span>
+                                                    <span class="product__thumbnail--quantity">@item.Quantity</span>
                                                 </div>
                                                 <div class="product__description">
-                                                    <h4 class="product__description--name"><a href="product-details.html">Fresh-whole-fish</a></h4>
-                                                    <span class="product__description--variant">COLOR: Blue</span>
+                                                    <h4 class="product__description--name"><a href="product-details.html">@item.Name</a></h4>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="cart__table--body__list">
-                                            <span class="cart__price">£65.00</span>
+                                            <span class="cart__price">@((item.Price * item.Quantity).ToString()) VNĐ</span>
                                         </td>
                                     </tr>
-                                    <tr class="cart__table--body__items">
-                                        <td class="cart__table--body__list">
-                                            <div class="cart__product d-flex align-items-center">
-                                                <div class="product__thumbnail border-radius-5">
-                                                    <a class="display-block" href="product-details.html"><img class="display-block border-radius-5" src="assets/img/product/small-product2.webp" alt="cart-product"></a>
-                                                    <span class="product__thumbnail--quantity">1</span>
-                                                </div>
-                                                <div class="product__description">
-                                                    <h4 class="product__description--name"><a href="product-details.html">Vegetable-healthy</a></h4>
-                                                    <span class="product__description--variant">COLOR: Green</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="cart__table--body__list">
-                                            <span class="cart__price">£82.00</span>
-                                        </td>
-                                    </tr>
-                                    <tr class="cart__table--body__items">
-                                        <td class="cart__table--body__list">
-                                            <div class="cart__product d-flex align-items-center">
-                                                <div class="product__thumbnail border-radius-5">
-                                                    <a class="display-block" href="product-details.html"><img class="display-block border-radius-5" src="assets/img/product/small-product4.webp" alt="cart-product"></a>
-                                                    <span class="product__thumbnail--quantity">1</span>
-                                                </div>
-                                                <div class="product__description">
-                                                    <h4 class="product__description--name"><a href="product-details.html">Raw-onions-surface</a></h4>
-                                                    <span class="product__description--variant">COLOR: White</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="cart__table--body__list">
-                                            <span class="cart__price">£78.00</span>
-                                        </td>
-                                    </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -278,18 +251,18 @@
                                 <tfoot class="checkout__total--footer">
                                     <tr class="checkout__total--footer__items">
                                         <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
-                                        <td class="checkout__total--footer__amount checkout__total--footer__list text-right">$860.00</td>
+                                        <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@ViewBag.TotalPrice.ToString("N") VNĐ</td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
-                        <div class="payment__history mb-30">
-                            <h3 class="payment__history--title mb-20">Payment</h3>
+                        <div class="payment__history mb-30" id="paypal-button-container">
+                            @*<h3 class="payment__history--title mb-20">Payment</h3>
                             <ul class="payment__history--inner d-flex">
                                 <li class="payment__history--list"><button class="payment__history--link primary__btn" type="submit">Credit Card</button></li>
                                 <li class="payment__history--list"><button class="payment__history--link primary__btn" type="submit">Bank Transfer</button></li>
                                 <li class="payment__history--list"><button class="payment__history--link primary__btn" type="submit">Paypal</button></li>
-                            </ul>
+                            </ul>*@
                         </div>
                         <button class="checkout__now--btn primary__btn" type="submit">Checkout Now</button>
                     </aside>
@@ -330,4 +303,60 @@
         </div>
     </section>
     <!-- End newsletter section -->
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AWOZR50bz-V9rD2iU1VlmXBkHiFbazwlCwMnYOd82X4ERYpSMVYzLqrhe8msSNAQLoiy8u3is0c37T2l"></script>
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '@ViewBag.TotalPriceUsd',
+                            currency_code: 'USD',
+                            breakdown: {
+                                item_total: {
+                                    currency_code: 'USD',
+                                    value: '@ViewBag.TotalPriceUsd'
+                                }
+                            }
+                        },
+                            items: [
+                                    @foreach(var item in Model)
+                                    {
+                                        <text>
+                                            {
+                                            name: '@item.Name',
+                                            quantity: '@item.Quantity',
+                                            unit_amount: { value: '@(Math.Round((item.Price / 23000), 2))', currency_code: 'USD' }
+                                            },
+                                        </text>
+                                    }
+                                   ]
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '',
+                        data: {
+                            userId: '@User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString()',
+                            amount: details.purchase_units[0].amount.value,
+                            createDate: details.create_time,
+                        },
+                        success: function(response) {
+                            window.location.href = "/order/orderdetail"
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Error saving payment: " + errorThrown);
+                        }
+                    });
+                });
+            },
+            onError: function(err) {
+                alert('payment fail: ' + err);
+            }
+        }).render('#paypal-button-container')
+    </script>
 </main>

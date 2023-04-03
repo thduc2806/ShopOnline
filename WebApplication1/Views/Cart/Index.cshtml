@@ -1,4 +1,5 @@
-﻿@using oShopSolution.ViewModels.Catalog.Cart
+﻿@using System.Security.Claims
+@using oShopSolution.ViewModels.Catalog.Cart
 @model List<CartViewModel>
 
 @{
@@ -120,7 +121,7 @@
                                     <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout</p>
                                     <ul class="d-flex justify-content-between">
                                         <li><button class="cart__summary--footer__btn primary__btn cart" type="submit">Update Cart</button></li>
-                                        <li><a class="cart__summary--footer__btn primary__btn checkout" href="/checkout">Check Out</a></li>
+                                        <li><a class="cart__summary--footer__btn primary__btn checkout" href="@Url.Action("Index","Checkout", new {userId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString()})">Check Out</a></li>
                                     </ul>
                                 </div>
                             </div>
