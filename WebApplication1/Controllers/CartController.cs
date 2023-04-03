@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using oShopSolution.Application.Helper;
 using oShopSolution.ViewModels.Catalog.Cart;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.Helper;
 
@@ -8,16 +9,17 @@ namespace WebApplication1.Controllers
 {
     public class CartController : Controller
     {
-        private readonly IWorkContext _workContext;
         private readonly ICartApi _cartApi;
-        public CartController(IWorkContext workContext, ICartApi cartApi)
+        public CartController(ICartApi cartApi)
         {
-            _workContext = workContext;
             _cartApi = cartApi;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string userId)
         {
-            return View();
-        }
+			var result = await _cartApi.GetCart(userId);
+			decimal totalPrice = result.Sum(x => x.Price * x.Quantity);
+			ViewBag.TotalPrice = totalPrice;
+			return View(result);
+		}
     }
 }

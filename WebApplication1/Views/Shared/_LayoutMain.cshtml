@@ -2,12 +2,15 @@
 <!doctype html>
 <html lang="en">
 @{
-    var userId = string.Empty;
-    if (User.Identity.IsAuthenticated)
+    string userId = string.Empty;
+    if(User.Identity.IsAuthenticated)
     {
-        var user = User.FindFirst(ClaimTypes.NameIdentifier);
-        userId = user.Value.ToString();
-    };
+        if (User.Identity.IsAuthenticated)
+        {
+            var user = User.FindFirst(ClaimTypes.NameIdentifier);
+            userId = user.Value.ToString();
+        };
+    }
 }
 <head>
     <meta charset="utf-8">
