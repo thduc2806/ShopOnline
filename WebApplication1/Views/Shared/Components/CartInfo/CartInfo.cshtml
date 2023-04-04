@@ -1,0 +1,61 @@
+﻿@using oShopSolution.ViewModels.Catalog.Cart
+@model List<CartViewModel>
+
+<div class="col-lg-5 col-md-6">
+    <aside class="checkout__sidebar sidebar border-radius-10">
+        <h2 class="checkout__order--summary__title text-center mb-15">Your Order Summary</h2>
+        <div class="cart__table checkout__product--table">
+            <table class="cart__table--inner">
+                <tbody class="cart__table--body">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="cart__table--body__items">
+                            <td class="cart__table--body__list">
+                                <div class="product__image two  d-flex align-items-center">
+                                    <div class="product__thumbnail border-radius-5">
+                                        <a class="display-block" href="product-details.html"><img class="display-block border-radius-5" src="assets/img/product/small-product1.webp" alt="cart-product"></a>
+                                        <span class="product__thumbnail--quantity">@item.Quantity</span>
+                                    </div>
+                                    <div class="product__description">
+                                        <h4 class="product__description--name"><a href="product-details.html">@item.Name</a></h4>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cart__table--body__list">
+                                <span class="cart__price">@((item.Price * item.Quantity).ToString()) VNĐ</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="checkout__discount--code">
+            <form class="d-flex" action="#">
+                <label>
+                    <input class="checkout__discount--code__input--field border-radius-5" placeholder="Gift card or discount code" type="text">
+                </label>
+                <button class="checkout__discount--code__btn primary__btn border-radius-5" type="submit">Apply</button>
+            </form>
+        </div>
+        <div class="checkout__total">
+            <table class="checkout__total--table">
+                <tbody class="checkout__total--body">
+                    <tr class="checkout__total--items">
+                        <td class="checkout__total--title text-left">Subtotal </td>
+                        <td class="checkout__total--amount text-right">$860.00</td>
+                    </tr>
+                    <tr class="checkout__total--items">
+                        <td class="checkout__total--title text-left">Shipping</td>
+                        <td class="checkout__total--calculated__text text-right">Calculated at next step</td>
+                    </tr>
+                </tbody>
+                <tfoot class="checkout__total--footer">
+                    <tr class="checkout__total--footer__items">
+                        <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
+                        <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@ViewBag.TotalPrice.ToString("N") VNĐ</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </aside>
+</div>

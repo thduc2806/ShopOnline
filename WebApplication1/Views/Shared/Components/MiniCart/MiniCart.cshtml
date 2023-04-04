@@ -17,7 +17,6 @@
                 <svg class="minicart__close--icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368" /></svg>
             </button>
         </div>
-        <p class="minicart__header--desc">The organic foods products are limited</p>
     </div>
     <div class="minicart__product">
         @foreach (var item in Model)
@@ -34,11 +33,11 @@
                 </div>
                 <div class="minicart__text--footer d-flex align-items-center">
                     <div class="quantity__box minicart__quantity">
-                        <button type="button" class="quantity__value decrease" aria-label="quantity value" value="Decrease Value">-</button>
+                            <button type="button" class="quantity__value decrease" aria-label="quantity value" value="Decrease Value" onclick="increase(@item.ProductId, @(item.Quantity - 1))">-</button>
                         <label>
-                            <input type="number" class="quantity__number" value="@item.Quantity" data-counter />
+                                <input type="number" class="quantity__number" oninput="increase(@item.ProductId, this.value)" value="@item.Quantity" data-counter />
                         </label>
-                        <button type="button" class="quantity__value increase" aria-label="quantity value" value="Increase Value">+</button>
+                            <button type="button" class="quantity__value increase" aria-label="quantity value" value="Increase Value" onclick="increase(@item.ProductId, @(item.Quantity + 1))">+</button>
                     </div>
                     <button class="minicart__product--remove" aria-label="minicart remove btn">Remove</button>
                 </div>
@@ -65,3 +64,22 @@
         <a class="primary__btn minicart__button--link" href="/checkout">Checkout</a>
     </div>
 </div>
+
+<script type="text/javascript">
+    function increase(id, quantity) {
+        $.ajax({
+            url: "https://localhost:5001/api/Cart/updateQuantity",
+            type: 'PUT',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'productId': id,
+                'customerId': '@userId',
+                'quantity': quantity,
+            }),
+            success: (function (result) {
+                window.location.reload();
+            }),
+        })
+    }
+</script>

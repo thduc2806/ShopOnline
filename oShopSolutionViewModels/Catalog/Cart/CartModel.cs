@@ -11,5 +11,7 @@ namespace oShopSolution.ViewModels.Catalog.Cart
         public int ProductId { get; set; }
         public string CustomerId { get; set; }
         public int Quantity { get; set; }
+
+
     }
 }

@@ -19,32 +19,53 @@ namespace oShopSolution.Application.Catalog.Order
 			_context = context;
 		}
 
-		public async Task<bool> CreateOrder(OrderModel model)
+		public async Task<bool> CreateOrder(InfoCustomerModel model)
 		{
 			var order = new Data.Entities.Order()
 			{
 				OrderDate = DateTime.Now,
 				UserId = new Guid(model.UserId),
-				Amount = Convert.ToDecimal(model.Amount),
-				CurrencyCode = model.CurrencyCode,
-				PaymentId = model.PaymentId
+				Email = model.Email,
+				Address = model.Address,
+				PhoneNumber = Convert.ToInt32(model.PhoneNumber),
+				City = model.City,
+				District = model.District,
+				Ward = model.Ward,
+				PostCode = model.PostCode,
 			};
 			await _context.Orders.AddAsync(order);
 			await _context.SaveChangesAsync();
-
-			if (model.Items.Count > 0)
-			{
-				foreach (var item in model.Items)
-				{
-					await CreateOrderDetail(item.Price, order.Id, item.ProductId, item.Quantity);
-				}
-			}
-			await DeleteCart(model.UserId);
-
-			return true;
+        
+            return true;
 		}
 
-		private async Task<bool> CreateOrderDetail(decimal price, int orderId, int productId, int quantity)
+        public async Task<bool> UpdatePayment(OrderModel model)
+		{
+            var order = new Data.Entities.Order()
+            {
+                Amount = Convert.ToDecimal(model.Amount),
+                CurrencyCode = model.CurrencyCode,
+                PaymentId = model.PaymentId,
+				isPayment = true,
+            };
+			_context.Orders.Update(order);
+			await _context.SaveChangesAsync();
+
+            if (model.Items.Count > 0)
+            {
+                foreach (var item in model.Items)
+                {
+                    await CreateOrderDetail(item.Price, order.Id, item.ProductId, item.Quantity);
+                }
+
+                await DeleteCart(model.UserId);
+				return true;
+            }
+            return false;
+        }
+
+
+        private async Task<bool> CreateOrderDetail(decimal price, int orderId, int productId, int quantity)
 		{
 				var orderDetail = new OrderDetail()
 				{

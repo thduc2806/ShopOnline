@@ -26,7 +26,7 @@
                     <div class="breadcrumb__content">
                         <h1 class="breadcrumb__content--title mb-10">Shopping Cart</h1>
                         <ul class="breadcrumb__content--menu d-flex">
-                            <li class="breadcrumb__content--menu__items"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><a href="/home">Home</a></li>
                             <li class="breadcrumb__content--menu__items"><span class="text__secondary">Shopping Cart</span></li>
                         </ul>
                     </div>
@@ -75,11 +75,11 @@
                                             </td>
                                             <td class="cart__table--body__list">
                                                 <div class="quantity__box">
-                                                        <button type="button" class="quantity__value quickview__value--quantity decrease" onclick="increase(@item.ProductId, @(item.Quantity - 1))" aria-label="quantity value" value="Decrease Value">-</button>
+                                                        <button type="button" class="quantity__value quickview__value--quantity decrease" onclick="increase(@item.ProductId, @(item.Quantity - 1))" aria-label="quantity value">-</button>
                                                     <label>
                                                             <input type="number" oninput="increase(@item.ProductId, this.value)" class="quantity__number quickview__value--number" value="@item.Quantity" data-counter />
                                                     </label>
-                                                        <button type="button" class="quantity__value quickview__value--quantity increase" onclick="increase(@item.ProductId, @(item.Quantity + 1))" aria-label="quantity value" value="Increase Value">+</button>
+                                                        <button type="button" class="quantity__value quickview__value--quantity increase" onclick="increase(@item.ProductId, @(item.Quantity + 1))" aria-label="quantity value">+</button>
                                                 </div>
                                             </td>
                                             <td class="cart__table--body__list">
@@ -130,7 +130,7 @@
                                     <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout</p>
                                     <ul class="d-flex justify-content-between">
                                         <li><button class="cart__summary--footer__btn primary__btn cart" type="submit">Update Cart</button></li>
-                                        <li><a class="cart__summary--footer__btn primary__btn checkout" href="@Url.Action("Index","Checkout", new {userId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString()})">Check Out</a></li>
+                                        <li><a class="cart__summary--footer__btn primary__btn checkout" href="@Url.Action("Index","Checkout")">Check Out</a></li>
                                     </ul>
                                 </div>
                             </div>

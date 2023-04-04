@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using oShopSolution.Data.EF;
 
 namespace oShopSolution.Data.Migrations
 {
     [DbContext(typeof(OShopDbContext))]
-    partial class OShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230404063722_updateFiledsOrder")]
+    partial class updateFiledsOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +182,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "bda761ec-7803-4883-843c-b04bfd2779b2",
+                            ConcurrencyStamp = "f00850f7-851a-4906-8c54-9e5e290f8dc2",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -252,7 +254,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "34012cce-eb14-4231-97f8-1e982c82be84",
+                            ConcurrencyStamp = "030e34a3-f749-41c3-9383-0f04a23126a6",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -260,7 +262,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAELsh8gawO5zFLAyr9vDY2sEg1O96BGeBH5yaN3TEtfzLJ5T6YJoCAO9UzwtREYs8sQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEILIzMoXTvAuChPg+4vWAy6n7OgAKs+fXUN4mnymUrLF8oFK3rHs6HPifWsKH2hOUA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -384,9 +386,6 @@ namespace oShopSolution.Data.Migrations
                     b.Property<string>("Ward")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isPayment")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
@@ -465,7 +464,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 4, 4, 13, 40, 29, 659, DateTimeKind.Local).AddTicks(9084),
+                            CreateDate = new DateTime(2023, 4, 4, 13, 37, 22, 376, DateTimeKind.Local).AddTicks(9309),
                             Description = "This is Iphone 12 Promax",
                             Name = "Iphone 12 Promax",
                             Price = 100000m,
@@ -476,7 +475,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 4, 4, 13, 40, 29, 660, DateTimeKind.Local).AddTicks(7131),
+                            CreateDate = new DateTime(2023, 4, 4, 13, 37, 22, 377, DateTimeKind.Local).AddTicks(7742),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,

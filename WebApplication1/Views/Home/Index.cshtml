@@ -213,6 +213,26 @@
     <!-- End shop section -->
 </main>
 
+<link rel="stylesheet" href="~/css/modal.css">
+<div id="addCartModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE876;</i>
+                </div>
+                <h4 class="modal-title w-100">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Add Cart is Success!!!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" onclick="window.location.reload();" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     function addToCart(id){
         $.ajax({
@@ -226,8 +246,7 @@
                 'quantity' : 1,
             }),
             success: (function(result) {
-                alert("Add successed!!!");
-                window.location.reload();
+                $('#addCartModal').modal('show');
             }),
         })
     }

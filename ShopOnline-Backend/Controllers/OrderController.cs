@@ -17,11 +17,19 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateOrder(OrderModel request)
+		public async Task<IActionResult> CreateOrder(InfoCustomerModel request)
 		
 		{
 			var response = await _orderService.CreateOrder(request);
 			return Ok(response);
 		}
-	}
+
+		[HttpPut]
+        public async Task<IActionResult> UpdateOrder(OrderModel request)
+
+        {
+            var response = await _orderService.UpdatePayment(request);
+            return Ok(response);
+        }
+    }
 }
