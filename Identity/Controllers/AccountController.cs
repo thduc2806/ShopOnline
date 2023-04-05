@@ -34,6 +34,13 @@ namespace Identity.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Profile/{userId}")]
+        public IActionResult GetUserProfile(string userId)
+        {
+            var result = _accountService.GetUserProfile(userId);
+            return Ok(result);
+        }
+
 
         private string GetUserId()
         {

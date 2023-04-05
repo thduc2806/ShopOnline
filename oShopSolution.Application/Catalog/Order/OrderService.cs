@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
@@ -19,7 +20,7 @@ namespace oShopSolution.Application.Catalog.Order
 			_context = context;
 		}
 
-		public async Task<bool> CreateOrder(InfoCustomerModel model)
+		public async Task<int> CreateOrder(InfoCustomerModel model)
 		{
 			var order = new Data.Entities.Order()
 			{
@@ -36,19 +37,18 @@ namespace oShopSolution.Application.Catalog.Order
 			await _context.Orders.AddAsync(order);
 			await _context.SaveChangesAsync();
         
-            return true;
+            return order.Id;
 		}
 
         public async Task<bool> UpdatePayment(OrderModel model)
 		{
-            var order = new Data.Entities.Order()
-            {
-                Amount = Convert.ToDecimal(model.Amount),
-                CurrencyCode = model.CurrencyCode,
-                PaymentId = model.PaymentId,
-				isPayment = true,
-            };
-			_context.Orders.Update(order);
+			var order = await _context.Orders.Where(o => o.Id == model.OrderId).FirstOrDefaultAsync();
+			order.Amount = Convert.ToDecimal(model.Amount);
+            order.CurrencyCode = model.CurrencyCode;
+            order.PaymentId = model.PaymentId;
+            order.isPayment = true;
+
+
 			await _context.SaveChangesAsync();
 
             if (model.Items.Count > 0)

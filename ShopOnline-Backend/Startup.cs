@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using oShopSolution.Application.Catalog.Cart;
 using oShopSolution.Application.Catalog.Category;
 using oShopSolution.Application.Catalog.Comment;
+using oShopSolution.Application.Catalog.DashBoard;
 using oShopSolution.Application.Catalog.Order;
 using oShopSolution.Application.Catalog.Products;
 using oShopSolution.Application.Common;
@@ -80,9 +81,10 @@ namespace ShopOnline_Backend
 			services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 			services.AddTransient<ICartService, CartService>();
 			services.AddTransient<IOrderService, OrderService>();
-			//services.AddTransient<IStringLocalizer, StringLocalizer>();
+            services.AddTransient<IDashboardService, DashboardService>();
+            //services.AddTransient<IStringLocalizer, StringLocalizer>();
 
-			services.AddControllersWithViews();
+            services.AddControllersWithViews();
 
 
             services.AddSwaggerGen(c =>

@@ -27,6 +27,7 @@ namespace oShopSolution.ViewModels.Catalog.Order
         public int PhoneNumber { get; set; }
         public string Email { get; set; }
         public string PostCode { get; set; }
+        public int OrderId { get; set; }
 
         public List<OrderDetailView> Items { get; set; }
 	}

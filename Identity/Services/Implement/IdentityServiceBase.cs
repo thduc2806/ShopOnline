@@ -21,6 +21,7 @@ namespace Identity.Services.Implement
         protected virtual bool IsValidated(Users user, string password) => !string.IsNullOrEmpty(password) && _userManager.CheckPasswordAsync(user, password).Result;
         protected virtual async Task<Users> FindByEmail(string email) => await _userManager.Users.Where(k => k.Email == email.ToLower()).FirstOrDefaultAsync();
         protected virtual async Task<Users> Find(string key) => await FindByEmail(key) ?? FindByUserId(key);
+        protected virtual async Task<Users> FindUser(string key) => FindByUserId(key);
         protected virtual async Task<Users> FindRelated(string key) => LoadRelated(await Find(key));
         protected virtual Users FindById(string id) => _userManager.Users.FirstOrDefault(k => k.Id.ToString().ToLower() == id.ToLower());
         protected virtual Users FindByUserId(string userId) => _userManager.Users.FirstOrDefault(k => k.UserId.ToString().ToLower() == userId.ToLower());

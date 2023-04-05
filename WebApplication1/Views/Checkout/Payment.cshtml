@@ -208,6 +208,7 @@
                             createDate: details.create_time,
                             paymentId: details.id,
                             userId: '@User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString()',
+                            orderId: @ViewBag.OrderId,
                             items: orderItem
                         }),
                         success: function (response) {

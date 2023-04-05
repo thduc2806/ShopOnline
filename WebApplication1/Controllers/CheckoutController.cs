@@ -35,12 +35,13 @@ namespace WebApplication1.Controllers
             return View();
         }
 		
-		public async Task<IActionResult> Payment()
+		public async Task<IActionResult> Payment(int orderId)
 		{
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
             var result = await _cartApi.GetCart(userId);
             decimal totalPrice = result.Sum(x => x.Price * x.Quantity);
             ViewBag.TotalPrice = totalPrice;
+			ViewBag.OrderId = orderId;
             ViewBag.TotalPriceUsd = result.Sum(p => p.Quantity * Math.Round(p.Price / RangeRate, 2));
             return View(result);
         }
@@ -49,11 +50,7 @@ namespace WebApplication1.Controllers
 		{
 			model.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
 			var result = await _checkoutApi.CreateOder(model);
-			if (!result)
-			{
-				return RedirectToAction("Index");
-			}
-			return RedirectToAction("Payment");
+			return RedirectToAction("Payment", new {orderId = result});
 
         }
 

@@ -11,6 +11,6 @@ namespace WebApplication1.Helper
 {
     public interface ICheckoutApi
     {
-        Task<bool> CreateOder(InfoCustomerModel request);
+        Task<int> CreateOder(InfoCustomerModel request);
     }
 }

@@ -9,7 +9,7 @@ namespace oShopSolution.Application.Catalog.Order
 {
 	public interface IOrderService
 	{
-		Task<bool> CreateOrder(InfoCustomerModel model);
+		Task<int> CreateOrder(InfoCustomerModel model);
 
 		Task<bool> UpdatePayment(OrderModel model);
 

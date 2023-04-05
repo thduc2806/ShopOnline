@@ -1,10 +1,14 @@
-﻿using Identity.Database.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Identity.ViewModel
+namespace oShopSolution.ViewModels.System.Users
 {
     public class UserProfileViewModel
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         public string? FirstName { get; set; }
 
@@ -34,11 +38,6 @@ namespace Identity.ViewModel
 
         public string? RefreshToken { get; set; }
 
-        public string RoleName { get; set; }
-
-        public int RoleId { get; set; }
-
-
-        //public List<UserRolesViewModel> UserRoles { get; set; }
+        public List<UserRoleViewModel> UserRoles { get; set; }
     }
 }

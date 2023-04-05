@@ -34,7 +34,7 @@ namespace WebApplication1.Helper
             httpClient = new HttpClient();
         }
 
-        public async Task<bool> CreateOder(InfoCustomerModel request)
+        public async Task<int> CreateOder(InfoCustomerModel request)
         {
             var sessions = _httpContextAccessor
                 .HttpContext
@@ -58,15 +58,15 @@ namespace WebApplication1.Helper
                 response = await PostDataAsync(method, url, null);
             }
             string responseData = await response.Content.ReadAsStringAsync();
-            var result = new bool();
+            var result = new int();
             if (response.IsSuccessStatusCode)
             {
-                result = JsonConvert.DeserializeObject<bool>(responseData);
+                result = JsonConvert.DeserializeObject<int>(responseData);
 
             }
             else
             {
-                result = response.IsSuccessStatusCode;
+                result = JsonConvert.DeserializeObject<int>(responseData);
             }
             return result;
 
