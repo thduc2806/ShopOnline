@@ -17,9 +17,9 @@ namespace ShopOnline_Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTotal(string userId)
+        public async Task<IActionResult> GetTotal()
         {
-            var result = await _dashboardService.GetTotal(userId);
+            var result = await _dashboardService.GetTotal();
             return Ok(result);
         }
     }

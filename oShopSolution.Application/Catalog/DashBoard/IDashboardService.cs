@@ -9,6 +9,6 @@ namespace oShopSolution.Application.Catalog.DashBoard
 {
     public interface IDashboardService
     {
-        Task<DashboardViewModel> GetTotal(string userId);
+        Task<DashboardViewModel> GetTotal();
     }
 }

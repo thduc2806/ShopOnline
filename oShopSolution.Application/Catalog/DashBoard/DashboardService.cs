@@ -17,11 +17,11 @@ namespace oShopSolution.Application.Catalog.DashBoard
             _context = context;
         }
 
-        public async Task<DashboardViewModel> GetTotal(string userId)
+        public async Task<DashboardViewModel> GetTotal()
         {
             var now = DateTime.Now;
             var monthlyRevenue = DateTime.Now.AddDays(-30);
-            var order = await _context.Orders.Where(o => o.UserId.ToString() == userId && o.isPayment && o.OrderDate >= monthlyRevenue && o.OrderDate <= now).ToListAsync();
+            var order = await _context.Orders.Where(o => o.isPayment && o.OrderDate >= monthlyRevenue && o.OrderDate <= now).ToListAsync();
             if(order.Count < 1)
             {
                 return new DashboardViewModel();
