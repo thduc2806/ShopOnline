@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
 		public async Task<IActionResult> Index(int pageIndex = 1)
 		{
 			//var pageIndex = 1;
-			var pageSize = 1;
+			var pageSize = 12;
 			var request = new GetManageProductPageRequest()
 			{
 				PageIndex = pageIndex,

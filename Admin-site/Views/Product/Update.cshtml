@@ -35,22 +35,21 @@
                             <form asp-action="Update" method="post">
                                 <input type="hidden" asp-for="Id"/>
                                 <div class="mb-3">
-                                    <label class="form-label" asp-for="Name">Product Name</label>
-                                    <input id="name" asp-for="Name" type="text" class="form-control" disabled="disabled">
-                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                    <label class="form-label">Product Name</label>
+                                    <input id="name" asp-for="Name" type="text" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" asp-for="Price">Price</label>
+                                    <label class="form-label">Price</label>
                                     <input id="price" asp-for="Price" type="text" class="form-control">
                                     <span asp-validation-for="Price" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" asp-for="Description">Product Description</label>
+                                    <label class="form-label">Product Description</label>
                                     <textarea class="form-control" id="productdesc" rows="5" asp-for="Description"></textarea>
                                 </div>
                                 <div class="text-center mt-4">
                                     <button type="submit" class="btn btn-primary me-2 waves-effect waves-light">Update</button>
-                                    <button asp-action="Index" type="submit" class="btn btn-primary me-2 waves-effect waves-light">Cancle</button>
+                                    <a href="/product/index" class="btn btn-primary me-2 waves-effect waves-light">Cancle</a>
                                 </div>
                                 <div class="text-center mt-4">
                                     

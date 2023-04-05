@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using oShopSolution.Application.Common;
@@ -22,11 +23,16 @@ namespace oShopSolution.Application.Catalog.Products
 	{
 		private readonly OShopDbContext _context;
         private readonly ImageConfigOption _config;
+		private readonly IStorageService _storageService;
+		private readonly string _userContentFolder;
+		private const string USER_CONTENT_FOLDER_NAME = "App_Data";
 
-        public ProductServie(OShopDbContext context, IOptions<ImageConfigOption> options)
+		public ProductServie(OShopDbContext context, IOptions<ImageConfigOption> options, IWebHostEnvironment webHostEnvironment, IStorageService storageService)
 		{
 			_context = context;
 			_config = options.Value;
+			_userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "App_Data");
+			_storageService = storageService;
 		}
 		public async Task<int> Create(ProductCreateRequest request)
 		{
@@ -44,8 +50,7 @@ namespace oShopSolution.Application.Catalog.Products
 
             if (request.ThumbImg != null)
             {
-				var img = (await this.ImportFileAsync(request.ThumbImg, product.Id));
-				var imagePath = img.ImgPath.Replace("\\", "/");
+				var imagePath = await this.SaveFile(request.ThumbImg);
                 product.ProductImgs = new List<ProductImg>()
                 {
                     new ProductImg()
@@ -238,8 +243,10 @@ namespace oShopSolution.Application.Catalog.Products
 		}
 
         public async Task<ProductImg> ImportFileAsync(IFormFile file, int producId)
-        {
-            string folderPath = Path.Combine(_config.ImagePath, DateTime.Now.ToString("yyyy-MM-dd"));
+		{
+
+			string savefolder = Path.Combine(_config.ImagePath, DateTime.Now.ToString("yyyy-MM-dd"));
+			string folderPath = Path.Combine(_userContentFolder, DateTime.Now.ToString("yyyy-MM-dd"));
 
             // if the folder does not exist then create new
             if (!Directory.Exists(folderPath))
@@ -251,7 +258,7 @@ namespace oShopSolution.Application.Catalog.Products
             {
 				ProductId = producId,
 				IsDefault = true,
-                ImgPath = Path.Combine(folderPath, producId.ToString() + fileExtension)
+                ImgPath = Path.Combine(savefolder, producId.ToString() + fileExtension)
             };
 
             //TODO: clean the file if error
@@ -277,5 +284,13 @@ namespace oShopSolution.Application.Catalog.Products
 			return true;
 		}
 
-    }
+		private async Task<string> SaveFile(IFormFile file)
+		{
+			var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+			var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+			await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+			return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
+		}
+
+	}
 }

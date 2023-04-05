@@ -65,9 +65,9 @@ namespace Admin_site.Controllers
                         new ClaimsPrincipal(claimsIdentity),
                         authProperties);
 
-                    if (!string.IsNullOrWhiteSpace(returnUrl))
-                        return Redirect(returnUrl);
-                    return RedirectToAction("Index", "Product");
+                    //if (!string.IsNullOrWhiteSpace(returnUrl))
+                    //    return Redirect(returnUrl);
+                    return RedirectToAction("Products", "Product");
                 }
 				else
 				{

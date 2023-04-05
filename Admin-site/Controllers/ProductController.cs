@@ -91,7 +91,7 @@ namespace Admin_site.Controllers
 			if (product)
 			{
 				TempData["product"] = "Add success";
-				return RedirectToAction("Index");
+				return RedirectToAction("/product/index");
 			}
 
 			ModelState.AddModelError("", "Add Fail");
@@ -126,7 +126,7 @@ namespace Admin_site.Controllers
             if(product)
             {
 				TempData["product"] = "Update success";
-				return RedirectToAction("Index");
+				return RedirectToAction("Index","Product");
 			}
 
 			ModelState.AddModelError("", "Add Fail");
