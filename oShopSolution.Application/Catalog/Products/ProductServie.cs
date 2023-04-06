@@ -94,7 +94,7 @@ namespace oShopSolution.Application.Catalog.Products
 			if(!string.IsNullOrEmpty(request.Keyword))
 			{
 				query = query.Where(c => c.p.Name.Contains(request.Keyword));
-			}	
+			}
 
 			query = query.OrderByDescending(c => c.p.CreateDate);
 

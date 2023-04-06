@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using oShopSolution.Application.Catalog.Order;
 using oShopSolution.ViewModels.Catalog.Order;
+using oShopSolution.ViewModels.Catalog.Products;
 using System.Threading.Tasks;
 
 namespace ShopOnline_Backend.Controllers
@@ -31,5 +32,13 @@ namespace ShopOnline_Backend.Controllers
             var response = await _orderService.UpdatePayment(request);
             return Ok(response);
         }
+
+		[HttpGet("page")]
+		public async Task<IActionResult> GetOrder([FromQuery] GetOrderModel request)
+		{
+			var result = await _orderService.GetOrder(request);
+
+			return Ok(result);
+		}
     }
 }

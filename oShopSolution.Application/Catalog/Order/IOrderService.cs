@@ -1,4 +1,5 @@
 ﻿using oShopSolution.ViewModels.Catalog.Order;
+using oShopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,8 @@ namespace oShopSolution.Application.Catalog.Order
 
 		Task<bool> UpdatePayment(OrderModel model);
 
-    }
+		Task<PageResult<OrderViewModel>> GetOrder(GetOrderModel request);
+
+
+	}
 }

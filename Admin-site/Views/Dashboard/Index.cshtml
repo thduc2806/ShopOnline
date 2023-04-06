@@ -7,6 +7,7 @@
     ViewBag.pageTitle = "Nazox";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 <!-- jquery.vectormap css -->
 <link href="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
@@ -47,8 +48,8 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="flex-1 overflow-hidden">
-                                <p class="text-truncate font-size-14 mb-2">Sales Revenue</p>
-                                <h4 class="mb-0">@Model.TotalPrice.ToString("C2")</h4>
+                                <p class="text-truncate font-size-14 mb-2">Sales Revenue In Month</p>
+                                <h4 class="mb-0">@(100).ToString("C2")</h4>
                             </div>
                             <div class="text-primary ms-auto">
                                 <i class="ri-store-2-line font-size-24"></i>
@@ -68,8 +69,8 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="flex-1 overflow-hidden">
-                                <p class="text-truncate font-size-14 mb-2">Average Price</p>
-                                <h4 class="mb-0">@((Model.TotalPrice / Model.TotalOrder).ToString("C2"))</h4>
+                                <p class="text-truncate font-size-14 mb-2">Average Price In Month</p>
+                                <h4 class="mb-0">@((100 / 1).ToString("C2"))</h4>
                             </div>
                             <div class="text-primary ms-auto">
                                 <i class="ri-briefcase-4-line font-size-24"></i>
@@ -89,13 +90,13 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="float-end d-none d-md-inline-block">
+               @* <div class="float-end d-none d-md-inline-block">
                     <div class="btn-group mb-2">
                         <button type="button" class="btn btn-sm btn-light">Today</button>
                         <button type="button" class="btn btn-sm btn-light active">Weekly</button>
                         <button type="button" class="btn btn-sm btn-light">Monthly</button>
                     </div>
-                </div>
+                </div>*@
                 <h4 class="card-title mb-4">Revenue Analytics</h4>
                 <div>
                     <div id="chart1" class="apex-charts" dir="ltr"></div>
@@ -253,276 +254,18 @@
                 <h4 class="card-title mb-4">Latest Transactions</h4>
 
                 <div class="table-responsive">
-                    <table class="table table-centered datatable dt-responsive nowrap" data-bs-page-length="5" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <table id="ordersTable" class="display">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20px;">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck">
-                                        <label class="form-check-label mb-0" for="ordercheck">&nbsp;</label>
-                                    </div>
-                                </th>
                                 <th>Order ID</th>
                                 <th>Date</th>
                                 <th>Billing Name</th>
                                 <th>Total</th>
                                 <th>Payment Status</th>
-                                <th style="width: 120px;">Action</th>
+                                @*<th style="width: 120px;">Action</th>*@
+                                @*<th></th>*@
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck1">
-                                        <label class="form-check-label mb-0" for="ordercheck1">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1572</a> </td>
-                                <td>
-                                    04 Apr, 2020
-                                </td>
-                                <td>Walter Brown</td>
-
-                                <td>
-                                    $172
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-success font-size-12">Paid</div>
-                                </td>
-                                <td id="tooltip-container1">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck2">
-                                        <label class="form-check-label mb-0" for="ordercheck2">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1571</a> </td>
-                                <td>
-                                    03 Apr, 2020
-                                </td>
-                                <td>Jimmy Barker</td>
-
-                                <td>
-                                    $165
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-warning font-size-12">unpaid</div>
-                                </td>
-                                <td id="tooltip-container2">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck3">
-                                        <label class="form-check-label mb-0" for="ordercheck3">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1570</a> </td>
-                                <td>
-                                    03 Apr, 2020
-                                </td>
-                                <td>Donald Bailey</td>
-
-                                <td>
-                                    $146
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-success font-size-12">Paid</div>
-                                </td>
-                                <td id="tooltip-container3">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container3" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck4">
-                                        <label class="form-check-label mb-0" for="ordercheck4">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1569</a> </td>
-                                <td>
-                                    02 Apr, 2020
-                                </td>
-                                <td>Paul Jones</td>
-
-                                <td>
-                                    $183
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-success font-size-12">Paid</div>
-                                </td>
-                                <td id="tooltip-container41">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container41" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container41" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck5">
-                                        <label class="form-check-label mb-0" for="ordercheck5">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1568</a> </td>
-                                <td>
-                                    01 Apr, 2020
-                                </td>
-                                <td>Jefferson Allen</td>
-
-                                <td>
-                                    $160
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-danger font-size-12">Chargeback</div>
-                                </td>
-                                <td id="tooltip-container4">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container4" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container4" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck6">
-                                        <label class="form-check-label mb-0" for="ordercheck6">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1567</a> </td>
-                                <td>
-                                    31 Mar, 2020
-                                </td>
-                                <td>Jeffrey Waltz</td>
-
-                                <td>
-                                    $105
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-warning font-size-12">unpaid</div>
-                                </td>
-                                <td id="tooltip-container5">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container5" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container5" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck7">
-                                        <label class="form-check-label mb-0" for="ordercheck7">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1566</a> </td>
-                                <td>
-                                    30 Mar, 2020
-                                </td>
-                                <td>Jewel Buckley</td>
-
-                                <td>
-                                    $112
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-success font-size-12">Paid</div>
-                                </td>
-                                <td id="tooltip-container6">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container6" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container6" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck8">
-                                        <label class="form-check-label mb-0" for="ordercheck8">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1565</a> </td>
-                                <td>
-                                    29 Mar, 2020
-                                </td>
-                                <td>Jamison Clark</td>
-
-                                <td>
-                                    $123
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-success font-size-12">Paid</div>
-                                </td>
-                                <td id="tooltip-container7">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container7" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container7" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck9">
-                                        <label class="form-check-label mb-0" for="ordercheck9">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1564</a> </td>
-                                <td>
-                                    28 Mar, 2020
-                                </td>
-                                <td>Eddy Torres</td>
-
-                                <td>
-                                    $141
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-success font-size-12">Paid</div>
-                                </td>
-                                <td id="tooltip-container8">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container8" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container8" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ordercheck10">
-                                        <label class="form-check-label mb-0" for="ordercheck10">&nbsp;</label>
-                                    </div>
-                                </td>
-
-                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#NZ1563</a> </td>
-                                <td>
-                                    28 Mar, 2020
-                                </td>
-                                <td>Frank Dean</td>
-
-                                <td>
-                                    $164
-                                </td>
-                                <td>
-                                    <div class="badge badge-soft-warning font-size-12">unpaid</div>
-                                </td>
-                                <td id="tooltip-container9">
-                                    <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container9" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                    <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container9" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -583,7 +326,9 @@
                     },
                     xaxis: {
                         categories: result.revenueMonthly.x,
-                        text: 'Month'
+                        title: {
+                            text: 'Month'
+                        }
                     },
                     yaxis: {
                         title: {
@@ -602,5 +347,64 @@
                 chart.render();
             }
         });
+
+        var imageCDN = "@(Configuration["BaseAddress"])";
+        $('#ordersTable').DataTable({
+            destroy: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: "@Url.Action("Order","Dashboard")",
+                type: "GET",
+                dataSrc: function (json) {
+                    if (json.data && json.data.length > 0) {
+                        return json.data;
+                    }
+                    else {
+                        alert('No orders found.');
+                        return[];
+                    }
+                }
+            },
+            columns: [
+                { data: 'id' },
+                { 
+                    data: 'orderDate',
+                    render: function (data, type, row) {
+                        var date = new Date(data);
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        return (day < 10 ? '0' + day : day) + '/' + (month < 10 ? '0' + month : month) + '/' + year;
+                    }
+                },
+                { data: 'email' },
+                { data: 'amount' },
+                { 
+                    data: 'isPayment',
+                    render: function(data, type, row) {
+                        var className = "";
+                        if (data == true) {
+                            className = "badge badge-soft-success font-size-12";
+                            return '<div class="' + className + '"> Paid </div>'
+                        }
+                        else if (data == false) {
+                            className = "badge badge-soft-warning font-size-12";
+                            return '<div class="' + className + '"> UnPaid </div>'
+                        }
+                    }
+                }
+            ],
+            language: {
+                lengthMenu: 'Display <select>' +
+                    '<option value="5">5</option>' +
+                    '<option value="10">10</option>' +
+                    '<option value="15">15</option>' +
+                    '<option value="20">20</option>' +
+                    '<option value="25">25</option>' +
+                    '</select> records'
+            },
+        });
+
     });
 </script>

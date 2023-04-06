@@ -31,8 +31,6 @@ namespace Admin_site.Controllers
 
         public async Task<IActionResult> Products(int start = 0, int length = 4, int draw = 0)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var test = _workContext.UserId;
             int page = 1;
             int pageSize = length;
             if (start == 0)

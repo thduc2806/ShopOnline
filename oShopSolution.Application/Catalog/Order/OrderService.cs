@@ -4,11 +4,14 @@ using Newtonsoft.Json.Linq;
 using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
 using oShopSolution.ViewModels.Catalog.Order;
+using oShopSolution.ViewModels.Catalog.Products;
+using oShopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace oShopSolution.Application.Catalog.Order
 {
@@ -18,6 +21,41 @@ namespace oShopSolution.Application.Catalog.Order
 		public OrderService(OShopDbContext context)
 		{
 			_context = context;
+		}
+
+		public async Task<PageResult<OrderViewModel>> GetOrder(GetOrderModel request)
+		{
+			var order = from o in _context.Orders
+						select new { o };
+			
+			int total = await order.CountAsync();
+
+			if (!string.IsNullOrEmpty(request.Keyword))
+			{
+				order = order.Where(c => c.o.Email.Contains(request.Keyword));
+			}
+
+			order = order.OrderByDescending(c => c.o.OrderDate);
+
+			var data = await order.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new OrderViewModel()
+			{
+				Id = x.o.Id,
+				OrderDate = x.o.OrderDate,
+				Email = x.o.Email,
+				Amount = x.o.Amount,
+				isPayment = x.o.isPayment,
+				Name = x.o.FullName
+			}).ToListAsync();
+
+			var pageResult = new PageResult<OrderViewModel>
+			{
+				TotalItems = total,
+				PageSize = request.PageSize,
+				PageIndex = request.PageIndex,
+				Items = data
+			};
+
+			return pageResult;
 		}
 
 		public async Task<int> CreateOrder(InfoCustomerModel model)
@@ -87,7 +125,5 @@ namespace oShopSolution.Application.Catalog.Order
 			await _context.SaveChangesAsync();
 			return true;
 		}
-
-
 	}
 }
