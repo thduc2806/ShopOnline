@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using oShopSolution.Data.EF;
 using oShopSolution.ViewModels.Catalog.Dashboard;
 using System;
@@ -21,17 +22,29 @@ namespace oShopSolution.Application.Catalog.DashBoard
         {
             var now = DateTime.Now;
             var monthlyRevenue = DateTime.Now.AddDays(-30);
+            var currentYear = now.Year;
             var order = await _context.Orders.Where(o => o.isPayment && o.OrderDate >= monthlyRevenue && o.OrderDate <= now).ToListAsync();
             if(order.Count < 1)
             {
                 return new DashboardViewModel();
             }
             var revenuePriceMonth = order.Sum(o => o.Amount);
+
             var revenueOrderMonth = order.Count();
+
+            var revenueMonthly = _context.Orders.Where(o => o.OrderDate.Year == currentYear && o.isPayment)
+                .GroupBy(o => o.OrderDate.Month).Select(g => new RevenueMonthly
+                {
+                    X = g.Key,
+                    Y = g.Sum(o => o.Amount)
+                })
+                .ToList();
+            
             var dashboard = new DashboardViewModel()
             {
                 TotalPrice = revenuePriceMonth,
                 TotalOrder = revenueOrderMonth,
+                RevenueMonthly = revenueMonthly,
             };
             return dashboard;
         }

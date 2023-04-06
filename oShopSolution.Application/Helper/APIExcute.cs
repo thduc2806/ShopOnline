@@ -46,7 +46,7 @@ namespace oShopSolution.Application.Helper
 
                 if (response.IsSuccessStatusCode)
                 {
-                    result = JsonConvert.DeserializeObject<BaseResponse<TResponse>>(responseData);
+                    result.FullResponseString = JsonConvert.DeserializeObject<string>(responseData);
 
                 }
                 else

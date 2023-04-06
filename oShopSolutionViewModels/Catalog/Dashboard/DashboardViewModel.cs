@@ -10,8 +10,18 @@ namespace oShopSolution.ViewModels.Catalog.Dashboard
     {
         public decimal TotalPrice { get; set; }
 
-        public int  TotalProduct { get; set; }
+        public int TotalProduct { get; set; }
 
         public int TotalOrder { get; set; }
+
+        public List<RevenueMonthly> RevenueMonthly { get; set; }
+
     }
+
+    public class RevenueMonthly
+    {
+        public int X { get; set; }
+        public decimal Y { get; set; }
+    }
+
 }

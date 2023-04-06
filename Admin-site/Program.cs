@@ -38,6 +38,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IProductApi, ProductApi>();
 builder.Services.AddScoped<IAuthenApi, AuthenApi>();
 builder.Services.AddScoped<IWorkContext, WorkContext>();
+builder.Services.AddScoped<IDashboardApi, DashboardApi>();
 
 builder.Services.AddSession();
 var app = builder.Build();
