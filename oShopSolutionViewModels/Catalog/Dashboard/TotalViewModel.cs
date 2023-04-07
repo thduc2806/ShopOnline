@@ -6,26 +6,12 @@ using System.Threading.Tasks;
 
 namespace oShopSolution.ViewModels.Catalog.Dashboard
 {
-    public class DashboardViewModel
+    public class TotalViewModel
     {
         public decimal TotalPrice { get; set; }
 
         public int TotalProduct { get; set; }
 
         public int TotalOrder { get; set; }
-
-        public float PercentOrder { get; set; }
-
-        public int AllOrderMonthly { get; set; }
-
-        public List<RevenueMonthly> RevenueMonthly { get; set; }
-
     }
-
-    public class RevenueMonthly
-    {
-        public int X { get; set; }
-        public decimal Y { get; set; }
-    }
-
 }

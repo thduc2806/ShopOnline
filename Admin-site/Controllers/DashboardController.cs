@@ -14,9 +14,10 @@ namespace Admin_site.Controllers
             _dashboardApi = dashboardApi;
         }
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			var result = await _dashboardApi.GetTotal();
+			return View(result);
 		}
 
 		public async Task<IActionResult> Order(int start = 0, int length = 4, int draw = 0)
@@ -41,6 +42,10 @@ namespace Admin_site.Controllers
 			{
 				if (item.Key.ToLower() == "search[value]")
 					request.Keyword = item.Value;
+				if (item.Key.ToLower() == "order[0][column]")
+					request.SortBy  = item.Value;
+				if (item.Key.ToLower() == "order[0][dir]")
+					request.SortDir = item.Value;
 			}
 
 			var data = await _dashboardApi.GetOrder(request);

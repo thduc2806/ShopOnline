@@ -11,7 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using oShopSolution.Utilities.Enum;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.Data.SqlClient;
+using oShopSolution.Utilities.Constants;
 
 namespace oShopSolution.Application.Catalog.Order
 {
@@ -35,7 +38,25 @@ namespace oShopSolution.Application.Catalog.Order
 				order = order.Where(c => c.o.Email.Contains(request.Keyword));
 			}
 
-			order = order.OrderByDescending(c => c.o.OrderDate);
+			switch (request.SortBy)
+			{
+				case SortingConstant.Date:
+					order = request.SortDir == "asc" ? order.OrderBy(c => c.o.OrderDate) : order.OrderByDescending(c => c.o.OrderDate);
+					break;
+				case SortingConstant.Name:
+                    order = request.SortDir == "asc" ? order.OrderBy(c => c.o.Email) : order.OrderByDescending(c => c.o.Email);
+                    break;
+                case SortingConstant.Total:
+                    order = request.SortDir == "asc" ? order.OrderBy(c => c.o.Amount) : order.OrderByDescending(c => c.o.Amount);
+                    break;
+                case SortingConstant.StatusPayment:
+                    order = request.SortDir == "asc" ? order.OrderBy(c => c.o.isPayment) : order.OrderByDescending(c => c.o.isPayment);
+                    break;
+
+				default:
+                    order = order.OrderByDescending(c => c.o.OrderDate);
+                    break;
+            }
 
 			var data = await order.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new OrderViewModel()
 			{

@@ -47,7 +47,7 @@ namespace Admin_site.Service
 		public async Task<PageResult<OrderViewModel>> GetOrder(GetOrderModel request)
 		{
 			string url = $"https://localhost:5001/api/order/page?pageIndex={request.PageIndex}" +
-                $"&pageSize={request.PageSize}" + $"&keyword={request.Keyword}";
+                $"&pageSize={request.PageSize}" + $"&keyword={request.Keyword}" + $"&sortBy={request.SortBy}" + $"&sortDir={request.SortDir}";
 
 			HttpResponseMessage response = null;
 			response = await httpClient.GetAsync(url);

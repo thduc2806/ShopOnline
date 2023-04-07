@@ -10,5 +10,9 @@ namespace oShopSolution.ViewModels.Catalog.Order
 	public class GetOrderModel : PageRequestBase
 	{
 		public string Keyword { get; set; }
+
+		public string SortBy { get; set; }
+
+		public string SortDir { get; set; }
 	}
 }

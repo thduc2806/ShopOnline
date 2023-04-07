@@ -32,6 +32,12 @@ namespace oShopSolution.Application.Catalog.DashBoard
 
             var revenueOrderMonth = order.Count();
 
+            var allOrder = await _context.Orders.Where(o => o.OrderDate >= monthlyRevenue && o.OrderDate <= now).ToListAsync();
+
+            var countOrder = allOrder.Count();
+
+            var percentOrder = revenueOrderMonth * 100 / countOrder;
+
             var revenueMonthly = _context.Orders.Where(o => o.OrderDate.Year == currentYear && o.isPayment)
                 .GroupBy(o => o.OrderDate.Month).Select(g => new RevenueMonthly
                 {
@@ -45,8 +51,29 @@ namespace oShopSolution.Application.Catalog.DashBoard
                 TotalPrice = revenuePriceMonth,
                 TotalOrder = revenueOrderMonth,
                 RevenueMonthly = revenueMonthly,
+                PercentOrder = percentOrder,
+                AllOrderMonthly = countOrder,
             };
             return dashboard;
+        }
+
+        public async Task<TotalProductViewModel> GetTotalProduct()
+        {
+            var monthlyRevenue = DateTime.Now.AddDays(-30);
+            var now = DateTime.Now;
+            var query = from o in _context.Orders
+                        join od in _context.OrderDetails on o.Id equals od.OrderId into ood
+                        from od in ood.DefaultIfEmpty()
+                        join p in _context.Products on od.ProductId equals p.Id into odp
+                        from p in odp.DefaultIfEmpty()
+                        join c in _context.Categories on p.CategoryId equals c.Id into pc
+                        from c in pc.DefaultIfEmpty()
+                        where o.isPayment == true && o.OrderDate >= monthlyRevenue && o.OrderDate <= now
+                        select new { o, od, p , c};
+
+            int total = await query.CountAsync();
+
+            var data = await query.
         }
     }
 }

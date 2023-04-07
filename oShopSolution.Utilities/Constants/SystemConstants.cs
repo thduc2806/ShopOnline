@@ -19,5 +19,6 @@ namespace oShopSolution.Utilities.Constants
         {
             public const int NumberOfFeaturedProducts = 4;
         }
+
     }
 }
