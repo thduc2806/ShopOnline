@@ -41,16 +41,16 @@
 //    }
 //});
 
-options = {
-    series: [42, 26, 15],
-    chart: { height: 250, type: "donut" },
-    labels: ["Product A", "Product B", "Product C"],
-    plotOptions: { pie: { donut: { size: "75%" } } },
-    dataLabels: { enabled: !1 },
-    legend: { show: !1 },
-    colors: ["#5664d2", "#1cbb8c", "#eeb902"],
-};
-(chart = new ApexCharts(document.querySelector("#donut-chart"), options)).render();
+//options = {
+//    series: [42, 26, 15],
+//    chart: { height: 250, type: "donut" },
+//    labels: ["Product A", "Product B", "Product C"],
+//    plotOptions: { pie: { donut: { size: "75%" } } },
+//    dataLabels: { enabled: !1 },
+//    legend: { show: !1 },
+//    colors: ["#5664d2", "#1cbb8c", "#eeb902"],
+//};
+//(chart = new ApexCharts(document.querySelector("#donut-chart"), options)).render();
 var radialoptions = {
     series: [72],
     chart: { type: "radialBar", wight: 60, height: 60, sparkline: { enabled: !0 } },
@@ -71,7 +71,7 @@ radialoptions = {
 };
 (radialchart = new ApexCharts(document.querySelector("#radialchart-2"), radialoptions)).render();
 options = {
-    series: [{ data: [23, 32, 27, 38, 27, 32, 27, 34, 26, 31, 28] }],
+    series: [{ data: [23, 32, 27, 38, 27, 32, 27, 34, 26, 31, 28]`` }],
     chart: { type: "line", width: 80, height: 35, sparkline: { enabled: !0 } },
     stroke: { width: [3], curve: "smooth" },
     colors: ["#5664d2"],

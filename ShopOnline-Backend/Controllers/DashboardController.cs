@@ -22,5 +22,12 @@ namespace ShopOnline_Backend.Controllers
             var result = await _dashboardService.GetTotal();
             return Ok(result);
         }
+
+        [HttpGet("GetTotalProduct")]
+        public async Task<IActionResult> GetTotalProduct()
+         {
+            var result = await _dashboardService.GetTotalProduct();
+            return Ok(result);
+        }
     }
 }

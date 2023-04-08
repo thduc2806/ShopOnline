@@ -16,6 +16,7 @@ namespace oShopSolution.ViewModels.Catalog.Dashboard
 
     public class PercentProduct
     {
-        public float Percent { get; set; }
+        public decimal Percent { get; set; }
+        public string Category { get; set; }
     }
 }

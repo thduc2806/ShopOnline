@@ -69,11 +69,23 @@ namespace oShopSolution.Application.Catalog.DashBoard
                         join c in _context.Categories on p.CategoryId equals c.Id into pc
                         from c in pc.DefaultIfEmpty()
                         where o.isPayment == true && o.OrderDate >= monthlyRevenue && o.OrderDate <= now
-                        select new { o, od, p , c};
+                        select new { p.Id , c.Name, od.Quantity};
+            var total = await query.ToListAsync();
+            var quantity = total.Sum(x => x.Quantity);
 
-            int total = await query.CountAsync();
 
-            var data = await query.
+            var products = await query.GroupBy(p => p.Name).Select(d => new PercentProduct()
+            {
+                Percent = (d.Sum(d => d.Quantity) * 100 / quantity),
+                Category = d.Key,
+            }).ToListAsync();
+
+            var data = new TotalProductViewModel()
+            {
+                TotalProduct = quantity,
+                PercentProducts = products,
+            };
+            return data;
         }
     }
 }

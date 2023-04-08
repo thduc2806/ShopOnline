@@ -10,5 +10,8 @@ namespace oShopSolution.Application.Catalog.DashBoard
     public interface IDashboardService
     {
         Task<DashboardViewModel> GetTotal();
-    }
+
+        Task<TotalProductViewModel> GetTotalProduct();
+
+	}
 }

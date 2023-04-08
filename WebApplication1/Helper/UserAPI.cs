@@ -47,5 +47,7 @@ namespace WebApplication1.Helper
             var res = await _aPIExcute.GetData<bool>(url);
             return res;
         }
+
+        public async MyProperty { get; set; }
     }
 }

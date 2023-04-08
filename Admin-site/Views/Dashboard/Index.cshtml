@@ -153,7 +153,7 @@
                 </div>
                 <h4 class="card-title mb-4">Sales Analytics</h4>
 
-                <div id="donut-chart" class="apex-charts"></div>
+                <div id="chartDo" class="apex-charts"></div>
 
                 <div class="row">
                     <div class="col-4">
@@ -345,6 +345,43 @@
                 };
                 chart = new ApexCharts(document.querySelector("#chart1"), options);
                 chart.render();
+            }
+        });
+
+        const apexDonutChart = "#chartDo";
+        $.ajax({
+            url: 'https://localhost:5001/api/Dashboard/GetTotalProduct',
+            dataType: 'json',
+            success: function (results) {
+                var categories = [];
+                var percents = [];
+
+                for (var i = 0; i < results.percentProducts.length; i++) {
+                    categories.push(results.percentProducts[i].category);
+                    percents.push(results.percentProducts[i].percent);
+                }
+
+                var donutOptions = {
+                    series: percents,
+                    chart: {
+                        type: "donut" 
+                    },
+                    labels: categories,
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    name: "Total",
+                                    value: results.totalProduct
+                                }
+                            }
+                        }
+                    },
+                    colors: ["#5664d2", "#1cbb8c"],
+                };
+                var chartDo = new ApexCharts(document.querySelector("#chartDo"), donutOptions);
+                chartDo.render();
             }
         });
 
