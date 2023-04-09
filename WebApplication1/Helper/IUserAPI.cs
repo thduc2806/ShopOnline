@@ -11,8 +11,12 @@ namespace WebApplication1.Helper
 	public interface IUserAPI
 	{
 		Task<AuthenViewModel> Authenticate(AuthenModel request);
+
 		Task<BaseResponse<RegisterViewModel>> Register(RegisterModel request);
+
 		Task<BaseResponse<bool>> CheckEmailExist(string email);
+
+		Task<UserProfileViewModel> GetInfo(string userId);
 
 
     }

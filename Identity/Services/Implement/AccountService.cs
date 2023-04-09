@@ -122,16 +122,16 @@ namespace Identity.Services.Implement
                 return BaseResponse<bool>.BadRequest(message: "Email already exists");
         }
 
-        public async Task<BaseResponse<UserProfileViewModel>> GetUserProfile(string userId)
+        public async Task<UserProfileViewModel> GetUserProfile(string userId)
         {
             Users user = await FindUser(userId);
             if (user == null)
             {
-                return BaseResponse<UserProfileViewModel>.NotFound();
+                return new UserProfileViewModel();
             }
             LoadRelated(user);
             var model = _mapper.Map<Users, UserProfileViewModel>(user);
-            return BaseResponse<UserProfileViewModel>.Success(model);
+            return model;
         }
     }
 }

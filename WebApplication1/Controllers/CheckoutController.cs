@@ -22,17 +22,21 @@ namespace WebApplication1.Controllers
 	{
 		private readonly ICartApi _cartApi;
 		private readonly ICheckoutApi _checkoutApi;
+		private readonly IUserAPI _userAPI;
 		public decimal RangeRate = 23000;
-		public CheckoutController(ICartApi cartApi, ICheckoutApi checkoutApi)
+		public CheckoutController(ICartApi cartApi, ICheckoutApi checkoutApi, IUserAPI userAPI)
 		{
 			_cartApi = cartApi;
 			_checkoutApi = checkoutApi;
+			_userAPI = userAPI;
 		}
 
 
 		public async Task<IActionResult> Index()
 		{
-            return View();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
+			var result = await _userAPI.GetInfo(userId);
+            return View(result);
         }
 		
 		public async Task<IActionResult> Payment(int orderId)

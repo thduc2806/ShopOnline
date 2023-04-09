@@ -1,6 +1,6 @@
 ﻿@using System.Security.Claims
-@using oShopSolution.ViewModels.Catalog.Order
-@model InfoCustomerModel
+@using oShopSolution.ViewModels.System.Users
+@model UserProfileViewModel
 
 
 <main class="main__content_wrapper">
@@ -36,7 +36,7 @@
                                 <div class="customer__information">
                                     <div class="checkout__email--phone mb-12">
                                         <label>
-                                            <input asp-for="Email" class="checkout__input--field border-radius-5" placeholder="Email" type="text">
+                                            <input asp-for="FirstName" class="checkout__input--field border-radius-5" placeholder="Email" type="text">
                                         </label>
                                     </div>
                                 </div>
@@ -50,15 +50,15 @@
                                         <div class="col-12 mb-20">
                                             <div class="checkout__input--list ">
                                                 <label class="checkout__input--label mb-5" for="input1">Fist Name <span class="checkout__input--label__star">*</span></label>
-                                                <input asp-for="FullName" class="checkout__input--field border-radius-5" placeholder="Full Name" id="input1" type="text">
-                                                <span asp-validation-for="FullName" class="text-danger"></span>
+                                                <input asp-for="FirstName" class="checkout__input--field border-radius-5" placeholder="Full Name" id="input1" type="text">
+                                                <span asp-validation-for="FirstName" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-12 mb-20">
                                             <div class="checkout__input--list">
                                                 <label class="checkout__input--label mb-5" for="input4">Address <span class="checkout__input--label__star">*</span></label>
-                                                <input asp-for="Address" class="checkout__input--field border-radius-5" placeholder="Address" id="input4" type="text">
-                                                <span asp-validation-for="Address" class="checkout__input--label__star"></span>
+                                                <input asp-for="Street" class="checkout__input--field border-radius-5" placeholder="Address" id="input4" type="text">
+                                                <span asp-validation-for="Street" class="checkout__input--label__star"></span>
                                             </div>
                                         </div>
                                         <div class="col-12 mb-20">
@@ -83,28 +83,28 @@
                                             <div class="checkout__input--list">
                                                 <label class="checkout__input--label mb-5" for="country2">District <span class="checkout__input--label__star">*</span></label>
                                                 <div class="checkout__input--select select">
-                                                    <select asp-for="District" class="checkout__input--select__field border-radius-5" id="district">
+                                                    <select asp-for="State" class="checkout__input--select__field border-radius-5" id="district">
                                                         <option value="" selected>Select District</option>
                                                     </select>
                                                 </div>
-                                                <span asp-validation-for="District" class="text-danger"></span>
+                                                <span asp-validation-for="State" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 mb-20">
                                             <div class="checkout__input--list">
                                                 <label class="checkout__input--label mb-5" for="country2">Ward <span class="checkout__input--label__star">*</span></label>
                                                 <div class="checkout__input--select select">
-                                                    <select asp-for="Ward" class="checkout__input--select__field border-radius-5" id="ward">
+                                                    <select asp-for="State" class="checkout__input--select__field border-radius-5" id="ward">
                                                         <option value="" selected>Select Ward</option>
                                                     </select>
                                                 </div>
-                                                <span asp-validation-for="Ward" class="text-danger"></span>
+                                                <span asp-validation-for="State" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 mb-20">
                                             <div class="checkout__input--list">
                                                 <label class="checkout__input--label mb-5" for="input6">Postal Code</label>
-                                                <input asp-for="PostCode" class="checkout__input--field border-radius-5" placeholder="Postal code" id="input6" type="text">
+                                                <input asp-for="UserId" class="checkout__input--field border-radius-5" placeholder="Postal code" id="input6" type="text">
                                             </div>
                                         </div>
                                     </div>

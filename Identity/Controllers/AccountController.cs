@@ -35,9 +35,9 @@ namespace Identity.Controllers
         }
 
         [HttpGet("Profile/{userId}")]
-        public IActionResult GetUserProfile(string userId)
+        public async Task<IActionResult> GetUserProfile(string userId)
         {
-            var result = _accountService.GetUserProfile(userId);
+            var result = await _accountService.GetUserProfile(userId);
             return Ok(result);
         }
 

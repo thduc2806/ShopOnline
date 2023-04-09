@@ -11,7 +11,7 @@ namespace Identity.Services.Interface
 
         BaseResponse<bool> CheckEmailExist(string email);
 
-        Task<BaseResponse<UserProfileViewModel>> GetUserProfile(string userId);
+        Task<UserProfileViewModel> GetUserProfile(string userId);
 
         //Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key);
     }

@@ -1,5 +1,9 @@
-﻿using oShopSolution.Application.Helper;
+﻿using Newtonsoft.Json;
+using oShopSolution.Application.Helper;
+using oShopSolution.ViewModels.Catalog.Order;
+using oShopSolution.ViewModels.Common;
 using oShopSolution.ViewModels.System.Users;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Helper
@@ -7,14 +11,16 @@ namespace WebApplication1.Helper
     public class UserAPI : IUserAPI
 	{
         protected APIExcute _aPIExcute;
+        private readonly HttpClient httpClient;
         public UserAPI()
 		{
             _aPIExcute = new APIExcute();
+            httpClient = new HttpClient();
         }
 
         public async Task<AuthenViewModel> Authenticate(AuthenModel request)
         {
-            string url = "https://localhost:44321/api/auth";
+            string url = "https://localhost:7065/api/auth";
 
             var req = new BaseRequest<object>(new
             {
@@ -35,7 +41,7 @@ namespace WebApplication1.Helper
 
         public async Task<BaseResponse<RegisterViewModel>> Register(RegisterModel request)
         {
-            string url = "https://localhost:44321/api/account/Register";
+            string url = "https://localhost:7065/api/account/Register";
             var req = new BaseRequest<RegisterModel>(request);
             var res = await _aPIExcute.PostData<RegisterViewModel, RegisterModel>(url, req);
             return res;
@@ -48,6 +54,38 @@ namespace WebApplication1.Helper
             return res;
         }
 
-        public async MyProperty { get; set; }
+        public async Task<UserProfileViewModel> GetInfo(string userId)
+        {
+            string url = $"https://localhost:7065/api/account/Profile/{userId}";
+            HttpResponseMessage response = null;
+            response = await httpClient.GetAsync(url);
+            string responseData = await response.Content.ReadAsStringAsync();
+            var result = new UserProfileViewModel();
+            if (response.IsSuccessStatusCode)
+            {
+                result = JsonConvert.DeserializeObject<UserProfileViewModel>(responseData);
+
+            }
+            else
+            {
+                result = new UserProfileViewModel();
+            }
+            return result;
+        }
+
+        private Task<HttpResponseMessage> PostDataAsync(HttpMethodEnum method, string url, HttpContent content)
+        {
+            switch (method)
+            {
+                case HttpMethodEnum.POST:
+                    return httpClient.PostAsync(url, content);
+                case HttpMethodEnum.PUT:
+                    return httpClient.PutAsync(url, content);
+                case HttpMethodEnum.DELETE:
+                    return httpClient.DeleteAsync(url);
+            }
+            return httpClient.PostAsync(url, content);
+        }
+
     }
 }
