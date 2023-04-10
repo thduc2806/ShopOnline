@@ -95,14 +95,14 @@ namespace Identity.Services.Implement
         //        return false;
         //    }
         //}
-        protected async Task<bool> SyncUserProfileIfNotExisted(string email, string firstName, string lastName)
+        protected async Task<bool> SyncUserProfileIfNotExisted(string email, string firstName, string lastName, string fullName)
         {
             try
             {
                 var user = await Find(email);
                 if (user != null)
                     return true;
-                user = new Users(email, firstName, lastName);
+                user = new Users(email, firstName, lastName, fullName);
                 _db.Users.Add(user);
                 var result = _db.SaveChanges();
                 return result == 1;

@@ -12,6 +12,8 @@ namespace Identity.Database.Entities
 
         public string? LastName { get; set; }
 
+        public string FullName { get; set; }
+
         public DateTime? DOB { get; set; }
 
         public string? Street { get; set; }
@@ -19,6 +21,8 @@ namespace Identity.Database.Entities
         public string? City { get; set; }
 
         public string? State { get; set; }
+
+        public string? Ward { get; set; }
 
         public string? Country { get; set; }
 
@@ -49,11 +53,12 @@ namespace Identity.Database.Entities
             }
         }
 
-        public Users(string email, string firstName, string lastName) : base()
+        public Users(string email, string firstName, string lastName, string fullName) : base()
         {
             Email = email;
             FirstName = firstName;
             LastName = lastName;
+            FullName = fullName;
             InitCommonProperties();
         }
 

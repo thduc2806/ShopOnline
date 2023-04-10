@@ -10,7 +10,7 @@ namespace Identity.Database
         public static void Seeds(this ModelBuilder modelBuilder)
         {
             var hasher = new PasswordHasher<Users>();
-            modelBuilder.Entity<Users>().HasData(new Users("thduc.2000@gmail.com","admin","admin")
+            modelBuilder.Entity<Users>().HasData(new Users("thduc.2000@gmail.com","admin","admin", "admin")
             {
                 Id = 1,
                 UserId = new Guid("FE6EEC2B-239B-4CB6-AEB1-25106220C7F0"),
@@ -27,7 +27,8 @@ namespace Identity.Database
                 Street = "",
                 RefreshToken = "",
                 CreatedDate = DateTime.Now,
-
+                FullName = "admin",
+                Ward = "Phường 13"
             });
         }
     }

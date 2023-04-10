@@ -72,7 +72,7 @@
                                             <div class="checkout__input--list">
                                                 <label class="checkout__input--label mb-5" for="input11">Town/City <span class="checkout__input--label__star">*</span></label>
                                                 <div class="checkout__input--select select">
-                                                    <select asp-for="City" class="checkout__input--select__field border-radius-5" id="city">
+                                                    <select asp-for="City" class="checkout__input--select__field border-radius-5" id="city" value="@Model.City">
                                                         <option value="" selected>Select City</option>
                                                     </select>
                                                 </div>
@@ -83,7 +83,7 @@
                                             <div class="checkout__input--list">
                                                 <label class="checkout__input--label mb-5" for="country2">District <span class="checkout__input--label__star">*</span></label>
                                                 <div class="checkout__input--select select">
-                                                    <select asp-for="State" class="checkout__input--select__field border-radius-5" id="district">
+                                                    <select asp-for="State" class="checkout__input--select__field border-radius-5" id="district" value="@Model.State">
                                                         <option value="" selected>Select District</option>
                                                     </select>
                                                 </div>
@@ -94,17 +94,11 @@
                                             <div class="checkout__input--list">
                                                 <label class="checkout__input--label mb-5" for="country2">Ward <span class="checkout__input--label__star">*</span></label>
                                                 <div class="checkout__input--select select">
-                                                    <select asp-for="State" class="checkout__input--select__field border-radius-5" id="ward">
+                                                    <select asp-for="Ward" class="checkout__input--select__field border-radius-5" id="ward" value="@Model.Ward">
                                                         <option value="" selected>Select Ward</option>
                                                     </select>
                                                 </div>
-                                                <span asp-validation-for="State" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 mb-20">
-                                            <div class="checkout__input--list">
-                                                <label class="checkout__input--label mb-5" for="input6">Postal Code</label>
-                                                <input asp-for="UserId" class="checkout__input--field border-radius-5" placeholder="Postal code" id="input6" type="text">
+                                                <span asp-validation-for="Ward" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>

@@ -50,11 +50,17 @@ namespace Identity.Services.Implement
                     UserId = string.Empty,
                 });
             }
-            var user = new Users(model.Email, model.FirstName ?? string.Empty, model.LastName ?? string.Empty)
+            var user = new Users(model.Email, model.FirstName ?? string.Empty, model.LastName ?? string.Empty, model.FullName ?? string.Empty)
             {
                 PhoneNumber = model.PhoneNumber,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                FullName = model.FullName,
+                City = model.City,
+                Email = model.Email,
+                State = model.State,
+                Ward = model.Ward,
+                Street = model.Street,
             };
             var createResult = _userManager.CreateAsync(user, model.Password).Result;
 

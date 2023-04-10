@@ -20,7 +20,7 @@ namespace WebApplication1.Helper
 
         public async Task<AuthenViewModel> Authenticate(AuthenModel request)
         {
-            string url = "https://localhost:7065/api/auth";
+            string url = "https://localhost:44321/api/auth";
 
             var req = new BaseRequest<object>(new
             {
@@ -41,7 +41,7 @@ namespace WebApplication1.Helper
 
         public async Task<BaseResponse<RegisterViewModel>> Register(RegisterModel request)
         {
-            string url = "https://localhost:7065/api/account/Register";
+            string url = "https://localhost:44321/api/account/Register";
             var req = new BaseRequest<RegisterModel>(request);
             var res = await _aPIExcute.PostData<RegisterViewModel, RegisterModel>(url, req);
             return res;
@@ -50,13 +50,25 @@ namespace WebApplication1.Helper
         public async Task<BaseResponse<bool>> CheckEmailExist(string email)
         {
             string url = $"https://localhost:44321/api/account/CheckEmail/{email}";
-            var res = await _aPIExcute.GetData<bool>(url);
-            return res;
+			HttpResponseMessage response = null;
+			response = await httpClient.GetAsync(url);
+			string responseData = await response.Content.ReadAsStringAsync();
+			var result = new BaseResponse<bool>();
+			if (response.IsSuccessStatusCode)
+			{
+				result = JsonConvert.DeserializeObject<BaseResponse<bool>>(responseData);
+
+			}
+			else
+			{
+				result = JsonConvert.DeserializeObject<BaseResponse<bool>>(responseData);
+			}
+			return result;
         }
 
         public async Task<UserProfileViewModel> GetInfo(string userId)
         {
-            string url = $"https://localhost:7065/api/account/Profile/{userId}";
+            string url = $"https://localhost:44321/api/account/Profile/{userId}";
             HttpResponseMessage response = null;
             response = await httpClient.GetAsync(url);
             string responseData = await response.Content.ReadAsStringAsync();

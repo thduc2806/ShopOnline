@@ -26,6 +26,16 @@ namespace Identity.ViewModel
         //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Invalid Phone number")]
         [RegularExpression("^[0-9]+$", ErrorMessage = "Invalid Phone number")]
         [MinLength(length: 8, ErrorMessage = "The Phone Number minimum length of 8 characters")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
+
+        public string? FullName { get; set; }
+
+        public string? City { get; set; }
+
+        public string? State { get; set; }
+
+        public string? Ward { get; set; }
+
+        public string? Street { get; set; }
     }
 }
