@@ -10,5 +10,8 @@ namespace oShopSolution.ViewModels.Catalog.Products
 	public class GetManageProductPageRequest : PageRequestBase
 	{
 		public string Keyword { get; set; }
+
+		public string SortBy { get; set; }
+
 	}
 }

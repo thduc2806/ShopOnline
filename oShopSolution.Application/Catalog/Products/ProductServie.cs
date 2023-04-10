@@ -6,6 +6,7 @@ using oShopSolution.Application.Common;
 using oShopSolution.Application.Option;
 using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
+using oShopSolution.Utilities.Constants;
 using oShopSolution.Utilities.Exceptions;
 using oShopSolution.ViewModels.Catalog.Products;
 using oShopSolution.ViewModels.Common;
@@ -96,7 +97,25 @@ namespace oShopSolution.Application.Catalog.Products
 				query = query.Where(c => c.p.Name.Contains(request.Keyword));
 			}
 
-			query = query.OrderByDescending(c => c.p.CreateDate);
+			if(request.SortBy != null)
+			{
+				switch(request.SortBy)
+				{
+					case SortingProductConstant.Name:
+                        query = query.OrderByDescending(c => c.p.Name);
+						break;
+					case SortingProductConstant.Price:
+						query = query.OrderByDescending(c => c.p.Price);
+						break;
+
+					default: query = query.OrderByDescending(c => c.p.CreateDate);
+						break;
+                }
+			}
+			else
+			{
+				query = query.OrderByDescending(c => c.p.CreateDate);
+			}
 
 			var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new ProductView()
 			{
