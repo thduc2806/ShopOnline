@@ -1,4 +1,5 @@
 ﻿using Admin_site.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using oShopSolution.ViewModels.Catalog.Order;
 using oShopSolution.ViewModels.Catalog.Products;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace Admin_site.Controllers
 {
+	[Authorize]
     public class DashboardController : Controller
     {
         private readonly IDashboardApi _dashboardApi;

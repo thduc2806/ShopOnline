@@ -10,5 +10,7 @@ namespace oShopSolution.ViewModels.Common
 	{
 		public List<T> Items { get; set; }
 
+		public int CateId { get; set; }
+
 	}
 }

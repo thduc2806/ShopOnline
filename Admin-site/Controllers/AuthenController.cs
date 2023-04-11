@@ -25,9 +25,8 @@ namespace Admin_site.Controllers
 
         [AllowAnonymous]
 		[HttpGet]
-        public IActionResult Login(string returnUrl)
+        public IActionResult Login()
 		{
-            ViewBag.ReturnUrl = returnUrl;
 			var model = new AuthenModel();
             return View(model);
 		}
@@ -35,12 +34,15 @@ namespace Admin_site.Controllers
         [AllowAnonymous]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Login(AuthenModel request, string returnUrl = "")
+        public async Task<IActionResult> Login(AuthenModel request)
 		{
 			if (ModelState.IsValid)
 			{
 				var results = await _authenApi.Authenticate(request);
-
+				if (results.UserRole.ToLower() != "admin")
+				{
+					return View("Login", request);
+				}	
 				if (results.AccessToken != null)
 				{
 					var claims = new List<Claim>()
@@ -67,7 +69,7 @@ namespace Admin_site.Controllers
 
                     //if (!string.IsNullOrWhiteSpace(returnUrl))
                     //    return Redirect(returnUrl);
-                    return RedirectToAction("Products", "Product");
+                    return RedirectToAction("Index", "Dashboard");
                 }
 				else
 				{
@@ -76,6 +78,12 @@ namespace Admin_site.Controllers
                 }
 			}
 			return View("Login", request);
+		}
+
+		public async Task<IActionResult> Logout()
+		{
+			await HttpContext.SignOutAsync();
+			return RedirectToAction("Index", "Dashboard");
 		}
 	}
 }

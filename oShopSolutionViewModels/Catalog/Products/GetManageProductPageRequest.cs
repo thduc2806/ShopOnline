@@ -13,5 +13,7 @@ namespace oShopSolution.ViewModels.Catalog.Products
 
 		public string SortBy { get; set; }
 
+		public int CateId { get; set; }
+
 	}
 }

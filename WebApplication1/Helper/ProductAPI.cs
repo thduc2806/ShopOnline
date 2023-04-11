@@ -40,7 +40,7 @@ namespace WebApplication1.Helper
 		{
 			var data = await GetAsync<PageResult<ProductView>>(
 				$"/api/product/page?pageIndex={request.PageIndex}" +
-				$"&pageSize={request.PageSize}" + $"&keyword={request.Keyword}" + $"&sortBy={request.SortBy}");
+				$"&pageSize={request.PageSize}" + $"&keyword={request.Keyword}" + $"&sortBy={request.SortBy}" + $"&cateId={request.CateId}");
 
 			return data;
 		}

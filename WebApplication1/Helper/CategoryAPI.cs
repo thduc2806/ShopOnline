@@ -17,10 +17,10 @@ namespace WebApplication1.Helper
 			: base(httpClientFactory, httpContextAccessor, configuration)
 		{
 		}
-		//public async Task<List<CategoryView>> GetAll()
-		//{
-		//	return await GetListAsync<CategoryView>("/api/category");
-		//}
+		public async Task<List<CategoryView>> GetAll()
+		{
+			return await GetAsync<List<CategoryView>>("/api/category");
+		}
 
 		public async Task<CategoryView> GetById(int id)
 		{

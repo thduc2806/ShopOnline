@@ -90,7 +90,14 @@ namespace oShopSolution.Application.Catalog.Products
 						from c in pc.DefaultIfEmpty()
 						select new { p, pc, c };
 
+			if (request.CateId > 0)
+			{
+				query = query.Where(o => o.p.CategoryId == request.CateId);
+			}	
+
 			int total = await query.CountAsync();
+
+
 
 			if(!string.IsNullOrEmpty(request.Keyword))
 			{
@@ -126,6 +133,7 @@ namespace oShopSolution.Application.Catalog.Products
 				Category = x.c.Name,
 				CreateDate = x.p.CreateDate,
 				ThumbImg = x.p.ThumbPath,
+				CategoryId = x.p.CategoryId,
 			}).ToListAsync();
 
 			var pageResult = new PageResult<ProductView>
@@ -133,7 +141,8 @@ namespace oShopSolution.Application.Catalog.Products
 				TotalItems = total,
 				PageSize = request.PageSize,
 				PageIndex = request.PageIndex,
-				Items = data
+				Items = data,
+				CateId = request.CateId
 			};
 			return pageResult;
 		}
@@ -198,7 +207,8 @@ namespace oShopSolution.Application.Catalog.Products
 				TotalItems = total,
 				PageIndex = request.PageIndex,
 				PageSize = request.PageSize,
-				Items = data
+				Items = data,
+				CateId = request.CateId,
 			};
 
 			return pageResult;

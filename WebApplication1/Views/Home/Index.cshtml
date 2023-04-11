@@ -90,7 +90,7 @@
                                                     <article class="product__card">
                                                         <div class="product__card--thumbnail">
                                                             <a class="product__card--thumbnail__link display-block" href="product-details.html">
-                                                                <img class="product__card--thumbnail__img product__primary--img display-block" src="~/images/nav-logo.webp" alt="product-img">
+                                                                <img class="product__card--thumbnail__img product__primary--img display-block" src="@(Configuration["BaseAddress"] + item.ThumbImg)" style="max-width:100%;height:400px" alt="product-img">
                                                             </a>
                                                             <ul class="product__card--action d-flex align-items-center justify-content-center">
                                                                 <li class="product__card--action__list">
@@ -220,7 +220,8 @@
     const selectElement = document.getElementById('sortProductItem');
     selectElement.addEventListener('change', (event) => {
         const sortBy = event.target.value;
-        const url  = '@Url.Action("Index","Home")?sortBy=' + sortBy;
+        const cateId = @Model.CateId
+            const url = '@Url.Action("Index","Home")?sortBy=' + sortBy + '&cateId=' + cateId;
         window.location.replace(url);
     });
 </script>

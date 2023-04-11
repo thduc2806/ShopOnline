@@ -28,7 +28,7 @@ namespace WebApplication1.Controllers
 			_categoryApi = categoryApi;
 		}
 
-		public async Task<IActionResult> Index(int pageIndex = 1, string keyword = "", string sortBy = "")
+		public async Task<IActionResult> Index(int pageIndex = 1, string keyword = "", string sortBy = "", int cateId = 0)
 		{
 			//var pageIndex = 1;
 			var pageSize = 12;
@@ -37,7 +37,8 @@ namespace WebApplication1.Controllers
 				PageIndex = pageIndex,
 				PageSize = pageSize,
 				Keyword = keyword,
-				SortBy = sortBy
+				SortBy = sortBy,
+				CateId = cateId,
             };
 			var product = await _productApi.GetAllProduct(request);
 			return View(product);

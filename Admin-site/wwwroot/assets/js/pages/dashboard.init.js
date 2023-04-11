@@ -71,7 +71,7 @@ radialoptions = {
 };
 (radialchart = new ApexCharts(document.querySelector("#radialchart-2"), radialoptions)).render();
 options = {
-    series: [{ data: [23, 32, 27, 38, 27, 32, 27, 34, 26, 31, 28]`` }],
+    series: [{ data: [23, 32, 27, 38, 27, 32, 27, 34, 26, 31, 28]}],
     chart: { type: "line", width: 80, height: 35, sparkline: { enabled: !0 } },
     stroke: { width: [3], curve: "smooth" },
     colors: ["#5664d2"],
