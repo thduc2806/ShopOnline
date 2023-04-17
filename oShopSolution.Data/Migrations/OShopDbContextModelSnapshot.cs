@@ -180,7 +180,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "5dc8c871-07d2-4bf2-a364-84348e52a6d9",
+                            ConcurrencyStamp = "bda761ec-7803-4883-843c-b04bfd2779b2",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -252,7 +252,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "353a3013-648d-4f30-a344-8305f198f854",
+                            ConcurrencyStamp = "34012cce-eb14-4231-97f8-1e982c82be84",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -260,7 +260,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPFQvNE0PLii6J/JKlwz4pVDJpOh5rdAGtzh32AzEK4iVUhjV8sRHkbFZt3DjfQmSQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELsh8gawO5zFLAyr9vDY2sEg1O96BGeBH5yaN3TEtfzLJ5T6YJoCAO9UzwtREYs8sQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -295,8 +295,6 @@ namespace oShopSolution.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
@@ -344,36 +342,82 @@ namespace oShopSolution.Data.Migrations
                         .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PostCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Ward")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isPayment")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.OrderDetail", b =>
                 {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -421,7 +465,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2021, 10, 21, 18, 2, 6, 292, DateTimeKind.Local).AddTicks(3625),
+                            CreateDate = new DateTime(2023, 4, 4, 13, 40, 29, 659, DateTimeKind.Local).AddTicks(9084),
                             Description = "This is Iphone 12 Promax",
                             Name = "Iphone 12 Promax",
                             Price = 100000m,
@@ -432,7 +476,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2021, 10, 21, 18, 2, 6, 292, DateTimeKind.Local).AddTicks(8120),
+                            CreateDate = new DateTime(2023, 4, 4, 13, 40, 29, 660, DateTimeKind.Local).AddTicks(7131),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,
@@ -498,31 +542,19 @@ namespace oShopSolution.Data.Migrations
             modelBuilder.Entity("oShopSolution.Data.Entities.Cart", b =>
                 {
                     b.HasOne("oShopSolution.Data.Entities.Product", "Product")
-                        .WithMany("Carts")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("oShopSolution.Data.Entities.AppUser", "AppUser")
-                        .WithMany("Carts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Product");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.Order", b =>
                 {
-                    b.HasOne("oShopSolution.Data.Entities.AppUser", "AppUser")
+                    b.HasOne("oShopSolution.Data.Entities.AppUser", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
+                        .HasForeignKey("AppUserId");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.OrderDetail", b =>
@@ -533,15 +565,7 @@ namespace oShopSolution.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("oShopSolution.Data.Entities.Product", "Product")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("oShopSolution.Data.Entities.Product", b =>
@@ -577,8 +601,6 @@ namespace oShopSolution.Data.Migrations
 
             modelBuilder.Entity("oShopSolution.Data.Entities.AppUser", b =>
                 {
-                    b.Navigation("Carts");
-
                     b.Navigation("Orders");
                 });
 
@@ -594,10 +616,6 @@ namespace oShopSolution.Data.Migrations
 
             modelBuilder.Entity("oShopSolution.Data.Entities.Product", b =>
                 {
-                    b.Navigation("Carts");
-
-                    b.Navigation("OrderDetails");
-
                     b.Navigation("ProductComments");
 
                     b.Navigation("ProductImgs");

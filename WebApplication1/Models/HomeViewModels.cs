@@ -1,5 +1,6 @@
 ﻿using oShopSolution.ViewModels.Catalog.Categories;
 using oShopSolution.ViewModels.Catalog.Products;
+using oShopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace WebApplication1.Models
 {
 	public class HomeViewModels
 	{
-		public List<ProductView> Product { get; set; }
+		public PageResult<ProductView> Product { get; set; }
 		public List<CategoryView> Category { get; set; }
 	}
 }

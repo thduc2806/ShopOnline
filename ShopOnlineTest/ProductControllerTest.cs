@@ -28,8 +28,8 @@ namespace ShopOnlineTest
 				CreateDate = DateTime.Now,
 				ThumbImg = "/user-content/ae269ed3-cfdb-4025-959f-191d9152c633.jpg",
 				Category = "Samsung",
-				TextComment = null,
-				commentViews = null,
+				//TextComment = null,
+				//commentViews = null,
 			};
 			var mockProductServie = new MockProductService().MockById(mockProduct, 12);
 			var controller = new Product1Controller(mockProductServie.Object);

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using oShopSolution.Data.EF;
@@ -33,29 +35,31 @@ namespace oShopSolution.Application.System.Users
 		public async Task<ApiResult<string>> Authencate(LoginRequest request)
 		{
 			var user = await _userManager.FindByNameAsync(request.Username);
-			if (user == null) return new ApiErrorResult<string>("Account does not exist");
+			var userId = user.Id;
+			if (user == null)
+			{
+				return new ApiErrorResult<string>("Login Fail");
+			}
 
-			var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+			var result = await _signInManager.PasswordSignInAsync(user, request.Password,true, true);
+
 			if (!result.Succeeded)
 			{
-				return new ApiErrorResult<string>("Login fail");
+				return new ApiErrorResult<string>("Login Fail");
 			}
-			var role = _userManager.GetRolesAsync(user);
-			var claims = new[]
-			{
-				new Claim(ClaimTypes.Email, user.Email),
-				new Claim(ClaimTypes.Name, user.UserName),
-				new Claim(ClaimTypes.GivenName, user.FullName),
-				new Claim(ClaimTypes.Role, string.Join(";", role))
-			};
-			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
-			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-			var token = new JwtSecurityToken(_config["Tokens:Issuer"],
-				_config["Tokens:Issuer"],
+			var role = _userManager.GetRolesAsync(user);
+			var claims = JwtTokenHelper.GetUserClaims(request);
+			var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+			var users = new ClaimsPrincipal(claimsIdentity);
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+			var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+				_config["Jwt:Issuer"],
 				claims,
 				expires: DateTime.Now.AddHours(3),
 				signingCredentials: creds);
+
 			return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
 		}
 
@@ -115,5 +119,6 @@ namespace oShopSolution.Application.System.Users
 
 			return new ApiSuccessResult<bool>();
 		}
+
 	}
 }

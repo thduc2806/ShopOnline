@@ -1,81 +1,103 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using oShopSolution.Application.Helper;
+using oShopSolution.ViewModels.Catalog.Order;
 using oShopSolution.ViewModels.Common;
 using oShopSolution.ViewModels.System.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Helper
 {
-	public class UserAPI : IUserAPI
+    public class UserAPI : IUserAPI
 	{
-		private readonly IHttpClientFactory _httpClientFactory;
-		private readonly IConfiguration _configuration;
-		private readonly IHttpContextAccessor _httpContextAccessor;
-		public UserAPI(IHttpClientFactory httpClientFactory,
-				   IHttpContextAccessor httpContextAccessor,
-					IConfiguration configuration)
+        protected APIExcute _aPIExcute;
+        private readonly HttpClient httpClient;
+        public UserAPI()
 		{
-			_configuration = configuration;
-			_httpContextAccessor = httpContextAccessor;
-			_httpClientFactory = httpClientFactory;
-		}
+            _aPIExcute = new APIExcute();
+            httpClient = new HttpClient();
+        }
 
-		public async Task<ApiResult<string>> Authenticate(LoginRequest request)
-		{
-			var json = JsonConvert.SerializeObject(request);
-			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+        public async Task<AuthenViewModel> Authenticate(AuthenModel request)
+        {
+            string url = "https://localhost:44321/api/auth";
 
-			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-			var response = await client.PostAsync("/api/users/authenticate", httpContent);
+            var req = new BaseRequest<object>(new
+            {
+                Email = request.Email,
+                request.Password
+            });
+            var res = await _aPIExcute.PostData<AuthenViewModel, object>(url: $"{url}", req);
+
+            if (res.IsSuccessStatusCode)
+            {
+                return res.ResponseData;
+            }
+            return new AuthenViewModel
+            {
+                Message = res.Message ?? "User is not valid"
+            };
+        }
+
+        public async Task<BaseResponse<RegisterViewModel>> Register(RegisterModel request)
+        {
+            string url = "https://localhost:44321/api/account/Register";
+            var req = new BaseRequest<RegisterModel>(request);
+            var res = await _aPIExcute.PostData<RegisterViewModel, RegisterModel>(url, req);
+            return res;
+        }
+
+        public async Task<BaseResponse<bool>> CheckEmailExist(string email)
+        {
+            string url = $"https://localhost:44321/api/account/CheckEmail/{email}";
+			HttpResponseMessage response = null;
+			response = await httpClient.GetAsync(url);
+			string responseData = await response.Content.ReadAsStringAsync();
+			var result = new BaseResponse<bool>();
 			if (response.IsSuccessStatusCode)
 			{
-				return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync());
+				result = JsonConvert.DeserializeObject<BaseResponse<bool>>(responseData);
+
 			}
+			else
+			{
+				result = JsonConvert.DeserializeObject<BaseResponse<bool>>(responseData);
+			}
+			return result;
+        }
 
-			return JsonConvert.DeserializeObject<ApiErrorResult<string>>(await response.Content.ReadAsStringAsync());
-		}
+        public async Task<UserProfileViewModel> GetInfo(string userId)
+        {
+            string url = $"https://localhost:44321/api/account/Profile/{userId}";
+            HttpResponseMessage response = null;
+            response = await httpClient.GetAsync(url);
+            string responseData = await response.Content.ReadAsStringAsync();
+            var result = new UserProfileViewModel();
+            if (response.IsSuccessStatusCode)
+            {
+                result = JsonConvert.DeserializeObject<UserProfileViewModel>(responseData);
 
-		public async Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest)
-		{
-			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            }
+            else
+            {
+                result = new UserProfileViewModel();
+            }
+            return result;
+        }
 
-			var json = JsonConvert.SerializeObject(registerRequest);
-			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+        private Task<HttpResponseMessage> PostDataAsync(HttpMethodEnum method, string url, HttpContent content)
+        {
+            switch (method)
+            {
+                case HttpMethodEnum.POST:
+                    return httpClient.PostAsync(url, content);
+                case HttpMethodEnum.PUT:
+                    return httpClient.PutAsync(url, content);
+                case HttpMethodEnum.DELETE:
+                    return httpClient.DeleteAsync(url);
+            }
+            return httpClient.PostAsync(url, content);
+        }
 
-			var response = await client.PostAsync("/api/users/register", httpContent);
-			var result = await response.Content.ReadAsStringAsync();
-			if (response.IsSuccessStatusCode)
-				return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
-			return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
-		}
-
-		public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleRequest request)
-		{
-			var client = _httpClientFactory.CreateClient();
-			client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-			var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-
-			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-
-			var json = JsonConvert.SerializeObject(request);
-			var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-			var response = await client.PutAsync($"/api/users/{id}/roles", httpContent);
-			var result = await response.Content.ReadAsStringAsync();
-			if (response.IsSuccessStatusCode)
-				return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
-
-			return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
-		}
-	}
+    }
 }

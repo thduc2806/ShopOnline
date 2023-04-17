@@ -11,6 +11,7 @@ const oidcSettings = {
     scope: "shop.api openid profile offline_access",
     automaticSilentRenew: false,
     includeIdTokenInSilentRenew: true,
+    client_secrets: "secret"
 };
 
 class AuthService {

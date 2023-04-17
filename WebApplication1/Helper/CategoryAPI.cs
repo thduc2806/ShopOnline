@@ -19,7 +19,7 @@ namespace WebApplication1.Helper
 		}
 		public async Task<List<CategoryView>> GetAll()
 		{
-			return await GetListAsync<CategoryView>("/api/category");
+			return await GetAsync<List<CategoryView>>("/api/category");
 		}
 
 		public async Task<CategoryView> GetById(int id)

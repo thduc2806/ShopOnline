@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using oShopSolution.Utilities.Constants;
 using oShopSolution.ViewModels.Catalog.Products;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,15 +28,42 @@ namespace WebApplication1.Controllers
 			_categoryApi = categoryApi;
 		}
 
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int pageIndex = 1, string keyword = "", string sortBy = "", int cateId = 0)
 		{
-			var viewModel = new HomeViewModels 
+			//var pageIndex = 1;
+			var pageSize = 12;
+			var request = new GetManageProductPageRequest()
 			{
-				Product =  await _productApi.GetAll(),
-				Category = await _categoryApi.GetAll()
+				PageIndex = pageIndex,
+				PageSize = pageSize,
+				Keyword = keyword,
+				SortBy = sortBy,
+				CateId = cateId,
+            };
+			var product = await _productApi.GetAllProduct(request);
+			return View(product);
+		}
 
-			};
-			return View(viewModel);
+		//[HttpPost]
+		//public async Task<IActionResult> Index(int pageIndex)
+		//{
+		//	int pageSize = 1;
+		//	var request = new GetManageProductPageRequest()
+		//	{
+		//		PageIndex = pageIndex,
+		//		PageSize = pageSize,
+		//	};
+
+		//	var product = await _productApi.GetAllProduct(request);
+
+		//	return View(product);
+		//}
+
+		[HttpGet]
+		public async Task<IActionResult> Detail(int id)
+		{
+			var result = await _productApi.GetProductById(id);
+			return PartialView(result);
 		}
 
 		public IActionResult Privacy()

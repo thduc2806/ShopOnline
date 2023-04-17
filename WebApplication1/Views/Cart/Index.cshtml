@@ -1,0 +1,194 @@
+﻿@using System.Security.Claims
+@using oShopSolution.ViewModels.Catalog.Cart
+@model List<CartViewModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "/Views/Shared/_LayoutMain.cshtml";
+}
+
+@{
+    var userId = string.Empty;
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        userId = user.Value.ToString();
+    };
+}
+
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content">
+                        <h1 class="breadcrumb__content--title mb-10">Shopping Cart</h1>
+                        <ul class="breadcrumb__content--menu d-flex">
+                            <li class="breadcrumb__content--menu__items"><a href="/home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text__secondary">Shopping Cart</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- cart section start -->
+    <section class="cart__section section--padding">
+        <div class="container-fluid">
+            <div class="cart__section--inner">
+                <form action="#">
+                    <h2 class="cart__title mb-40">Shopping Cart</h2>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="cart__table">
+                                <table class="cart__table--inner">
+                                    <thead class="cart__table--header">
+                                        <tr class="cart__table--header__items">
+                                            <th class="cart__table--header__list">Product</th>
+                                            <th class="cart__table--header__list">Price</th>
+                                            <th class="cart__table--header__list">Quantity</th>
+                                            <th class="cart__table--header__list">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="cart__table--body">
+                                        @foreach(var item in Model)
+                                        {
+                                            <tr class="cart__table--body__items">
+                                            <td class="cart__table--body__list">
+                                                <div class="cart__product d-flex align-items-center">
+                                                    <button class="cart__remove--btn" aria-label="search button" type="button"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px"><path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z" /></svg></button>
+                                                    <div class="cart__thumbnail">
+                                                        <a href="product-details.html"><img class="border-radius-5" src="assets/img/product/product1.webp" alt="cart-product"></a>
+                                                    </div>
+                                                    <div class="cart__content">
+                                                        <h3 class="cart__content--title h4"><a href="product-details.html">@item.Name</a></h3>
+@*                                                        <span class="cart__content--variant">COLOR: Blue</span>
+                                                        <span class="cart__content--variant">WEIGHT: 2 Kg</span>*@
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="cart__table--body__list">
+                                                <span class="cart__price">@item.Price.ToString("N") VNĐ</span>
+                                            </td>
+                                            <td class="cart__table--body__list">
+                                                <div class="quantity__box">
+                                                        <button type="button" class="quantity__value quickview__value--quantity decrease" onclick="increase(@item.ProductId, @(item.Quantity - 1))" aria-label="quantity value">-</button>
+                                                    <label>
+                                                            <input type="number" oninput="increase(@item.ProductId, this.value)" class="quantity__number quickview__value--number" value="@item.Quantity" data-counter />
+                                                    </label>
+                                                        <button type="button" class="quantity__value quickview__value--quantity increase" onclick="increase(@item.ProductId, @(item.Quantity + 1))" aria-label="quantity value">+</button>
+                                                </div>
+                                            </td>
+                                            <td class="cart__table--body__list">
+                                                    <span class="cart__price end">@((item.Price * item.Quantity).ToString("N")) VNĐ</span>
+                                            </td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <div class="continue__shopping d-flex justify-content-between">
+                                    <a class="continue__shopping--link" href="shop.html">Continue shopping</a>
+                                    <button class="continue__shopping--clear" type="submit">Clear Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="cart__summary border-radius-10">
+                                <div class="coupon__code mb-30">
+                                    <h3 class="coupon__code--title">Coupon</h3>
+                                    <p class="coupon__code--desc">Enter your coupon code if you have one.</p>
+                                    <div class="coupon__code--field d-flex">
+                                        <label>
+                                            <input class="coupon__code--field__input border-radius-5" placeholder="Coupon code" type="text">
+                                        </label>
+                                        <button class="coupon__code--field__btn primary__btn" type="submit">Apply Coupon</button>
+                                    </div>
+                                </div>
+                                <div class="cart__note mb-20">
+                                    <h3 class="cart__note--title">Note</h3>
+                                    <p class="cart__note--desc">Add special instructions for your seller...</p>
+                                    <textarea class="cart__note--textarea border-radius-5"></textarea>
+                                </div>
+                                <div class="cart__summary--total mb-20">
+                                    <table class="cart__summary--total__table">
+                                        <tbody>
+                                            <tr class="cart__summary--total__list">
+                                                <td class="cart__summary--total__title text-left">SUBTOTAL</td>
+                                                <td class="cart__summary--amount text-right">@ViewBag.TotalPrice.ToString("N") VNĐ</td>
+                                            </tr>
+                                            <tr class="cart__summary--total__list">
+                                                <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
+                                                <td class="cart__summary--amount text-right">@ViewBag.TotalPrice.ToString("N") VNĐ</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="cart__summary--footer">
+                                    <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout</p>
+                                    <ul class="d-flex justify-content-between">
+                                        <li><button class="cart__summary--footer__btn primary__btn cart" type="submit">Update Cart</button></li>
+                                        <li><a class="cart__summary--footer__btn primary__btn checkout" href="@Url.Action("Index","Checkout")">Check Out</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- cart section end -->
+    <!-- Start newsletter section -->
+    <section class="newsletter__section newsletter__bg">
+        <div class="container">
+            <div class="row row-cols-md-2 row-cols-1 align-items-center">
+                <div class="col">
+                    <div class="newsletter__content position__relative">
+                        <h2 class="newsletter__content--title text-white">
+                            We Best To Immediately Do
+                            Subscribe Newsleter.
+                        </h2>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="newsletter__subscribe">
+                        <form class="newsletter__subscribe position__relative" action="#">
+                            <label>
+                                <input class="newsletter__subscribe--input style2" placeholder="Enter Your Email" type="email">
+                            </label>
+                            <button class="newsletter__subscribe--button style2 primary__btn" type="submit">
+                                Subscribe
+                                <svg class="newsletter__subscribe--button__icon" xmlns="http://www.w3.org/2000/svg" width="9.159" height="7.85" viewBox="0 0 9.159 7.85">
+                                    <path data-name="Icon material-send" d="M3,12.35l9.154-3.925L3,4.5,3,7.553l6.542.872L3,9.3Z" transform="translate(-3 -4.5)" fill="currentColor" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End newsletter section -->
+
+    <script type="text/javascript">
+        function increase(id,quantity) {
+            $.ajax({
+                url: "https://localhost:5001/api/Cart/updateQuantity",
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'productId': id,
+                    'customerId': '@userId',
+                    'quantity': quantity,
+                }),
+                success: (function (result) {
+                    window.location.reload();
+                }),
+            })
+        }
+    </script>
+</main>

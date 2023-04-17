@@ -1,104 +1,234 @@
-﻿@model HomeViewModels
+﻿@using Microsoft.AspNetCore.Http
+@using System.Security.Claims
+@using oShopSolution.ViewModels.Catalog.Products
+@using oShopSolution.ViewModels.Common
+@model PageResult<ProductView>
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccesor;
 
 
 @{
-	ViewData["Title"] = "Home Page";
-	Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home Page";
+    Layout = "/Views/Shared/_LayoutMain.cshtml";
 }
-@section slide{
-	<section id="slider">
-		<!--slider-->
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12">
-					<div id="slider-carousel" class="carousel slide" data-ride="carousel">
-						<ol class="carousel-indicators">
-							<li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
-							<li data-target="#slider-carousel" data-slide-to="1"></li>
-							<li data-target="#slider-carousel" data-slide-to="2"></li>
-						</ol>
-
-						<div class="carousel-inner">
-							<div class="item active">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>Free E-Commerce Template</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="/images/home/girl1.jpg" class="girl img-responsive" alt="" />
-									<img src="/images/home/pricing.png" class="pricing" alt="" />
-								</div>
-							</div>
-							<div class="item">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>100% Responsive Design</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="/images/home/girl2.jpg" class="girl img-responsive" alt="" />
-									<img src="/images/home/pricing.png" class="pricing" alt="" />
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>Free Ecommerce Template</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="/images/home/girl3.jpg" class="girl img-responsive" alt="" />
-									<img src="/images/home/pricing.png" class="pricing" alt="" />
-								</div>
-							</div>
-
-						</div>
-
-						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
-							<i class="fa fa-angle-left"></i>
-						</a>
-						<a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
-							<i class="fa fa-angle-right"></i>
-						</a>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</section><!--/slider-->
+@{
+    var userId = string.Empty;
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = User.FindFirst(ClaimTypes.NameIdentifier);
+        userId = user.Value.ToString();
+    };
 }
-			<div class="col-sm-9 padding-right">
-				<div class="features_items">
-					<!--features_items-->
-					<h2 class="title text-center">Features Items</h2>
-					@foreach (var product in Model.Product)
-					{
-						<div class="col-sm-4">
 
-							<div class="product-image-wrapper">
+<main class="main__content_wrapper">
 
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="@(Configuration["BaseAddress"] + product.ThumbImg)" alt="@product.Name" width="100" height="200"/>
-										<h2>@product.Price</h2>
-										<p>@product.Description</p>
-										<a href="/product/detail/@product.Id" class="btn btn-default add-to-cart">Detail</a>
-									</div>
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					}
-					</div><!--features_items-->
-			</div>
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content">
+                        <h1 class="breadcrumb__content--title mb-10">Shop Left</h1>
+                        <ul class="breadcrumb__content--menu d-flex">
+                            <li class="breadcrumb__content--menu__items"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text__secondary">Shop Left Sidebar</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start shop section -->
+    <section class="shop__section section--padding">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-4">
+                    @await Component.InvokeAsync("Filter")
+                </div>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="shop__header bg__gray--color d-flex align-items-center justify-content-between mb-30">
+                        <button class="widget__filter--btn d-flex d-lg-none align-items-center" data-offcanvas>
+                            <svg class="widget__filter--btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" d="M368 128h80M64 128h240M368 384h80M64 384h240M208 256h240M64 256h80" /><circle cx="336" cy="128" r="28" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" /><circle cx="176" cy="256" r="28" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" /><circle cx="336" cy="384" r="28" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" /></svg>
+                            <span class="widget__filter--btn__text">Filter</span>
+                        </button>
+                        <div class="product__view--mode d-flex align-items-center">
+                            @*<div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
+                                <label class="product__view--label">Prev Page :</label>
+                                <div class="select shop__header--select">
+                                    <select class="product__view--select">
+                                        <option selected value="1">65</option>
+                                        <option value="2">40</option>
+                                        <option value="3">42</option>
+                                        <option value="4">57 </option>
+                                        <option value="5">60 </option>
+                                    </select>
+                                </div>
+                            </div>*@
+                            <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
+                                <label class="product__view--label">Sort By :</label>
+                                <div class="select shop__header--select">
+                                    <select class="product__view--select" id="sortProductItem">
+                                        <option selected value="">Sort by CreateDate</option>
+                                        <option value="1">Sort by Name</option>
+                                        <option value="2">Sort by Price</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="product__showing--count">Showing 1–12 of @Model.TotalItems Total Products</p>
+                    </div>
+                    <form asp-action="Index" asp-controller="Home" method="post">
+                        <div class="shop__product--wrapper">
+                            <div class="tab_content">
+                                <div id="product_grid" class="tab_pane active show">
+                                    <div class="product__section--inner product__grid--inner">
+                                        <div class="row row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 mb--n30">
+                                            @foreach (var item in Model.Items)
+                                            {
+                                                <div class="col custom-col-2 mb-30">
+                                                    <article class="product__card">
+                                                        <div class="product__card--thumbnail">
+                                                            <a class="product__card--thumbnail__link display-block" href="product-details.html">
+                                                                <img class="product__card--thumbnail__img product__primary--img display-block" src="@(Configuration["BaseAddress"] + item.ThumbImg)" style="max-width:100%;height:400px" alt="product-img">
+                                                            </a>
+                                                            <ul class="product__card--action d-flex align-items-center justify-content-center">
+                                                                <li class="product__card--action__list">
+                                                                    <a class="product__card--action__btn" title="Wishlist" href="wishlist.html">
+                                                                        <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="25.51" height="22.443" viewBox="0 0 512 512"><path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
+                                                                        <span class="visually-hidden">Wishlist</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="product__card--action__list">
+                                                                    <a class="product__card--action__btn" title="Quick View" data-bs-toggle="modal" data-bs-target="#examplemodal" href="@Url.Action("Detail","Home")">
+                                                                        <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="24.51" height="22.443" viewBox="0 0 512 512"><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448"></path></svg>
+                                                                        <span class="visually-hidden">Quick View</span>
+                                                                    </a>
+                                                                </li>
+                                                                @*@await Html.PartialAsync("_ProductDetailPartialView",item)*@
+                                                                <li class="product__card--action__list">
+                                                                    <a class="product__card--action__btn" title="Compare" href="compare.html">
+                                                                        <svg class="product__card--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="19.51" height="18.443" viewBox="0 0 20 20" fill="currentColor">
+                                                                            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+                                                                        </svg>
+                                                                        <span class="visually-hidden">Compare</span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            @*<div class="product__badge">
+                                                    <span class="product__badge--items sale">SALE</span>
+                                                    </div>*@
+                                                        </div>
+                                                        <div class="product__card--content text-center">
+                                                            <span class="product__card--meta__tag">Watch,Woman</span>
+                                                            <h3 class="product__card--title"><a href="product-details.html">@item.Name</a></h3>
+                                                            <div class="product__card--price">
+                                                                <span class="current__price">@item.Price VNĐ</span>
+                                                                @*<span class="price__divided"></span>*@
+                                                            </div>
+                                                            <a data-id="@item.Id" class="product__card--btn primary__btn" onclick="addToCart(@item.Id);return false;">Add To Card</a>
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                                @await Html.PartialAsync("Detail",item)
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pagination__area bg__gray--color">
+                                <nav class="pagination justify-content-center">
+                                    <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
+                                        <li class="pagination__list">
+                                            <a class="pagination__item--arrow  link " href="@Url.Action("Index", new { pageIndex = Model.PageIndex - 1 , sortBy = HttpContextAccesor.HttpContext.Request.Query["sortBy"]})">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" /></svg>
+                                                <span class="visually-hidden">pagination arrow</span>
+                                            </a>
+                                        </li>
+                                        @for (int i = 1; i <= Model.TotalPages; i++)
+                                        {
+                                            <li class="pagination__list">
+                                                @if (i != Model.PageIndex)
+                                                {
+                                                    <a href="@Url.Action("Index", new { pageIndex = i , sortBy = HttpContextAccesor.HttpContext.Request.Query["sortBy"]})" class="pagination__item link">@i</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="pagination__item pagination__item--current">@i</a>
+                                                }
+                                            </li>
+                                        }
+                                        <li class="pagination__list">
+                                            <a class="pagination__item--arrow  link " href="@Url.Action("Index", new { pageIndex = Model.PageIndex + 1 , sortBy = HttpContextAccesor.HttpContext.Request.Query["sortBy"]})">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100" /></svg>
+                                                <span class="visually-hidden">pagination arrow</span>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+                                    <input type="hidden" id="hfPageIndex" name="pageIndex">
+                                </nav>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End shop section -->
+</main>
+
+<link rel="stylesheet" href="~/css/modal.css">
+<div id="addCartModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE876;</i>
+                </div>
+                <h4 class="modal-title w-100">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Add Cart is Success!!!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" onclick="window.location.reload();" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function addToCart(id){
+        $.ajax({
+            url: "https://localhost:5001/api/Cart/addToCart",
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'productId' : id,
+                'customerId' : '@userId',
+                'quantity' : 1,
+            }),
+            success: (function(result) {
+                $('#addCartModal').modal('show');
+            }),
+        })
+    }
+
+    const selectElement = document.getElementById('sortProductItem');
+    selectElement.addEventListener('change', (event) => {
+        const sortBy = event.target.value;
+        const cateId = @Model.CateId
+            const url = '@Url.Action("Index","Home")?sortBy=' + sortBy + '&cateId=' + cateId;
+        window.location.replace(url);
+    });
+</script>
+
+
+
+
+
+
+

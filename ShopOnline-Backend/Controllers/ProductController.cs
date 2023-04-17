@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using oShopSolution.Application.Catalog.Products;
 using oShopSolution.Data.EF;
 using oShopSolution.ViewModels.Catalog.Products;
+using oShopSolution.ViewModels.Common;
 using System.Threading.Tasks;
 
 namespace ShopOnline_Backend.Controllers
@@ -11,28 +15,40 @@ namespace ShopOnline_Backend.Controllers
 	[ApiController]
 	public class ProductController : ControllerBase
 	{
-		private readonly IManageProductService _manageProductService;
+		private readonly IProductService _manageProductService;
 		private readonly OShopDbContext _context;
-		public ProductController(IManageProductService manageProductService, OShopDbContext context)
+		public ProductController(IProductService manageProductService, OShopDbContext context)
 		{
 			_manageProductService = manageProductService;
 			_context = context;
 		}
 		[HttpGet]
 		[AllowAnonymous]
-		public async Task<IActionResult> Get()
+		public async Task<IActionResult> Get([FromQuery] GetManageProductPageRequest request)
 		{
-			var product = await _manageProductService.GetAll();
+			var product = await _manageProductService.GetAllPagings(request);
+			if (product == null)
+			{
+				return BadRequest();
+			}
 			return Ok(product);
 		}
 
 		[HttpGet("page")]
-		[AllowAnonymous]
-		public async Task<IActionResult> GetAllPagings([FromQuery] GetPublicProductPageRequest request)
+		//[AllowAnonymous]
+		public async Task<IActionResult> GetAllPagings([FromQuery] GetManageProductPageRequest request)
 		{
-			var product = await _manageProductService.GetAllByCategoryId(request);
+			var product = await _manageProductService.GetAllPagings(request);
 			return Ok(product);
 		}
+
+		[AllowAnonymous]
+		[HttpGet("page/{cateId}")]
+		public async Task<IActionResult> GetAllPageByCateId([FromQuery] GetManageProductPageRequest request, int cateId)
+        {
+			var product = await _manageProductService.GetAllPagingByCateId(cateId, request);
+			return Ok(product);
+        }
 
 		[HttpGet("{id}")]
 		[AllowAnonymous]
@@ -44,10 +60,24 @@ namespace ShopOnline_Backend.Controllers
 			return Ok(product);
 		}
 
+		[AllowAnonymous]
 		[HttpPost]
 		//[Consumes("multipart/form-data")]
 		public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
 		{
+			if (request.ThumbImg == null || request.ThumbImg.Length == 0)
+			{
+                return BadRequest(new ResponseDto() { Code = "file_is_empty", Message = "the uploaded file is empty" });
+            }
+			var isExel = _manageProductService.IsExelFileAsync(request.ThumbImg);
+			if (!isExel)
+			{
+				return BadRequest(new ResponseDto()
+				{
+					Code = "file_is_invalid",
+					Message = "File is not Image"
+				});
+			}
 			var rs = await _manageProductService.Create(request);
 			if (rs == 0)
 				return BadRequest();
@@ -55,9 +85,9 @@ namespace ShopOnline_Backend.Controllers
 			return CreatedAtAction(nameof(GetById), new { id = rs }, product);
 		}
 
+		[AllowAnonymous]
 		[HttpPut("{id}")]
-		//[Consumes("multipart/form-data")]
-		public async Task<IActionResult> Put([FromBody] ProductUpdateRequest request, int id)
+		public async Task<IActionResult> Update([FromBody] ProductUpdateRequest request, int id)
 		{
 			var product = _context.Products.Find(id);
 			product.Name = request.Name;

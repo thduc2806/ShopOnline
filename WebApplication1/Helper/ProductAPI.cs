@@ -18,7 +18,7 @@ namespace WebApplication1.Helper
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IHttpClientFactory _httpClientFactory;
 		private readonly IConfiguration _configuration;
-        public ProductAPI(IHttpClientFactory httpClientFactory,
+		public ProductAPI(IHttpClientFactory httpClientFactory,
                    IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
             : base(httpClientFactory, httpContextAccessor, configuration)
@@ -36,18 +36,19 @@ namespace WebApplication1.Helper
             return data;
         }
 
-        public async Task<List<ProductView>> GetAll()
-        {
-            var data = await GetListAsync<ProductView>("/api/product");
-            return data;
-        }
-
-		public async Task<List<ProductView>> GetAllPagings(GetManageProductPageRequest request)
+		public async Task<PageResult<ProductView>> GetAllProduct(GetManageProductPageRequest request)
 		{
-            var data = await GetAsync<List<ProductView>>(
-                 $"/api/product/page?categoryId={request.CategoryId}");
+			var data = await GetAsync<PageResult<ProductView>>(
+				$"/api/product/page?pageIndex={request.PageIndex}" +
+				$"&pageSize={request.PageSize}" + $"&keyword={request.Keyword}" + $"&sortBy={request.SortBy}" + $"&cateId={request.CateId}");
 
-            return data;
-        }
+			return data;
+		}
+
+		public async Task<ProductView> GetProductById(int Id)
+		{
+			var data = await GetAsync<ProductView>($"/api/product/{Id}");
+			return data;
+		}
 	}
 }

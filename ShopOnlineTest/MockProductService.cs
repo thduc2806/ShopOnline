@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShopOnlineTest
 {
-	public class MockProductService: Mock<IManageProductService>
+	public class MockProductService: Mock<IProductService>
 	{
 		public MockProductService MockById(ProductView result, int productId)
 		{

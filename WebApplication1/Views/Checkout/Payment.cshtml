@@ -1,0 +1,228 @@
+﻿@using System.Security.Claims
+@using oShopSolution.ViewModels.Catalog.Cart
+@model List<CartViewModel>
+
+
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content">
+                        <h1 class="breadcrumb__content--title mb-10">Checkout</h1>
+                        <ul class="breadcrumb__content--menu d-flex">
+                            <li class="breadcrumb__content--menu__items"><a href="/home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text__secondary">Checkout</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start checkout page area -->
+    <div class="checkout__page--area section--padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="main checkout__mian">
+                        <div class="payment__history mb-30" id="paypal-button-container">
+                            @*<h3 class="payment__history--title mb-20">Payment</h3>
+                            <ul class="payment__history--inner d-flex">
+                            <li class="payment__history--list"><button class="payment__history--link primary__btn" type="submit">Credit Card</button></li>
+                            <li class="payment__history--list"><button class="payment__history--link primary__btn" type="submit">Bank Transfer</button></li>
+                            <li class="payment__history--list"><button class="payment__history--link primary__btn" type="submit">Paypal</button></li>
+                            </ul>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-6">
+                    <aside class="checkout__sidebar sidebar border-radius-10">
+                        <h2 class="checkout__order--summary__title text-center mb-15">Your Order Summary</h2>
+                        <div class="cart__table checkout__product--table">
+                            <table class="cart__table--inner">
+                                <tbody class="cart__table--body">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="cart__table--body__items">
+                                            <td class="cart__table--body__list">
+                                                <div class="product__image two  d-flex align-items-center">
+                                                    <div class="product__thumbnail border-radius-5">
+                                                        <a class="display-block" href="product-details.html"><img class="display-block border-radius-5" src="assets/img/product/small-product1.webp" alt="cart-product"></a>
+                                                        <span class="product__thumbnail--quantity">@item.Quantity</span>
+                                                    </div>
+                                                    <div class="product__description">
+                                                        <h4 class="product__description--name"><a href="product-details.html">@item.Name</a></h4>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="cart__table--body__list">
+                                                <span class="cart__price">@((item.Price * item.Quantity).ToString()) VNĐ</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="checkout__discount--code">
+                            <form class="d-flex" action="#">
+                                <label>
+                                    <input class="checkout__discount--code__input--field border-radius-5" placeholder="Gift card or discount code" type="text">
+                                </label>
+                                <button class="checkout__discount--code__btn primary__btn border-radius-5" type="submit">Apply</button>
+                            </form>
+                        </div>
+                        <div class="checkout__total">
+                            <table class="checkout__total--table">
+                                <tbody class="checkout__total--body">
+                                    <tr class="checkout__total--items">
+                                        <td class="checkout__total--title text-left">Subtotal </td>
+                                        <td class="checkout__total--amount text-right">@ViewBag.TotalPrice.ToString("N") VNĐ</td>
+                                    </tr>
+                                    <tr class="checkout__total--items">
+                                        <td class="checkout__total--title text-left">Shipping</td>
+                                        <td class="checkout__total--calculated__text text-right">Calculated at next step</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="checkout__total--footer">
+                                    <tr class="checkout__total--footer__items">
+                                        <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
+                                        <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@ViewBag.TotalPrice.ToString("N") VNĐ</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <button class="checkout__now--btn primary__btn" type="submit">Checkout Now</button>
+                    </aside>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End checkout page area -->
+    <!-- Start newsletter section -->
+    <section class="newsletter__section newsletter__bg">
+        <div class="container">
+            <div class="row row-cols-md-2 row-cols-1 align-items-center">
+                <div class="col">
+                    <div class="newsletter__content position__relative">
+                        <h2 class="newsletter__content--title text-white">
+                            We Best To Immediately Do
+                            Subscribe Newsleter.
+                        </h2>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="newsletter__subscribe">
+                        <form class="newsletter__subscribe position__relative" action="#">
+                            <label>
+                                <input class="newsletter__subscribe--input style2" placeholder="Enter Your Email" type="email">
+                            </label>
+                            <button class="newsletter__subscribe--button style2 primary__btn" type="submit">
+                                Subscribe
+                                <svg class="newsletter__subscribe--button__icon" xmlns="http://www.w3.org/2000/svg" width="9.159" height="7.85" viewBox="0 0 9.159 7.85">
+                                    <path data-name="Icon material-send" d="M3,12.35l9.154-3.925L3,4.5,3,7.553l6.542.872L3,9.3Z" transform="translate(-3 -4.5)" fill="currentColor" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <link rel="stylesheet" href="~/css/modal.css">
+    <div id="paymentModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <h4 class="modal-title w-100">Thanks You!</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Your Payment has been Success!!!</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success btn-block" href="/home" data-dismiss="modal">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AWOZR50bz-V9rD2iU1VlmXBkHiFbazwlCwMnYOd82X4ERYpSMVYzLqrhe8msSNAQLoiy8u3is0c37T2l"></script>
+    <script>
+        var orderItem = [
+        @foreach (var oder in Model)
+        {
+            <text>
+                {
+                    productId: @oder.ProductId,
+                    quantity: @oder.Quantity,
+                    price: @oder.Price,
+                },
+            </text>
+        }
+                ];
+        paypal.Buttons({
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '@ViewBag.TotalPriceUsd',
+                            currency_code: 'USD',
+                            breakdown: {
+                                item_total: {
+                                    currency_code: 'USD',
+                                    value: '@ViewBag.TotalPriceUsd'
+                                }
+                            }
+                        },
+                        items: [
+                            @foreach (var item in Model)
+                            {
+                                <text>
+                                    {
+                                        name: '@item.Name',
+                                        quantity: '@item.Quantity',
+                                        unit_amount: { value: '@(Math.Round((item.Price / 23000), 2))', currency_code: 'USD' }
+                                    },
+                                </text>
+                            }
+                        ]
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    $.ajax({
+                        type: 'PUT',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        url: 'https://localhost:5001/api/Order',
+                        data: JSON.stringify({
+                            amount: details.purchase_units[0].amount.value,
+                            createDate: details.create_time,
+                            paymentId: details.id,
+                            userId: '@User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString()',
+                            orderId: @ViewBag.OrderId,
+                            items: orderItem
+                        }),
+                        success: function (response) {
+                            $('#paymentModal').modal('show');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('Error saving payment: ' + errorThrown);
+                        }
+                    });
+                });
+            },
+            onError: function (err) {
+                alert('payment fail: ' + err);
+            }
+        }).render('#paypal-button-container')
+    </script>
+</main>

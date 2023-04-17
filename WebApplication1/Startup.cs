@@ -17,6 +17,10 @@ using oShopSolution.ViewModels.System.Users;
 using oShopSolution.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
@@ -39,41 +43,13 @@ namespace WebApplication1
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 			services.AddHttpClient();
 
-			//services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			//	.AddCookie(options =>
-			//	{
-			//		options.LoginPath = "/CustomerAccount/Login";
-			//		options.AccessDeniedPath = "/User/Forbidden/";
-			//	});
-
-			services.AddAuthentication(options =>
-			{
-				options.DefaultScheme = "Cookies";
-				options.DefaultChallengeScheme = "oidc";
-			})
-				.AddCookie("Cookies")
-				.AddOpenIdConnect("oidc", options =>
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(options =>
 				{
-					options.Authority = "https://localhost:5001";
-					options.RequireHttpsMetadata = false;
-					options.GetClaimsFromUserInfoEndpoint = true;
-
-					options.ClientId = "mvc";
-					options.ClientSecret = "secret";
-					options.ResponseType = "code";
-
-					options.SaveTokens = true;
-
-					options.Scope.Add("openid");
-					options.Scope.Add("profile");
-					options.Scope.Add("shop.api");
-
-					options.TokenValidationParameters = new TokenValidationParameters
-					{
-						NameClaimType = "name",
-						RoleClaimType = "role"
-					};
+					options.LoginPath = "/Authen/Login";
+					//options.AccessDeniedPath = "/User/Forbidden/";
 				});
+
 			services.AddSession(options =>
 			{
 				options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -84,8 +60,11 @@ namespace WebApplication1
 			services.AddTransient<ICategoryAPI, CategoryAPI>();
 			services.AddTransient<ICommentAPI, CommentAPI>();
 			services.AddTransient<IUserAPI, UserAPI>();
+			services.AddTransient<IWorkContext, WorkContext>();
+			services.AddTransient<ICartApi, CartApi>();
+            services.AddTransient<ICheckoutApi, CheckoutApi>();
 
-			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,8 +12,8 @@ namespace ShopOnline_Backend.Controllers
 	[ApiController]
 	public class Product1Controller : ControllerBase
 	{
-		private readonly IManageProductService _manageProductService;
-		public Product1Controller(IManageProductService manageProductService)
+		private readonly IProductService _manageProductService;
+		public Product1Controller(IProductService manageProductService)
 		{
 			_manageProductService = manageProductService;
 		}

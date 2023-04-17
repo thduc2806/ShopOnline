@@ -17,8 +17,6 @@ namespace oShopSolution.Data.Entities
 		public string ThumbPath { get; set; }
 		public int CategoryId { get; set; }
 		public Category Category { get; set; }
-		public List<Cart> Carts { get; set; }
-		public List<OrderDetail> OrderDetails { get; set; }
 		public List<ProductImg> ProductImgs { get; set; }
 		public ICollection<ProductComment> ProductComments { get; set; }
 

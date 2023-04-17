@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ShopOnline_Backend.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/user")]
 	[ApiController]
 	public class UsersController : ControllerBase
 	{
