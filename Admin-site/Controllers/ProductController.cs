@@ -66,11 +66,11 @@ namespace Admin_site.Controllers
 
         // GET: ProductController/Details/5
 
-        public async Task<IActionResult> Details(int Id)
-        {
-            var result = await _productApi.GetProductById(Id);
-            return View(result);
-        }
+        // public async Task<IActionResult> Details(int Id)
+        // {
+        //     var result = await _productApi.GetProductById(Id);
+        //     return View(result);
+        // }
 
 		[HttpGet]
 		public IActionResult Create()
@@ -89,7 +89,7 @@ namespace Admin_site.Controllers
 			if (product)
 			{
 				TempData["product"] = "Add success";
-				return RedirectToAction("/product/index");
+				return RedirectToAction("Index","Product");
 			}
 
 			ModelState.AddModelError("", "Add Fail");

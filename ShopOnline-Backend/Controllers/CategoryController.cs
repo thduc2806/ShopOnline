@@ -64,7 +64,7 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] CategoryUpdateRequest request)
+		public async Task<IActionResult> Post(CategoryUpdateRequest request)
 		{
 			var cate = new Category()
 			{

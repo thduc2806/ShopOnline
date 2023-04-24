@@ -1,4 +1,4 @@
-﻿@model oShopSolution.ViewModels.Catalog.Products.ProductCreateRequest;
+﻿@model oShopSolution.ViewModels.Catalog.Categories.CategoryUpdateRequest
 @{
     ViewBag.Title = "Add Product";
     ViewBag.pTitle = "Add Product";
@@ -35,56 +35,22 @@
                             <h4 class="card-title">Basic Information</h4>
                             <p class="card-title-desc">Fill all information below</p>
 
-                            <form asp-action="Create" enctype="multipart/form-data" method="post">
+                            <form asp-action="Create" asp-controller="Category" method="post">
                                 <div class="mb-3">
-                                    <label class="form-label" asp-for="Name">Product Name</label>
+                                    <label class="form-label" asp-for="Name">Category Name</label>
                                     <input id="name" asp-for="Name" type="text" class="form-control">
                                     <span asp-validation-for="Name" class="text-danger"></span>
-                                </div>
-                                <div class="mb-3">                        
-                                    <label class="form-label" asp-for="Price">Price</label>
-                                    <input id="price" asp-for="Price" type="text" class="form-control">
-                                    <span asp-validation-for="Price" class="text-danger"></span>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" asp-for="CategoryId">Category</label>
-                                            <select asp-for="CategoryId" class="form-control select2" >
-                                                <option>Select</option>
-                                                <option value="1">APPLE</option>
-                                                <option value="2">Samsung</option>
-                                                <option value="3">Huawei</option>
-                                            </select>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" asp-for="Description">Product Description</label>
                                     <textarea class="form-control" id="productdesc" rows="5" asp-for="Description"></textarea>
                                 </div>
-                                <div class="tab-pane" id="product-img">
-                                    <h4 class="card-title">Product Images</h4>
-                                    <p class="card-title-desc">Upload product image</p>
-                                    <div class="fallback">
-                                        <input asp-for="ThumbImg" type="file"/>
-                                    </div>
-                                    <div class="dz-message needsclick">
-                                        <div class="mb-3">
-                                            <i class="display-4 text-muted ri-upload-cloud-2-line"></i>
-                                        </div>
-                                    <h4>Drop files here or click to upload.</h4>
-                                    </div>
-                                </div>
                                 <div class="text-center mt-4">
                                     <button type="submit" class="btn btn-primary me-2 waves-effect waves-light">ADD</button>
                                 </div>
                             </form>
-
                         </div>
-                        
-                    
                     </div>
                     <ul class="pager wizard twitter-bs-wizard-pager-link">
                         <li class="previous"><a href="#">Previous</a></li>
