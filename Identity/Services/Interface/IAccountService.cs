@@ -1,6 +1,7 @@
 ﻿using Identity.Database.Entities;
 using Identity.ViewModel;
 using oShopSolution.Application.Helper;
+using oShopSolution.ViewModels.Common;
 
 namespace Identity.Services.Interface
 {
@@ -12,6 +13,8 @@ namespace Identity.Services.Interface
         BaseResponse<bool> CheckEmailExist(string email);
 
         Task<UserProfileViewModel> GetUserProfile(string userId);
+
+        Task<PageResult<UserProfileViewModel>> GetUser(int page = 1, int pageSize = 10);
 
         //Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key);
     }

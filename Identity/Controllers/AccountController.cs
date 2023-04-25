@@ -2,6 +2,7 @@
 using Identity.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
 namespace Identity.Controllers
@@ -41,6 +42,13 @@ namespace Identity.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllUser([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _accountService.GetUser(page,pageSize);
+            return Ok(result);
+        }
+
 
         private string GetUserId()
         {
@@ -55,6 +63,7 @@ namespace Identity.Controllers
             }
             return string.Empty;
         }
+
 
     }
 }

@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Account";
+    ViewBag.pTitle = "Account";
+    ViewBag.pageTitle = "Nazox";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Latest Transactions</h4>
+                <div class="table-responsive">
+                    <table id="userTable" class="display">
+                        <thead class="table-light">
+                            <tr>
+                                <th>UserID</th>
+                                <th>FullName</th>
+                                <th>DOB</th>
+                                <th>Street</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Ward</th>
+                                <th>RoleName</th>
+                                <th>IsActivated</th>
+                                @*<th style="width: 120px;">Action</th>*@
+                                @*<th></th>*@
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+<script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+<script src="~/assets/libs/node-waves/waves.min.js"></script>
+
+
+<!-- jquery.vectormap map -->
+<script src="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="~/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js"></script>
+
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+<!-- Responsive examples -->
+<script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+            $('#userTable').DataTable({
+            destroy: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: "@Url.Action("UserProfile","Account")",
+                type: "GET",
+                dataSrc: function (json) {
+                    if (json.data && json.data.length > 0) {
+                        return json.data;
+                    }
+                    else {
+                        alert('No orders found.');
+                        return [];
+                    }
+                }
+            },
+            columns: [
+                { data: 'userId' },
+                {data: 'fullName'},
+                { data: 'dOB' },
+                { data: 'street' },
+                { data: 'city' },
+                { data: 'state' },
+                { data: 'ward' },
+                { data: 'roleName' },
+                {
+                    data: 'isActivated',
+                    render: function (data, type, row) {
+                        var className = "";
+                        if (data == true) {
+                            className = "badge badge-soft-success font-size-12";
+                            return '<div class="' + className + '"> Active </div>'
+                        }
+                        else if (data == false) {
+                            className = "badge badge-soft-warning font-size-12";
+                            return '<div class="' + className + '"> Disable </div>'
+                        }
+                    }
+                }
+            ],
+            pagingType: 'full_numbers',
+            dom: 'lrtip',
+            language: {
+                lengthMenu: 'Display <select>' +
+                    '<option value="5">5</option>' +
+                    '<option value="10">10</option>' +
+                    '<option value="15">15</option>' +
+                    '<option value="20">20</option>' +
+                    '<option value="25">25</option>' +
+                    '</select> records'
+            },
+        });
+    })
+</script>

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Omu.ValueInjecter;
 using oShopSolution.Application.Helper;
+using oShopSolution.ViewModels.Common;
 
 namespace Identity.Services.Implement
 {
@@ -138,6 +139,35 @@ namespace Identity.Services.Implement
             LoadRelated(user);
             var model = _mapper.Map<Users, UserProfileViewModel>(user);
             return model;
+        }
+
+        public async Task<PageResult<UserProfileViewModel>> GetUser(int page = 1, int pageSize = 10)
+        {
+            var query = _userManager.Users.AsQueryable();
+
+            var total = await query.CountAsync();
+
+            query = query.OrderByDescending(u => u.CreatedDate);
+
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+            var users = await query.ToListAsync();
+            if (users.Count <= 0)
+            {
+                return new PageResult<UserProfileViewModel>();
+            }
+            var model = new List<Users>();
+            foreach (var user in users)
+            {
+                LoadRelated(user);
+                model.Add(user);
+            }
+            var result = _mapper.Map<List<Users>, List<UserProfileViewModel>>(model);
+            return new PageResult<UserProfileViewModel>
+            {
+                Items = result,
+                TotalItems = total,
+            };
         }
     }
 }
