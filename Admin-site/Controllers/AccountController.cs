@@ -45,5 +45,16 @@ namespace Admin_site.Controllers
                 data = data.Items
             });
         }
+
+        [HttpGet("/account/changestatus/{accountId}")]
+        public async Task<IActionResult> ChangeStatus(string accountId)
+        {
+            var result = await _accountApi.GetUser(accountId);
+            if (result == true)
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

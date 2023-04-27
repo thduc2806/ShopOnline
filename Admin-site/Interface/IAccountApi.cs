@@ -7,5 +7,7 @@ namespace Admin_site.Interface
     public interface IAccountApi
     {
         Task<PageResult<UserProfileViewModel>> GetUser(PageRequestBase request);
+
+        Task<bool> GetUser(string userId);
     }
 }

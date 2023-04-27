@@ -16,6 +16,8 @@ namespace Identity.Services.Interface
 
         Task<PageResult<UserProfileViewModel>> GetUser(int page = 1, int pageSize = 10);
 
+        Task<bool> ChangeStatus(string userId);
+
         //Task<BaseResponse<AuthenViewModel>> GetUserProfile(string key);
     }
 }

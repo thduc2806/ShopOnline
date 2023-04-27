@@ -79,7 +79,38 @@ namespace oShopSolution.Application.Catalog.Order
 			return pageResult;
 		}
 
-		public async Task<int> CreateOrder(InfoCustomerModel model)
+		public async Task<PageResult<OrderViewModel>> GetById(GetOrderByIdModel request)
+		{
+			request.PageSize = 10;
+            var order = from o in _context.Orders
+						where o.UserId.ToString() == request.UserId
+                        select new { o };
+
+            int total = await order.CountAsync();
+            var data = await order.OrderByDescending(o => o.o.OrderDate).Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new OrderViewModel()
+            {
+                Id = x.o.Id,
+                OrderDate = x.o.OrderDate,
+                Email = x.o.Email,
+                Amount = x.o.Amount,
+                isPayment = x.o.isPayment,
+                Name = x.o.FullName,
+            }).ToListAsync();
+
+			var pageResult = new PageResult<OrderViewModel>
+			{
+				TotalItems = total,
+				PageSize = request.PageSize,
+				PageIndex = request.PageIndex,
+				TotalPrice = data.Sum(p => p.Amount),
+                Items = data
+            };
+
+            return pageResult;
+        }
+
+
+        public async Task<int> CreateOrder(InfoCustomerModel model)
 		{
 			var order = new Data.Entities.Order()
 			{
@@ -122,6 +153,33 @@ namespace oShopSolution.Application.Catalog.Order
             }
             return false;
         }
+
+		public async Task<List<OrderDetailViewModel>> GetOrderDetail(int orderId)
+		{
+			var orderDetails = await _context.OrderDetails.Where(o => o.OrderId == orderId).ToListAsync();
+			var orderDetail = new List<OrderDetailViewModel>();
+			if (orderDetails.Any())
+			{
+				foreach (var order in orderDetails)
+				{
+					var productInfo = await _context.Products.Where(p => p.Id == order.ProductId).SingleOrDefaultAsync();
+					var category = await _context.Categories.Where(c => c.Id == productInfo.CategoryId).FirstOrDefaultAsync();
+					var result = new OrderDetailViewModel
+					{
+						Id = order.Id,
+						Name = productInfo.Name,
+						Price = productInfo.Price,
+						Quantity = order.Quantity,
+						Category = category.Name,
+						ProductImgs = productInfo.ThumbPath,
+					};
+					orderDetail.Add(result);
+				}
+				return orderDetail;
+			}
+
+			return new List<OrderDetailViewModel>();
+		}
 
 
         private async Task<bool> CreateOrderDetail(decimal price, int orderId, int productId, int quantity)

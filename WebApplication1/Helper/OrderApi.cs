@@ -1,57 +1,61 @@
-﻿using Admin_site.Interface;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using oShopSolution.Application.Helper;
 using oShopSolution.ViewModels.Catalog.Order;
 using oShopSolution.ViewModels.Common;
-using oShopSolution.ViewModels.System.Users;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace Admin_site.Service
+namespace WebApplication1.Helper
 {
-    public class AccountApi : IAccountApi
+    public class OrderApi : IOrderApi
     {
         private readonly HttpClient httpClient;
-        public AccountApi()
+
+        public OrderApi()
         {
             httpClient = new HttpClient();
         }
 
-        public async Task<PageResult<UserProfileViewModel>> GetUser(PageRequestBase request)
+        public async Task<PageResult<OrderViewModel>> GetOrder(GetOrderByIdModel request)
         {
-            string url = $"https://localhost:44321/api/account?page={request.PageIndex}" +
-                $"&pageSize={request.PageSize}";
+            string url = $"https://localhost:5001/api/order?pageIndex={request.PageIndex}" +
+                $"&pageSize={request.PageSize}" + $"&userId={request.UserId}";
 
             HttpResponseMessage response = null;
             response = await httpClient.GetAsync(url);
             string responseData = await response.Content.ReadAsStringAsync();
-            var result = new PageResult<UserProfileViewModel>();
+            var result = new PageResult<OrderViewModel>();
             if (response.IsSuccessStatusCode)
             {
-                result = JsonConvert.DeserializeObject<PageResult<UserProfileViewModel>>(responseData);
+                result = JsonConvert.DeserializeObject<PageResult<OrderViewModel>>(responseData);
 
             }
             else
             {
-                result = new PageResult<UserProfileViewModel>();
+                result = new PageResult<OrderViewModel>();
             }
             return result;
         }
 
-        public async Task<bool> GetUser(string userId)
+        public async Task<List<OrderDetailViewModel>> GetOrderDetail(int orderId)
         {
-            string url = $"https://localhost:44321/api/account?userId={userId}";
+            string url = $"https://localhost:5001/api/order/orderdetail/{orderId}";
 
             HttpResponseMessage response = null;
-            response = await httpClient.PutAsync(url, null);
+            response = await httpClient.GetAsync(url);
             string responseData = await response.Content.ReadAsStringAsync();
+            var result = new List<OrderDetailViewModel>();
             if (response.IsSuccessStatusCode)
             {
-                return true;
+                result = JsonConvert.DeserializeObject<List<OrderDetailViewModel>>(responseData);
 
             }
             else
             {
-                return false;
+                result = new List<OrderDetailViewModel>();
             }
+            return result;
         }
 
         private Task<HttpResponseMessage> PostDataAsync(HttpMethodEnum method, string url, HttpContent content)

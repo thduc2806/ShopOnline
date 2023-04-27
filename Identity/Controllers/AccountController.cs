@@ -49,6 +49,13 @@ namespace Identity.Controllers
             return Ok(result);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> ChangeStatus(string userId)
+        {
+            var result = await _accountService.ChangeStatus(userId);
+            return Ok(result);
+        }
+
 
         private string GetUserId()
         {

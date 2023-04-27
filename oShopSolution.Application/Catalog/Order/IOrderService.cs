@@ -16,6 +16,9 @@ namespace oShopSolution.Application.Catalog.Order
 
 		Task<PageResult<OrderViewModel>> GetOrder(GetOrderModel request);
 
+		Task<PageResult<OrderViewModel>> GetById(GetOrderByIdModel request);
 
-	}
+		Task<List<OrderDetailViewModel>> GetOrderDetail(int orderId);
+
+    }
 }

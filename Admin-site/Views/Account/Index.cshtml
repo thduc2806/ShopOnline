@@ -15,7 +15,7 @@
                     <table id="userTable" class="display">
                         <thead class="table-light">
                             <tr>
-                                <th>UserID</th>
+                                <th>Email</th>
                                 <th>FullName</th>
                                 <th>DOB</th>
                                 <th>Street</th>
@@ -24,7 +24,6 @@
                                 <th>Ward</th>
                                 <th>RoleName</th>
                                 <th>IsActivated</th>
-                                @*<th style="width: 120px;">Action</th>*@
                                 @*<th></th>*@
                             </tr>
                         </thead>
@@ -35,6 +34,9 @@
     </div>
 </div>
 <!-- end row -->
+
+
+
 <!-- JAVASCRIPT -->
 <script src="~/assets/libs/jquery/jquery.min.js"></script>
 <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -55,9 +57,52 @@
 <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
+
+<!-- Modal Popup -->
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirm-delete-modal-label">Disable Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to disable this account?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-button">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="active-account-modal" tabindex="-1" role="dialog" aria-labelledby="active-account-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="active-account-modal-label">Active Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to Active this account?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
+                <button type="button" class="btn btn-success" id="confirm-active-button">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     $(document).ready(function () {
-            $('#userTable').DataTable({
+        $('#userTable').DataTable({
             destroy: true,
             serverSide: true,
             processing: true,
@@ -75,25 +120,25 @@
                 }
             },
             columns: [
-                { data: 'userId' },
+                { data: 'email' },
                 {data: 'fullName'},
-                { data: 'dOB' },
+                { data: 'dob' },
                 { data: 'street' },
                 { data: 'city' },
                 { data: 'state' },
                 { data: 'ward' },
                 { data: 'roleName' },
                 {
-                    data: 'isActivated',
-                    render: function (data, type, row) {
+                    data: null,
+                    render: function (data, type, row, meta) {
                         var className = "";
-                        if (data == true) {
-                            className = "badge badge-soft-success font-size-12";
-                            return '<div class="' + className + '"> Active </div>'
+                        if (data['isActivated'] == true) {
+                            className = "btn btn-danger delete-account";
+                            return "<a class='" + className + "' data-id='" + data['userId'] + "'>Disable</a>"
                         }
-                        else if (data == false) {
-                            className = "badge badge-soft-warning font-size-12";
-                            return '<div class="' + className + '"> Disable </div>'
+                        else if (data['isActivated'] == false) {
+                            className = "btn btn-success active-account";
+                            return "<a class='" + className + "' data-id='" + data['userId'] + "'>Active</a>"
                         }
                     }
                 }
@@ -110,5 +155,46 @@
                     '</select> records'
             },
         });
-    })
+
+        $('body').on('click', '.delete-account', function (e) {
+            e.preventDefault();
+            var accountId = $(this).data('id');
+            $('#confirm-delete-modal').modal('show');
+            $('#confirm-delete-button').attr('id', accountId);
+        });
+
+        $('#confirm-delete-button').on('click', function () {
+            var accountId = $(this).attr('id');
+            $.ajax({
+                url: '/account/ChangeStatus/' + accountId,
+                type: 'GET',
+                success: function (response) {
+                    // Đóng modal popup confirm
+                    window.location.reload();
+                    $('#confirm-delete-modal').modal('hide');
+                }
+            });
+        });
+
+        $('body').on('click', '.active-account', function (e) {
+            e.preventDefault();
+            var accountId = $(this).data('id');
+            $('#active-account-modal').modal('show');
+            $('#confirm-active-button').attr('id', accountId);
+        });
+
+        $('#confirm-active-button').on('click', function () {
+            var accountId = $(this).attr('id');
+            $.ajax({
+                url: '/account/ChangeStatus/' + accountId,
+                type: 'GET',
+                success: function (response) {
+                    // Đóng modal popup confirm
+                    window.location.reload();
+                    $('#active-account-modal').modal('hide');
+                }
+            });
+        });
+  });
 </script>
+

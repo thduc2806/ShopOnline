@@ -169,5 +169,17 @@ namespace Identity.Services.Implement
                 TotalItems = total,
             };
         }
+
+        public async Task<bool> ChangeStatus(string userId)
+        {
+            Users user = await FindUser(userId);
+            if (user != null)
+            {
+                user.IsActivated = !user.IsActivated;
+                _db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

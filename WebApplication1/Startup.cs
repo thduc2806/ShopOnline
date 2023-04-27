@@ -63,6 +63,7 @@ namespace WebApplication1
 			services.AddTransient<IWorkContext, WorkContext>();
 			services.AddTransient<ICartApi, CartApi>();
             services.AddTransient<ICheckoutApi, CheckoutApi>();
+            services.AddTransient<IOrderApi, OrderApi>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}
