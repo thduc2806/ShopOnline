@@ -20,5 +20,9 @@ namespace oShopSolution.Application.Catalog.Order
 
 		Task<List<OrderDetailViewModel>> GetOrderDetail(int orderId);
 
-    }
+		Task<OrderViewModel> GetByOrderId(int orderId);
+
+		Task<bool> CancleOrder(int orderId);
+
+	}
 }

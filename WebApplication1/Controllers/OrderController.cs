@@ -35,5 +35,11 @@ namespace WebApplication1.Controllers
             return View(result);
         }
 
+        public async Task<IActionResult> CancleOrders(int orderId)
+        {
+            var result = await _orderApi.CancleOrder(orderId);
+            return RedirectToAction("Index", "Order");
+        }
+
     }
 }

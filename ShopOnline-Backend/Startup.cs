@@ -17,7 +17,6 @@ using oShopSolution.Application.Catalog.DashBoard;
 using oShopSolution.Application.Catalog.Order;
 using oShopSolution.Application.Catalog.Products;
 using oShopSolution.Application.Common;
-using oShopSolution.Application.Option;
 using oShopSolution.Application.System.Users;
 using oShopSolution.Data.EF;
 using oShopSolution.Data.Entities;
@@ -25,6 +24,9 @@ using oShopSolution.ViewModels.System.Users;
 using ShopOnline_Backend.IdentityServer;
 using System.Collections.Generic;
 using System.Text;
+using AutoMapper;
+using ShopOnline_Backend.Option;
+using ImageConfigOption = oShopSolution.Application.Option.ImageConfigOption;
 
 namespace ShopOnline_Backend
 {
@@ -66,7 +68,12 @@ namespace ShopOnline_Backend
 				.AddInMemoryClients(Config.Clients)
 				.AddAspNetIdentity<AppUser>()
 				.AddDeveloperSigningCredential();
-
+			var mapperConfig = new MapperConfiguration(mc =>
+			{
+				mc.AddProfile(new AutoMapperProfile());
+			});
+			IMapper mapper = mapperConfig.CreateMapper();
+			services.AddSingleton(mapper);
 			services.AddControllers()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 			services.AddTransient<IProductService, ProductServie>();

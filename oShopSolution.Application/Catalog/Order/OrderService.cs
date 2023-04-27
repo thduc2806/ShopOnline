@@ -11,19 +11,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using oShopSolution.Utilities.Enum;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.Data.SqlClient;
 using oShopSolution.Utilities.Constants;
+using oShopSolution.ViewModels.System.Users;
 
 namespace oShopSolution.Application.Catalog.Order
 {
 	public class OrderService : IOrderService
 	{
 		private readonly OShopDbContext _context;
-		public OrderService(OShopDbContext context)
+		private readonly IMapper _mapper;
+		public OrderService(OShopDbContext context, IMapper mapper)
 		{
 			_context = context;
+			_mapper = mapper;
 		}
 
 		public async Task<PageResult<OrderViewModel>> GetOrder(GetOrderModel request)
@@ -95,6 +99,7 @@ namespace oShopSolution.Application.Catalog.Order
                 Amount = x.o.Amount,
                 isPayment = x.o.isPayment,
                 Name = x.o.FullName,
+                isCancle = x.o.isCancle
             }).ToListAsync();
 
 			var pageResult = new PageResult<OrderViewModel>
@@ -108,6 +113,18 @@ namespace oShopSolution.Application.Catalog.Order
 
             return pageResult;
         }
+
+		public async Task<OrderViewModel> GetByOrderId(int orderId)
+		{
+			var order = await _context.Orders.Where(o => o.Id == orderId).SingleOrDefaultAsync();
+			if (order != null)
+			{
+				var result = _mapper.Map<Data.Entities.Order, OrderViewModel>(order);
+				return _mapper.Map<Data.Entities.Order, OrderViewModel>(order);
+			}
+
+			return new OrderViewModel();
+		}
 
 
         public async Task<int> CreateOrder(InfoCustomerModel model)
@@ -167,6 +184,7 @@ namespace oShopSolution.Application.Catalog.Order
 					var result = new OrderDetailViewModel
 					{
 						Id = order.Id,
+						OrderId = orderId,
 						Name = productInfo.Name,
 						Price = productInfo.Price,
 						Quantity = order.Quantity,
@@ -181,7 +199,19 @@ namespace oShopSolution.Application.Catalog.Order
 			return new List<OrderDetailViewModel>();
 		}
 
+		public async Task<bool> CancleOrder(int orderId)
+		{
+			var order = await _context.Orders.Where(o => o.Id == orderId).SingleOrDefaultAsync();
+			if (order != null)
+			{
+				order.isCancle = true;
+				_context.SaveChanges();
+				return true;
+			}
 
+			return false;
+		}
+		
         private async Task<bool> CreateOrderDetail(decimal price, int orderId, int productId, int quantity)
 		{
 				var orderDetail = new OrderDetail()

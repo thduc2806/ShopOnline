@@ -58,6 +58,45 @@ namespace WebApplication1.Helper
             return result;
         }
 
+        public async Task<OrderViewModel> GetOrderById(int orderId)
+        {
+            string url = $"https://localhost:5001/api/order/{orderId}";
+
+            HttpResponseMessage response = null;
+            response = await httpClient.GetAsync(url);
+            string responseData = await response.Content.ReadAsStringAsync();
+            var result = new OrderViewModel();
+            if (response.IsSuccessStatusCode)
+            {
+                result = JsonConvert.DeserializeObject<OrderViewModel>(responseData);
+
+            }
+            else
+            {
+                result = new OrderViewModel();
+            }
+            return result;
+        }
+        
+        public async Task<bool> CancleOrder(int orderId)
+        {
+            string url = $"https://localhost:5001/api/order/{orderId}";
+
+            HttpResponseMessage response = null;
+            response = await httpClient.DeleteAsync(url);
+            string responseData = await response.Content.ReadAsStringAsync();
+            var result = new bool();
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private Task<HttpResponseMessage> PostDataAsync(HttpMethodEnum method, string url, HttpContent content)
         {
             switch (method)

@@ -10,5 +10,9 @@ namespace WebApplication1.Helper
         Task<PageResult<OrderViewModel>> GetOrder(GetOrderByIdModel request);
 
         Task<List<OrderDetailViewModel>> GetOrderDetail(int orderId);
+        
+        Task<OrderViewModel> GetOrderById(int orderId);
+
+        Task<bool> CancleOrder(int orderId);
     }
 }

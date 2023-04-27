@@ -46,11 +46,27 @@ namespace ShopOnline_Backend.Controllers
 			var result = await _orderService.GetById(request);
 			return Ok(result);
 		}
+		
+		[HttpGet("{orderId}")]
+		public async Task<IActionResult> GetByOrderId(int orderId)
+		{
+			var result = await _orderService.GetByOrderId(orderId);
+			return Ok(result);
+		}
+		
+		
 
 		[HttpGet("OrderDetail/{orderId}")]
 		public async Task<IActionResult> GetOrderDetail(int orderId)
 		{
 			var result = await _orderService.GetOrderDetail(orderId);
+			return Ok(result);
+		}
+
+		[HttpDelete("{orderId}")]
+		public async Task<IActionResult> CancleOrder(int orderId)
+		{
+			var result = await _orderService.CancleOrder(orderId);
 			return Ok(result);
 		}
     }

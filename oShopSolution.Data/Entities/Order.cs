@@ -35,6 +35,8 @@ namespace oShopSolution.Data.Entities
         public string PostCode { get; set; }
 
         public bool isPayment { get; set; }
+        
+        public bool isCancle { get; set; }
 
         public List<OrderDetail> OrderDetails { get; set; }
 	}

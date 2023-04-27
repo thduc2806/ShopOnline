@@ -1,0 +1,32 @@
+﻿@model oShopSolution.ViewModels.Catalog.Order.OrderViewModel
+
+<div class="col-lg-4">
+    <div class="cart__summary border-radius-10">
+        <div class="cart__note mb-20">
+            <h3 class="cart__note--title">Info Order</h3>
+            <p class="cart__note--desc">Name: @Model.FullName</p>
+            <p class="cart__note--desc">Email: @Model.Email</p>
+            <p class="cart__note--desc">Address: @Model.Address</p>
+            <p class="cart__note--desc">City: @Model.City</p>
+            <p class="cart__note--desc">District: @Model.District</p>
+            <p class="cart__note--desc">Ward: @Model.Ward</p>
+            <p class="cart__note--desc">Phone: @Model.PhoneNumber</p>
+        </div>
+        <div class="cart__summary--footer">
+            <ul class="d-flex justify-content-between">
+                @if (Model.isCancle)
+                {
+                    <li>
+                        <button class="cart__summary--footer__btn primary__btn cart" style="background-color: grey" type="button" disabled>Cancle Order</button>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a type="button" class="cart__summary--footer__btn primary__btn cart" href="@Url.Action("CancleOrders","Order", new { orderId = Model.Id})" style="background-color: grey">Cancle Order</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

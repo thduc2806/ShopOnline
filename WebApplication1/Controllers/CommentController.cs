@@ -19,11 +19,11 @@ namespace WebApplication1.Controllers
             _configuration = configuration;
             _commentAPI = commentAPI;
         }
-        [HttpGet]
-		public IActionResult Create()
-		{
-			return View();
-		}
+  //       [HttpGet]
+		// public IActionResult Create()
+		// {
+		// 	return View();
+		// }
 
 
 	}
