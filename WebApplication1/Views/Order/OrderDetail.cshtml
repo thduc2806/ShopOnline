@@ -8,6 +8,11 @@
     Layout = "/Views/Shared/_LayoutMain.cshtml";
 }
 
+@{
+    var pr = HttpContextAccesor.HttpContext.Request.Query["orderId"].ToString();
+    int orderId = Convert.ToInt32(pr);
+}
+
 <main class="main__content_wrapper">
 
     <!-- Start breadcrumb section -->
@@ -79,7 +84,7 @@
                                 </div>
                             </div>
                         </div>
-                        @await Component.InvokeAsync("InforOrder", new { orderId = HttpContextAccesor.HttpContext.Request.Query["orderId"]})
+                        @await Component.InvokeAsync("InforOrder", new { orderId = orderId})
                     </div>
                 </form>
             </div>

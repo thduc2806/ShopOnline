@@ -153,6 +153,7 @@
                                 <th>Billing Name</th>
                                 <th>Total</th>
                                 <th>Payment Status</th>
+                                <th>Order Status</th>
                                 @*<th style="width: 120px;">Action</th>*@
                                 @*<th></th>*@
                             </tr>
@@ -321,7 +322,22 @@
                             return '<div class="' + className + '"> UnPaid </div>'
                         }
                     }
+                },
+                {
+                    data: 'isCancle',
+                    render: function (data, type, row) {
+                        var className = "";
+                        if (data == false) {
+                            className = "badge badge-soft-success font-size-12";
+                            return '<div class="' + className + '"> Shipping </div>'
+                        }
+                        else if (data == true) {
+                            className = "badge badge-soft-warning font-size-12";
+                            return '<div class="' + className + '"> Cancled </div>'
+                        }
+                    }
                 }
+
             ],
             pagingType: 'full_numbers',
             dom: 'lrtip',
