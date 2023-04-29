@@ -19,5 +19,19 @@ namespace oShopSolution.ViewModels.Catalog.Order
 		public decimal Amount { get; set; }
 
 		public bool isPayment { get; set; }
+
+		public bool isCancle { get; set; }
+		
+		public string Address { get; set; }
+
+		public string City { get; set; }
+
+		public string District { get; set; }
+
+		public string Ward { get; set; }
+
+		public int PhoneNumber { get; set; }
+
+		public string FullName { get; set; }
 	}
 }

@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "Account";
+    ViewBag.pTitle = "Account";
+    ViewBag.pageTitle = "Nazox";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Latest Transactions</h4>
+                <div class="table-responsive">
+                    <table id="userTable" class="display">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Email</th>
+                                <th>FullName</th>
+                                <th>DOB</th>
+                                <th>Street</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Ward</th>
+                                <th>RoleName</th>
+                                <th>IsActivated</th>
+                                @*<th></th>*@
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+
+
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+<script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+<script src="~/assets/libs/node-waves/waves.min.js"></script>
+
+
+<!-- jquery.vectormap map -->
+<script src="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="~/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js"></script>
+
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+<!-- Responsive examples -->
+<script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+
+<!-- Modal Popup -->
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirm-delete-modal-label">Disable Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to disable this account?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-button">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="active-account-modal" tabindex="-1" role="dialog" aria-labelledby="active-account-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="active-account-modal-label">Active Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to Active this account?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
+                <button type="button" class="btn btn-success" id="confirm-active-button">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#userTable').DataTable({
+            destroy: true,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: "@Url.Action("UserProfile","Account")",
+                type: "GET",
+                dataSrc: function (json) {
+                    if (json.data && json.data.length > 0) {
+                        return json.data;
+                    }
+                    else {
+                        alert('No orders found.');
+                        return [];
+                    }
+                }
+            },
+            columns: [
+                { data: 'email' },
+                {data: 'fullName'},
+                { data: 'dob' },
+                { data: 'street' },
+                { data: 'city' },
+                { data: 'state' },
+                { data: 'ward' },
+                { data: 'roleName' },
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        var className = "";
+                        if (data['isActivated'] == true) {
+                            className = "btn btn-danger delete-account";
+                            return "<a class='" + className + "' data-id='" + data['userId'] + "'>Disable</a>"
+                        }
+                        else if (data['isActivated'] == false) {
+                            className = "btn btn-success active-account";
+                            return "<a class='" + className + "' data-id='" + data['userId'] + "'>Active</a>"
+                        }
+                    }
+                }
+            ],
+            pagingType: 'full_numbers',
+            dom: 'lrtip',
+            language: {
+                lengthMenu: 'Display <select>' +
+                    '<option value="5">5</option>' +
+                    '<option value="10">10</option>' +
+                    '<option value="15">15</option>' +
+                    '<option value="20">20</option>' +
+                    '<option value="25">25</option>' +
+                    '</select> records'
+            },
+        });
+
+        $('body').on('click', '.delete-account', function (e) {
+            e.preventDefault();
+            var accountId = $(this).data('id');
+            $('#confirm-delete-modal').modal('show');
+            $('#confirm-delete-button').attr('id', accountId);
+        });
+
+        $('#confirm-delete-button').on('click', function () {
+            var accountId = $(this).attr('id');
+            $.ajax({
+                url: '/account/ChangeStatus/' + accountId,
+                type: 'GET',
+                success: function (response) {
+                    // Đóng modal popup confirm
+                    window.location.reload();
+                    $('#confirm-delete-modal').modal('hide');
+                }
+            });
+        });
+
+        $('body').on('click', '.active-account', function (e) {
+            e.preventDefault();
+            var accountId = $(this).data('id');
+            $('#active-account-modal').modal('show');
+            $('#confirm-active-button').attr('id', accountId);
+        });
+
+        $('#confirm-active-button').on('click', function () {
+            var accountId = $(this).attr('id');
+            $.ajax({
+                url: '/account/ChangeStatus/' + accountId,
+                type: 'GET',
+                success: function (response) {
+                    // Đóng modal popup confirm
+                    window.location.reload();
+                    $('#active-account-modal').modal('hide');
+                }
+            });
+        });
+  });
+</script>
+

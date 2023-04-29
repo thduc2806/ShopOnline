@@ -180,7 +180,7 @@ namespace oShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7225da6b-65fc-4b04-8f46-fd3176512eff"),
-                            ConcurrencyStamp = "bda761ec-7803-4883-843c-b04bfd2779b2",
+                            ConcurrencyStamp = "58cd64bc-72a3-4188-b6c3-76306452e056",
                             Description = "Admin Role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -252,7 +252,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = new Guid("d60a3a17-4053-42bb-a858-f44e7825bdf4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "34012cce-eb14-4231-97f8-1e982c82be84",
+                            ConcurrencyStamp = "ce306033-10ea-4eba-9cc5-04b7abc6b13e",
                             DOB = new DateTime(2000, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thduc.2000@gmail.com",
                             EmailConfirmed = true,
@@ -260,7 +260,7 @@ namespace oShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thduc.2000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAELsh8gawO5zFLAyr9vDY2sEg1O96BGeBH5yaN3TEtfzLJ5T6YJoCAO9UzwtREYs8sQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOhhgeMnfWKmmGQOVCQD1dF6MXybMo3CbjU/wsoIvsunPgXRD9hMQYLRo1mzeIHFAA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -384,6 +384,9 @@ namespace oShopSolution.Data.Migrations
                     b.Property<string>("Ward")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isCancle")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("isPayment")
                         .HasColumnType("bit");
 
@@ -465,7 +468,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 4, 4, 13, 40, 29, 659, DateTimeKind.Local).AddTicks(9084),
+                            CreateDate = new DateTime(2023, 4, 27, 19, 57, 42, 453, DateTimeKind.Local).AddTicks(5636),
                             Description = "This is Iphone 12 Promax",
                             Name = "Iphone 12 Promax",
                             Price = 100000m,
@@ -476,7 +479,7 @@ namespace oShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 4, 4, 13, 40, 29, 660, DateTimeKind.Local).AddTicks(7131),
+                            CreateDate = new DateTime(2023, 4, 27, 19, 57, 42, 454, DateTimeKind.Local).AddTicks(4218),
                             Description = "This is Samsung Galaxy Fold",
                             Name = "Samsung Galaxy Fold",
                             Price = 20000m,

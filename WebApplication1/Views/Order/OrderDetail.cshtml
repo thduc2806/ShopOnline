@@ -1,0 +1,124 @@
+﻿@using oShopSolution.ViewModels.Catalog.Order
+@model List<OrderDetailViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccesor;
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "/Views/Shared/_LayoutMain.cshtml";
+}
+
+@{
+    var pr = HttpContextAccesor.HttpContext.Request.Query["orderId"].ToString();
+    int orderId = Convert.ToInt32(pr);
+}
+
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content">
+                        <h1 class="breadcrumb__content--title mb-10">Checkout</h1>
+                        <ul class="breadcrumb__content--menu d-flex">
+                            <li class="breadcrumb__content--menu__items"><a href="/home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text__secondary">Checkout</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start checkout page area -->
+    <section class="cart__section section--padding">
+        <div class="container-fluid">
+            <div class="cart__section--inner">
+                <form action="#">
+                    <h2 class="cart__title mb-40">Shopping Cart</h2>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="cart__table">
+                                <table class="cart__table--inner">
+                                    <thead class="cart__table--header">
+                                        <tr class="cart__table--header__items">
+                                            <th class="cart__table--header__list">Product</th>
+                                            <th class="cart__table--header__list text-center">Price</th>
+                                            <th class="cart__table--header__list text-center">Quantity</th>
+                                            <th class="cart__table--header__list text-right">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="cart__table--body">
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr class="cart__table--body__items">
+                                                <td class="cart__table--body__list">
+                                                    <div class="cart__product d-flex align-items-center">
+                                                        <div class="cart__thumbnail">
+                                                            <a><img class="border-radius-5" src="@(Configuration["BaseAddress"] + item.ProductImgs)" alt="cart-product"></a>
+                                                        </div>
+                                                        <div class="cart__content">
+                                                            <h3 class="cart__content--title h4"><a>@item.Name</a></h3>
+                                                            <span class="cart__content--variant">@item.Category</span>
+                                                            @*<span class="cart__content--variant">WEIGHT: 2 Kg</span>*@
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="cart__table--body__list text-center">
+                                                    <span class="cart__price">@item.Price.ToString("N") VNĐ</span>
+                                                </td>
+                                                <td class="cart__table--body__list text-center">
+                                                    <span class="in__stock">@item.Quantity</span>
+                                                </td>
+                                                <td class="cart__table--body__list text-right">
+                                                    <span class="cart__price end">@((item.Price * item.Quantity).ToString("N")) VNĐ</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <div class="continue__shopping d-flex justify-content-between">
+                                    <a class="continue__shopping--link" href="@Url.Action("Index","Order")">Back to Orders</a>
+                                </div>
+                            </div>
+                        </div>
+                        @await Component.InvokeAsync("InforOrder", new { orderId = orderId})
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- End checkout page area -->
+    <!-- Start newsletter section -->
+    <section class="newsletter__section newsletter__bg">
+        <div class="container">
+            <div class="row row-cols-md-2 row-cols-1 align-items-center">
+                <div class="col">
+                    <div class="newsletter__content position__relative">
+                        <h2 class="newsletter__content--title text-white">
+                            We Best To Immediately Do
+                            Subscribe Newsleter.
+                        </h2>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="newsletter__subscribe">
+                        <form class="newsletter__subscribe position__relative" action="#">
+                            <label>
+                                <input class="newsletter__subscribe--input style2" placeholder="Enter Your Email" type="email">
+                            </label>
+                            <button class="newsletter__subscribe--button style2 primary__btn" type="submit">
+                                Subscribe
+                                <svg class="newsletter__subscribe--button__icon" xmlns="http://www.w3.org/2000/svg" width="9.159" height="7.85" viewBox="0 0 9.159 7.85">
+                                    <path data-name="Icon material-send" d="M3,12.35l9.154-3.925L3,4.5,3,7.553l6.542.872L3,9.3Z" transform="translate(-3 -4.5)" fill="currentColor" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

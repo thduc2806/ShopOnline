@@ -12,5 +12,7 @@ namespace oShopSolution.ViewModels.Common
 
 		public int CateId { get; set; }
 
+		public decimal TotalPrice { get; set; }
+
 	}
 }

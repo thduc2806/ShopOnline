@@ -1,0 +1,28 @@
+﻿@model List<oShopSolution.ViewModels.Catalog.Categories.CategoryView>
+
+@{
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <H4>Category</h4>
+            <table class="table table-bordered table-responsive table-hover">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

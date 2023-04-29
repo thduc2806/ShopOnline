@@ -1,5 +1,6 @@
 ﻿using oShopSolution.ViewModels.Catalog.Order;
 using oShopSolution.ViewModels.Common;
+using oShopSolution.ViewModels.System.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,19 @@ namespace oShopSolution.Application.Catalog.Order
 {
 	public interface IOrderService
 	{
-		Task<int> CreateOrder(InfoCustomerModel model);
+		Task<int> CreateOrder(UserProfileViewModel model);
 
 		Task<bool> UpdatePayment(OrderModel model);
 
 		Task<PageResult<OrderViewModel>> GetOrder(GetOrderModel request);
 
+		Task<PageResult<OrderViewModel>> GetById(GetOrderByIdModel request);
+
+		Task<List<OrderDetailViewModel>> GetOrderDetail(int orderId);
+
+		Task<OrderViewModel> GetByOrderId(int orderId);
+
+		Task<bool> CancleOrder(int orderId);
 
 	}
 }

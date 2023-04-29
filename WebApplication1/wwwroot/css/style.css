@@ -51,6 +51,7 @@
 :root {
   --primary-color: #222222;
   --secondary-color: #D72323;
+  --success-color: #00C851;
   --yellow-color: #ffc107;
   --text-gray-color: #4A4C59;
   --white-color: #ffffff;
@@ -1940,6 +1941,10 @@ select {
 
 .text__secondary {
   color: var(--secondary-color);
+}
+
+.text__success {
+    color: rgba(0, 255, 0, 1);
 }
 
 .text__secondary2 {

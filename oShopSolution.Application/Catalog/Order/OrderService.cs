@@ -11,19 +11,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using oShopSolution.Utilities.Enum;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.Data.SqlClient;
 using oShopSolution.Utilities.Constants;
+using oShopSolution.ViewModels.System.Users;
 
 namespace oShopSolution.Application.Catalog.Order
 {
 	public class OrderService : IOrderService
 	{
 		private readonly OShopDbContext _context;
-		public OrderService(OShopDbContext context)
+		private readonly IMapper _mapper;
+		public OrderService(OShopDbContext context, IMapper mapper)
 		{
 			_context = context;
+			_mapper = mapper;
 		}
 
 		public async Task<PageResult<OrderViewModel>> GetOrder(GetOrderModel request)
@@ -79,19 +83,62 @@ namespace oShopSolution.Application.Catalog.Order
 			return pageResult;
 		}
 
-		public async Task<int> CreateOrder(InfoCustomerModel model)
+		public async Task<PageResult<OrderViewModel>> GetById(GetOrderByIdModel request)
+		{
+			request.PageSize = 10;
+            var order = from o in _context.Orders
+						where o.UserId.ToString() == request.UserId
+                        select new { o };
+
+            int total = await order.CountAsync();
+            var data = await order.OrderByDescending(o => o.o.OrderDate).Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).Select(x => new OrderViewModel()
+            {
+                Id = x.o.Id,
+                OrderDate = x.o.OrderDate,
+                Email = x.o.Email,
+                Amount = x.o.Amount,
+                isPayment = x.o.isPayment,
+                Name = x.o.FullName,
+                isCancle = x.o.isCancle
+            }).ToListAsync();
+
+			var pageResult = new PageResult<OrderViewModel>
+			{
+				TotalItems = total,
+				PageSize = request.PageSize,
+				PageIndex = request.PageIndex,
+				TotalPrice = data.Sum(p => p.Amount),
+                Items = data
+            };
+
+            return pageResult;
+        }
+
+		public async Task<OrderViewModel> GetByOrderId(int orderId)
+		{
+			var order = await _context.Orders.Where(o => o.Id == orderId).SingleOrDefaultAsync();
+			if (order != null)
+			{
+				var result = _mapper.Map<Data.Entities.Order, OrderViewModel>(order);
+				return _mapper.Map<Data.Entities.Order, OrderViewModel>(order);
+			}
+
+			return new OrderViewModel();
+		}
+
+
+        public async Task<int> CreateOrder(UserProfileViewModel model)
 		{
 			var order = new Data.Entities.Order()
 			{
 				OrderDate = DateTime.Now,
 				UserId = new Guid(model.UserId),
 				Email = model.Email,
-				Address = model.Address,
+				Address = model.Street,
 				PhoneNumber = Convert.ToInt32(model.PhoneNumber),
 				City = model.City,
-				District = model.District,
+				District = model.State,
 				Ward = model.Ward,
-				PostCode = model.PostCode,
 			};
 			await _context.Orders.AddAsync(order);
 			await _context.SaveChangesAsync();
@@ -123,7 +170,47 @@ namespace oShopSolution.Application.Catalog.Order
             return false;
         }
 
+		public async Task<List<OrderDetailViewModel>> GetOrderDetail(int orderId)
+		{
+			var orderDetails = await _context.OrderDetails.Where(o => o.OrderId == orderId).ToListAsync();
+			var orderDetail = new List<OrderDetailViewModel>();
+			if (orderDetails.Any())
+			{
+				foreach (var order in orderDetails)
+				{
+					var productInfo = await _context.Products.Where(p => p.Id == order.ProductId).SingleOrDefaultAsync();
+					var category = await _context.Categories.Where(c => c.Id == productInfo.CategoryId).FirstOrDefaultAsync();
+					var result = new OrderDetailViewModel
+					{
+						Id = order.Id,
+						OrderId = orderId,
+						Name = productInfo.Name,
+						Price = productInfo.Price,
+						Quantity = order.Quantity,
+						Category = category.Name,
+						ProductImgs = productInfo.ThumbPath,
+					};
+					orderDetail.Add(result);
+				}
+				return orderDetail;
+			}
 
+			return new List<OrderDetailViewModel>();
+		}
+
+		public async Task<bool> CancleOrder(int orderId)
+		{
+			var order = await _context.Orders.Where(o => o.Id == orderId).SingleOrDefaultAsync();
+			if (order != null)
+			{
+				order.isCancle = true;
+				_context.SaveChanges();
+				return true;
+			}
+
+			return false;
+		}
+		
         private async Task<bool> CreateOrderDetail(decimal price, int orderId, int productId, int quantity)
 		{
 				var orderDetail = new OrderDetail()

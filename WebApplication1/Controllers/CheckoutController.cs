@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using oShopSolution.Data.Entities;
 using oShopSolution.ViewModels.Catalog.Cart;
 using oShopSolution.ViewModels.Catalog.Order;
+using oShopSolution.ViewModels.System.Users;
 using PayPal.Api;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,8 @@ namespace WebApplication1.Controllers
             return View(result);
         }
 
-		public async Task<IActionResult> CreateOrder(InfoCustomerModel model)
+		[HttpPost]
+		public async Task<IActionResult> CreateOrder(UserProfileViewModel model)
 		{
 			model.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
 			var result = await _checkoutApi.CreateOder(model);
