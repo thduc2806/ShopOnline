@@ -13,6 +13,7 @@ using System.Text;
 using System.Security.Policy;
 using oShopSolution.Application.Helper;
 using Microsoft.AspNetCore.Mvc;
+using oShopSolution.ViewModels.System.Users;
 
 namespace WebApplication1.Helper
 {
@@ -34,7 +35,7 @@ namespace WebApplication1.Helper
             httpClient = new HttpClient();
         }
 
-        public async Task<int> CreateOder(InfoCustomerModel request)
+        public async Task<int> CreateOder(UserProfileViewModel request)
         {
             var sessions = _httpContextAccessor
                 .HttpContext

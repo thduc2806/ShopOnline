@@ -6,11 +6,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System;
 using oShopSolution.ViewModels.Catalog.Order;
+using oShopSolution.ViewModels.System.Users;
 
 namespace WebApplication1.Helper
 {
     public interface ICheckoutApi
     {
-        Task<int> CreateOder(InfoCustomerModel request);
+        Task<int> CreateOder(UserProfileViewModel request);
     }
 }

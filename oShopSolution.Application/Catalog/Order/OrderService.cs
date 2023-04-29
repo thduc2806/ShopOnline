@@ -127,19 +127,18 @@ namespace oShopSolution.Application.Catalog.Order
 		}
 
 
-        public async Task<int> CreateOrder(InfoCustomerModel model)
+        public async Task<int> CreateOrder(UserProfileViewModel model)
 		{
 			var order = new Data.Entities.Order()
 			{
 				OrderDate = DateTime.Now,
 				UserId = new Guid(model.UserId),
 				Email = model.Email,
-				Address = model.Address,
+				Address = model.Street,
 				PhoneNumber = Convert.ToInt32(model.PhoneNumber),
 				City = model.City,
-				District = model.District,
+				District = model.State,
 				Ward = model.Ward,
-				PostCode = model.PostCode,
 			};
 			await _context.Orders.AddAsync(order);
 			await _context.SaveChangesAsync();

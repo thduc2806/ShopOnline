@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using oShopSolution.Application.Catalog.Order;
 using oShopSolution.ViewModels.Catalog.Order;
 using oShopSolution.ViewModels.Catalog.Products;
+using oShopSolution.ViewModels.System.Users;
 using System.Threading.Tasks;
 
 namespace ShopOnline_Backend.Controllers
@@ -18,7 +19,7 @@ namespace ShopOnline_Backend.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateOrder(InfoCustomerModel request)
+		public async Task<IActionResult> CreateOrder(UserProfileViewModel request)
 		
 		{
 			var response = await _orderService.CreateOrder(request);

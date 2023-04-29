@@ -28,6 +28,7 @@
             <div class="row">
                 <div class="col-lg-7 col-md-6">
                     <div class="main checkout__mian">
+                        <form method="post" asp-action="CreateOrder">
                             <div class="checkout__content--step section__contact--information">
                                 <div class="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
                                     <h2 class="section__header--title h3">Contact information</h2>
@@ -35,7 +36,7 @@
                                 <div class="customer__information">
                                     <div class="checkout__email--phone mb-12">
                                         <label>
-                                            <input asp-for="FirstName" class="checkout__input--field border-radius-5" placeholder="Email" type="text">
+                                            <input asp-for="Email" class="checkout__input--field border-radius-5" placeholder="Email" type="text">
                                         </label>
                                     </div>
                                 </div>
@@ -49,8 +50,8 @@
                                         <div class="col-12 mb-20">
                                             <div class="checkout__input--list ">
                                                 <label class="checkout__input--label mb-5" for="input1">Fist Name <span class="checkout__input--label__star">*</span></label>
-                                                <input asp-for="FirstName" class="checkout__input--field border-radius-5" placeholder="Full Name" id="input1" type="text">
-                                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                                <input asp-for="FullName" class="checkout__input--field border-radius-5" placeholder="Full Name" id="input1" type="text">
+                                                <span asp-validation-for="FullName" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-12 mb-20">
@@ -111,6 +112,7 @@
                                 <button type="submit" class="continue__shipping--btn primary__btn border-radius-5">Continue Payment</button>
                                 <a class="previous__link--content" href="/cart">Return to cart</a>
                             </div>
+                        </form>
                     </div>
                 </div>
                 @await Component.InvokeAsync("CartInfo")
